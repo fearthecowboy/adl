@@ -37,9 +37,21 @@ http:
             description: Data format for the response.
             expandParameterValues: true
             renderStyle: form
-            schema: &a10
-              type: any
+            schema:
+              type: constant
               name: anonymous<unknown>
+              value: atom
+              valueSchema:
+                type: alias
+                name: anonymous<string>
+                aliasType: schema
+                defaults:
+                  - type: server-default
+                    name: anonymous<unknown>
+                    value: atom
+                targetSchema: &a1
+                  type: string
+                  name: anonymous<unknown>
         - name: "1"
           aliasType: parameter
           target: &a4
@@ -48,9 +60,7 @@ http:
             description: Selector specifying which fields to include in a partial response.
             expandParameterValues: true
             renderStyle: form
-            schema: &a1
-              type: string
-              name: anonymous<unknown>
+            schema: *a1
         - name: "2"
           aliasType: parameter
           target: &a5
@@ -79,7 +89,7 @@ http:
             description: Returns response with indentations and line breaks.
             expandParameterValues: true
             renderStyle: form
-            schema: &a13
+            schema:
               type: alias
               name: anonymous<?>
               aliasType: schema
@@ -87,7 +97,7 @@ http:
                 - type: server-default
                   name: anonymous<unknown>
                   value: false
-              targetSchema: &a11
+              targetSchema: &a10
                 type: boolean
                 name: anonymous<unknown>
         - name: "5"
@@ -183,7 +193,7 @@ http:
             pagination mechanism along with the max-results parameter.
           expandParameterValues: true
           renderStyle: form
-          schema: &a14
+          schema:
             type: alias
             name: anonymous<number>
             aliasType: schema
@@ -243,7 +253,7 @@ http:
             pagination mechanism along with the max-results parameter.
           expandParameterValues: true
           renderStyle: form
-          schema: &a15
+          schema:
             type: alias
             name: anonymous<number>
             aliasType: schema
@@ -312,7 +322,7 @@ http:
             pagination mechanism along with the max-results parameter.
           expandParameterValues: true
           renderStyle: form
-          schema: &a16
+          schema:
             type: alias
             name: anonymous<number>
             aliasType: schema
@@ -390,7 +400,7 @@ http:
             pagination mechanism along with the max-results parameter.
           expandParameterValues: true
           renderStyle: form
-          schema: &a17
+          schema:
             type: alias
             name: anonymous<number>
             aliasType: schema
@@ -477,7 +487,7 @@ http:
             pagination mechanism along with the max-results parameter.
           expandParameterValues: true
           renderStyle: form
-          schema: &a18
+          schema:
             type: alias
             name: anonymous<number>
             aliasType: schema
@@ -538,7 +548,7 @@ http:
             parameter.
           expandParameterValues: true
           renderStyle: form
-          schema: &a19
+          schema:
             type: alias
             name: anonymous<number>
             aliasType: schema
@@ -607,27 +617,4 @@ schemas:
   primitives:
     - *a1
     - *a10
-    - *a11
     - *a2
-  constants:
-    - type: constant
-      name: anonymous<unknown>
-      value: atom
-      valueSchema: &a12
-        type: alias
-        name: anonymous<string>
-        aliasType: schema
-        defaults:
-          - type: server-default
-            name: anonymous<unknown>
-            value: atom
-        targetSchema: *a1
-  aliases:
-    - *a12
-    - *a13
-    - *a14
-    - *a15
-    - *a16
-    - *a17
-    - *a18
-    - *a19

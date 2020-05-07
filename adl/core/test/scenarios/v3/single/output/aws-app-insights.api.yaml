@@ -152,9 +152,15 @@ http:
           expandParameterValues: false
           renderStyle: simple
           required: true
-          schema: &a5
-            type: any
+          schema:
+            type: constant
             name: anonymous<unknown>
+            value: EC2WindowsBarleyService.CreateApplication
+            valueSchema:
+              type: alias
+              name: anonymous<string>
+              aliasType: schema
+              targetSchema: *a1
       requests:
         - identity: anonymous<requestBody>
           mediaType: application/json
@@ -163,7 +169,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a61
+            targetSchema: &a49
               type: object
               name: CreateApplicationRequest
               properties:
@@ -229,10 +235,10 @@ http:
                       - type: constraint
                         name: MinimumElements
                         count: 0
-                    targetSchema: &a41
+                    targetSchema:
                       type: array
                       name: anonymous<unknown>
-                      elementSchema: &a60
+                      elementSchema: &a104
                         type: object
                         name: Tag
                         description: "<p>An object that defines the tags associated with an application.
@@ -283,7 +289,7 @@ http:
                               want an application to have a specific tag value,
                               don't specify a value for this parameter.
                             required: true
-                            schema: &a116
+                            schema: &a114
                               type: alias
                               name: anonymous<string>
                               aliasType: schema
@@ -304,7 +310,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a59
+            targetSchema: &a48
               type: object
               name: CreateApplicationResponse
               properties:
@@ -352,7 +358,9 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: *a5
+            targetSchema: &a5
+              type: any
+              name: anonymous<unknown>
         - name: "481"
           description: ResourceNotFoundException
           mediaType: application/json
@@ -415,7 +423,15 @@ http:
           expandParameterValues: false
           renderStyle: simple
           required: true
-          schema: *a5
+          schema:
+            type: constant
+            name: anonymous<unknown>
+            value: EC2WindowsBarleyService.CreateComponent
+            valueSchema:
+              type: alias
+              name: anonymous<string>
+              aliasType: schema
+              targetSchema: *a1
       requests:
         - identity: anonymous<requestBody>
           mediaType: application/json
@@ -424,7 +440,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a63
+            targetSchema: &a51
               type: object
               name: CreateComponentRequest
               properties:
@@ -443,10 +459,10 @@ http:
                     type: alias
                     name: ResourceList
                     aliasType: schema
-                    targetSchema: &a42
+                    targetSchema:
                       type: array
                       name: anonymous<unknown>
-                      elementSchema: &a117
+                      elementSchema: &a113
                         type: alias
                         name: anonymous<string>
                         aliasType: schema
@@ -467,7 +483,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a62
+            targetSchema: &a50
               type: object
               name: CreateComponentResponse
         - name: "480"
@@ -531,7 +547,15 @@ http:
           expandParameterValues: false
           renderStyle: simple
           required: true
-          schema: *a5
+          schema:
+            type: constant
+            name: anonymous<unknown>
+            value: EC2WindowsBarleyService.CreateLogPattern
+            valueSchema:
+              type: alias
+              name: anonymous<string>
+              aliasType: schema
+              targetSchema: *a1
       requests:
         - identity: anonymous<requestBody>
           mediaType: application/json
@@ -540,7 +564,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a65
+            targetSchema: &a53
               type: object
               name: CreateLogPatternRequest
               properties:
@@ -614,7 +638,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a64
+            targetSchema: &a52
               type: object
               name: CreateLogPatternResponse
               properties:
@@ -711,7 +735,15 @@ http:
           expandParameterValues: false
           renderStyle: simple
           required: true
-          schema: *a5
+          schema:
+            type: constant
+            name: anonymous<unknown>
+            value: EC2WindowsBarleyService.DeleteApplication
+            valueSchema:
+              type: alias
+              name: anonymous<string>
+              aliasType: schema
+              targetSchema: *a1
       requests:
         - identity: anonymous<requestBody>
           mediaType: application/json
@@ -720,7 +752,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a67
+            targetSchema: &a55
               type: object
               name: DeleteApplicationRequest
               properties:
@@ -737,7 +769,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a66
+            targetSchema: &a54
               type: object
               name: DeleteApplicationResponse
         - name: "480"
@@ -803,7 +835,15 @@ http:
           expandParameterValues: false
           renderStyle: simple
           required: true
-          schema: *a5
+          schema:
+            type: constant
+            name: anonymous<unknown>
+            value: EC2WindowsBarleyService.DeleteComponent
+            valueSchema:
+              type: alias
+              name: anonymous<string>
+              aliasType: schema
+              targetSchema: *a1
       requests:
         - identity: anonymous<requestBody>
           mediaType: application/json
@@ -812,7 +852,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a69
+            targetSchema: &a57
               type: object
               name: DeleteComponentRequest
               properties:
@@ -833,7 +873,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a68
+            targetSchema: &a56
               type: object
               name: DeleteComponentResponse
         - name: "480"
@@ -889,7 +929,15 @@ http:
           expandParameterValues: false
           renderStyle: simple
           required: true
-          schema: *a5
+          schema:
+            type: constant
+            name: anonymous<unknown>
+            value: EC2WindowsBarleyService.DeleteLogPattern
+            valueSchema:
+              type: alias
+              name: anonymous<string>
+              aliasType: schema
+              targetSchema: *a1
       requests:
         - identity: anonymous<requestBody>
           mediaType: application/json
@@ -898,7 +946,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a71
+            targetSchema: &a59
               type: object
               name: DeleteLogPatternRequest
               properties:
@@ -923,7 +971,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a70
+            targetSchema: &a58
               type: object
               name: DeleteLogPatternResponse
         - name: "480"
@@ -987,7 +1035,15 @@ http:
           expandParameterValues: false
           renderStyle: simple
           required: true
-          schema: *a5
+          schema:
+            type: constant
+            name: anonymous<unknown>
+            value: EC2WindowsBarleyService.DescribeApplication
+            valueSchema:
+              type: alias
+              name: anonymous<string>
+              aliasType: schema
+              targetSchema: *a1
       requests:
         - identity: anonymous<requestBody>
           mediaType: application/json
@@ -996,7 +1052,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a73
+            targetSchema: &a61
               type: object
               name: DescribeApplicationRequest
               properties:
@@ -1013,7 +1069,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a72
+            targetSchema: &a60
               type: object
               name: DescribeApplicationResponse
               properties:
@@ -1074,7 +1130,15 @@ http:
           expandParameterValues: false
           renderStyle: simple
           required: true
-          schema: *a5
+          schema:
+            type: constant
+            name: anonymous<unknown>
+            value: EC2WindowsBarleyService.DescribeComponent
+            valueSchema:
+              type: alias
+              name: anonymous<string>
+              aliasType: schema
+              targetSchema: *a1
       requests:
         - identity: anonymous<requestBody>
           mediaType: application/json
@@ -1083,7 +1147,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a75
+            targetSchema: &a63
               type: object
               name: DescribeComponentRequest
               properties:
@@ -1104,7 +1168,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a74
+            targetSchema: &a62
               type: object
               name: DescribeComponentResponse
               properties:
@@ -1127,7 +1191,7 @@ http:
                         description: The stack tier of the application component.
                         schema: &a20
                           type: enum
-                          name: anonymous<unknown>
+                          name: Tier
                           elementSchema: &a18
                             type: alias
                             name: anonymous<string>
@@ -1221,7 +1285,15 @@ http:
           expandParameterValues: false
           renderStyle: simple
           required: true
-          schema: *a5
+          schema:
+            type: constant
+            name: anonymous<unknown>
+            value: EC2WindowsBarleyService.DescribeComponentConfiguration
+            valueSchema:
+              type: alias
+              name: anonymous<string>
+              aliasType: schema
+              targetSchema: *a1
       requests:
         - identity: anonymous<requestBody>
           mediaType: application/json
@@ -1230,7 +1302,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a77
+            targetSchema: &a65
               type: object
               name: DescribeComponentConfigurationRequest
               properties:
@@ -1251,7 +1323,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a76
+            targetSchema: &a64
               type: object
               name: DescribeComponentConfigurationResponse
               properties:
@@ -1332,7 +1404,15 @@ http:
           expandParameterValues: false
           renderStyle: simple
           required: true
-          schema: *a5
+          schema:
+            type: constant
+            name: anonymous<unknown>
+            value: EC2WindowsBarleyService.DescribeComponentConfigurationRecommendation
+            valueSchema:
+              type: alias
+              name: anonymous<string>
+              aliasType: schema
+              targetSchema: *a1
       requests:
         - identity: anonymous<requestBody>
           mediaType: application/json
@@ -1341,7 +1421,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a79
+            targetSchema: &a67
               type: object
               name: DescribeComponentConfigurationRecommendationRequest
               properties:
@@ -1369,7 +1449,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a78
+            targetSchema: &a66
               type: object
               name: DescribeComponentConfigurationRecommendationResponse
               properties:
@@ -1430,7 +1510,15 @@ http:
           expandParameterValues: false
           renderStyle: simple
           required: true
-          schema: *a5
+          schema:
+            type: constant
+            name: anonymous<unknown>
+            value: EC2WindowsBarleyService.DescribeLogPattern
+            valueSchema:
+              type: alias
+              name: anonymous<string>
+              aliasType: schema
+              targetSchema: *a1
       requests:
         - identity: anonymous<requestBody>
           mediaType: application/json
@@ -1439,7 +1527,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a81
+            targetSchema: &a69
               type: object
               name: DescribeLogPatternRequest
               properties:
@@ -1464,7 +1552,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a80
+            targetSchema: &a68
               type: object
               name: DescribeLogPatternResponse
               properties:
@@ -1527,7 +1615,15 @@ http:
           expandParameterValues: false
           renderStyle: simple
           required: true
-          schema: *a5
+          schema:
+            type: constant
+            name: anonymous<unknown>
+            value: EC2WindowsBarleyService.DescribeObservation
+            valueSchema:
+              type: alias
+              name: anonymous<string>
+              aliasType: schema
+              targetSchema: *a1
       requests:
         - identity: anonymous<requestBody>
           mediaType: application/json
@@ -1536,7 +1632,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a83
+            targetSchema: &a71
               type: object
               name: DescribeObservationRequest
               properties:
@@ -1567,7 +1663,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a82
+            targetSchema: &a70
               type: object
               name: DescribeObservationResponse
               properties:
@@ -1607,9 +1703,9 @@ http:
                         schema: *a1
                       - name: LogFilter
                         description: The log filter of the observation.
-                        schema: &a53
+                        schema: &a45
                           type: enum
-                          name: anonymous<unknown>
+                          name: LogFilter
                           elementSchema: &a25
                             type: alias
                             name: anonymous<string>
@@ -1640,7 +1736,7 @@ http:
                         schema: *a1
                       - name: Value
                         description: The value of the source observation metric.
-                        schema: &a43
+                        schema: &a41
                           type: double
                           name: anonymous<unknown>
                       - name: CloudWatchEventId
@@ -1649,9 +1745,9 @@ http:
                         schema: *a1
                       - name: CloudWatchEventSource
                         description: " The source of the CloudWatch Event. "
-                        schema: &a54
+                        schema: &a42
                           type: enum
-                          name: anonymous<unknown>
+                          name: CloudWatchEventSource
                           elementSchema: &a26
                             type: alias
                             name: anonymous<string>
@@ -1791,7 +1887,15 @@ http:
           expandParameterValues: false
           renderStyle: simple
           required: true
-          schema: *a5
+          schema:
+            type: constant
+            name: anonymous<unknown>
+            value: EC2WindowsBarleyService.DescribeProblem
+            valueSchema:
+              type: alias
+              name: anonymous<string>
+              aliasType: schema
+              targetSchema: *a1
       requests:
         - identity: anonymous<requestBody>
           mediaType: application/json
@@ -1800,7 +1904,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a85
+            targetSchema: &a73
               type: object
               name: DescribeProblemRequest
               properties:
@@ -1831,7 +1935,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a84
+            targetSchema: &a72
               type: object
               name: DescribeProblemResponse
               properties:
@@ -1853,9 +1957,9 @@ http:
                         schema: *a1
                       - name: Status
                         description: The status of the problem.
-                        schema: &a55
+                        schema: &a46
                           type: enum
-                          name: anonymous<unknown>
+                          name: Status
                           elementSchema: &a28
                             type: alias
                             name: anonymous<string>
@@ -1886,9 +1990,9 @@ http:
                         schema: *a24
                       - name: SeverityLevel
                         description: A measure of the level of impact of the problem.
-                        schema: &a56
+                        schema: &a47
                           type: enum
-                          name: anonymous<unknown>
+                          name: SeverityLevel
                           elementSchema: &a29
                             type: alias
                             name: anonymous<string>
@@ -1913,7 +2017,7 @@ http:
                         schema: *a3
                       - name: Feedback
                         description: Feedback provided by the user about the problem.
-                        schema:
+                        schema: &a108
                           type: alias
                           name: Feedback
                           aliasType: schema
@@ -1921,12 +2025,12 @@ http:
                             - type: constraint
                               name: MaximumProperties
                               count: 10
-                          targetSchema: &a44
+                          targetSchema:
                             type: dictionary
                             name: anonymous<unknown>
-                            elementSchema: &a57
+                            elementSchema: &a44
                               type: enum
-                              name: anonymous<unknown>
+                              name: FeedbackValue
                               elementSchema: &a30
                                 type: alias
                                 name: anonymous<string>
@@ -1999,7 +2103,15 @@ http:
           expandParameterValues: false
           renderStyle: simple
           required: true
-          schema: *a5
+          schema:
+            type: constant
+            name: anonymous<unknown>
+            value: EC2WindowsBarleyService.DescribeProblemObservations
+            valueSchema:
+              type: alias
+              name: anonymous<string>
+              aliasType: schema
+              targetSchema: *a1
       requests:
         - identity: anonymous<requestBody>
           mediaType: application/json
@@ -2008,7 +2120,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a88
+            targetSchema: &a75
               type: object
               name: DescribeProblemObservationsRequest
               properties:
@@ -2025,24 +2137,24 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a87
+            targetSchema: &a74
               type: object
               name: DescribeProblemObservationsResponse
               properties:
                 - name: RelatedObservations
                   description: Observations related to the problem.
-                  schema: &a86
+                  schema: &a103
                     type: object
                     name: RelatedObservations
                     description: Describes observations related to the problem.
                     properties:
                       - name: ObservationList
                         description: The list of observations related to the problem.
-                        schema: &a118
+                        schema: &a112
                           type: alias
                           name: ObservationList
                           aliasType: schema
-                          targetSchema: &a45
+                          targetSchema:
                             type: array
                             name: anonymous<unknown>
                             elementSchema: *a31
@@ -2113,7 +2225,15 @@ http:
           expandParameterValues: false
           renderStyle: simple
           required: true
-          schema: *a5
+          schema:
+            type: constant
+            name: anonymous<unknown>
+            value: EC2WindowsBarleyService.ListApplications
+            valueSchema:
+              type: alias
+              name: anonymous<string>
+              aliasType: schema
+              targetSchema: *a1
       requests:
         - identity: anonymous<requestBody>
           mediaType: application/json
@@ -2122,7 +2242,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a90
+            targetSchema: &a77
               type: object
               name: ListApplicationsRequest
               properties:
@@ -2154,17 +2274,17 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a89
+            targetSchema: &a76
               type: object
               name: ListApplicationsResponse
               properties:
                 - name: ApplicationInfoList
                   description: The list of applications.
-                  schema: &a119
+                  schema: &a106
                     type: alias
                     name: ApplicationInfoList
                     aliasType: schema
-                    targetSchema: &a46
+                    targetSchema:
                       type: array
                       name: anonymous<unknown>
                       elementSchema: *a17
@@ -2233,7 +2353,15 @@ http:
           expandParameterValues: false
           renderStyle: simple
           required: true
-          schema: *a5
+          schema:
+            type: constant
+            name: anonymous<unknown>
+            value: EC2WindowsBarleyService.ListComponents
+            valueSchema:
+              type: alias
+              name: anonymous<string>
+              aliasType: schema
+              targetSchema: *a1
       requests:
         - identity: anonymous<requestBody>
           mediaType: application/json
@@ -2242,7 +2370,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a92
+            targetSchema: &a79
               type: object
               name: ListComponentsRequest
               properties:
@@ -2267,17 +2395,17 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a91
+            targetSchema: &a78
               type: object
               name: ListComponentsResponse
               properties:
                 - name: ApplicationComponentList
                   description: The list of application components.
-                  schema: &a120
+                  schema: &a105
                     type: alias
                     name: ApplicationComponentList
                     aliasType: schema
-                    targetSchema: &a47
+                    targetSchema:
                       type: array
                       name: anonymous<unknown>
                       elementSchema: *a33
@@ -2357,7 +2485,15 @@ http:
           expandParameterValues: false
           renderStyle: simple
           required: true
-          schema: *a5
+          schema:
+            type: constant
+            name: anonymous<unknown>
+            value: EC2WindowsBarleyService.ListConfigurationHistory
+            valueSchema:
+              type: alias
+              name: anonymous<string>
+              aliasType: schema
+              targetSchema: *a1
       requests:
         - identity: anonymous<requestBody>
           mediaType: application/json
@@ -2366,7 +2502,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a95
+            targetSchema: &a81
               type: object
               name: ListConfigurationHistoryRequest
               properties:
@@ -2384,7 +2520,7 @@ http:
                     include INFO, WARN, and ERROR.
                   schema: &a35
                     type: enum
-                    name: anonymous<unknown>
+                    name: ConfigurationEventStatus
                     elementSchema: &a34
                       type: alias
                       name: anonymous<string>
@@ -2435,21 +2571,21 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a94
+            targetSchema: &a80
               type: object
               name: ListConfigurationHistoryResponse
               properties:
                 - name: EventList
                   description: " The list of configuration events and their corresponding details.
                     "
-                  schema: &a121
+                  schema: &a107
                     type: alias
                     name: ConfigurationEventList
                     aliasType: schema
-                    targetSchema: &a48
+                    targetSchema:
                       type: array
                       name: anonymous<unknown>
-                      elementSchema: &a93
+                      elementSchema: &a102
                         type: object
                         name: ConfigurationEvent
                         description: " The event information. "
@@ -2464,9 +2600,9 @@ http:
                           - name: EventResourceType
                             description: " The resource type that Application Insights attempted to
                               configure, for example, CLOUDWATCH_ALARM. "
-                            schema: &a58
+                            schema: &a43
                               type: enum
-                              name: anonymous<unknown>
+                              name: ConfigurationEventResourceType
                               elementSchema: &a36
                                 type: alias
                                 name: anonymous<string>
@@ -2571,7 +2707,15 @@ http:
           expandParameterValues: false
           renderStyle: simple
           required: true
-          schema: *a5
+          schema:
+            type: constant
+            name: anonymous<unknown>
+            value: EC2WindowsBarleyService.ListLogPatternSets
+            valueSchema:
+              type: alias
+              name: anonymous<string>
+              aliasType: schema
+              targetSchema: *a1
       requests:
         - identity: anonymous<requestBody>
           mediaType: application/json
@@ -2580,7 +2724,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a97
+            targetSchema: &a83
               type: object
               name: ListLogPatternSetsRequest
               properties:
@@ -2605,7 +2749,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a96
+            targetSchema: &a82
               type: object
               name: ListLogPatternSetsResponse
               properties:
@@ -2614,11 +2758,11 @@ http:
                   schema: *a3
                 - name: LogPatternSets
                   description: The list of log pattern sets.
-                  schema: &a122
+                  schema: &a109
                     type: alias
                     name: LogPatternSetList
                     aliasType: schema
-                    targetSchema: &a49
+                    targetSchema:
                       type: array
                       name: anonymous<unknown>
                       elementSchema: *a13
@@ -2694,7 +2838,15 @@ http:
           expandParameterValues: false
           renderStyle: simple
           required: true
-          schema: *a5
+          schema:
+            type: constant
+            name: anonymous<unknown>
+            value: EC2WindowsBarleyService.ListLogPatterns
+            valueSchema:
+              type: alias
+              name: anonymous<string>
+              aliasType: schema
+              targetSchema: *a1
       requests:
         - identity: anonymous<requestBody>
           mediaType: application/json
@@ -2703,7 +2855,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a99
+            targetSchema: &a85
               type: object
               name: ListLogPatternsRequest
               properties:
@@ -2731,7 +2883,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a98
+            targetSchema: &a84
               type: object
               name: ListLogPatternsResponse
               properties:
@@ -2740,11 +2892,11 @@ http:
                   schema: *a3
                 - name: LogPatterns
                   description: The list of log patterns.
-                  schema: &a123
+                  schema: &a110
                     type: alias
                     name: LogPatternList
                     aliasType: schema
-                    targetSchema: &a50
+                    targetSchema:
                       type: array
                       name: anonymous<unknown>
                       elementSchema: *a22
@@ -2820,7 +2972,15 @@ http:
           expandParameterValues: false
           renderStyle: simple
           required: true
-          schema: *a5
+          schema:
+            type: constant
+            name: anonymous<unknown>
+            value: EC2WindowsBarleyService.ListProblems
+            valueSchema:
+              type: alias
+              name: anonymous<string>
+              aliasType: schema
+              targetSchema: *a1
       requests:
         - identity: anonymous<requestBody>
           mediaType: application/json
@@ -2829,7 +2989,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a101
+            targetSchema: &a87
               type: object
               name: ListProblemsRequest
               properties:
@@ -2862,17 +3022,17 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a100
+            targetSchema: &a86
               type: object
               name: ListProblemsResponse
               properties:
                 - name: ProblemList
                   description: "The list of problems. "
-                  schema: &a124
+                  schema: &a111
                     type: alias
                     name: ProblemList
                     aliasType: schema
-                    targetSchema: &a51
+                    targetSchema:
                       type: array
                       name: anonymous<unknown>
                       elementSchema: *a37
@@ -2939,7 +3099,15 @@ http:
           expandParameterValues: false
           renderStyle: simple
           required: true
-          schema: *a5
+          schema:
+            type: constant
+            name: anonymous<unknown>
+            value: EC2WindowsBarleyService.ListTagsForResource
+            valueSchema:
+              type: alias
+              name: anonymous<string>
+              aliasType: schema
+              targetSchema: *a1
       requests:
         - identity: anonymous<requestBody>
           mediaType: application/json
@@ -2948,7 +3116,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a103
+            targetSchema: &a89
               type: object
               name: ListTagsForResourceRequest
               properties:
@@ -2977,7 +3145,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a102
+            targetSchema: &a88
               type: object
               name: ListTagsForResourceResponse
               properties:
@@ -3039,7 +3207,15 @@ http:
           expandParameterValues: false
           renderStyle: simple
           required: true
-          schema: *a5
+          schema:
+            type: constant
+            name: anonymous<unknown>
+            value: EC2WindowsBarleyService.TagResource
+            valueSchema:
+              type: alias
+              name: anonymous<string>
+              aliasType: schema
+              targetSchema: *a1
       requests:
         - identity: anonymous<requestBody>
           mediaType: application/json
@@ -3048,7 +3224,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a105
+            targetSchema: &a91
               type: object
               name: TagResourceRequest
               properties:
@@ -3074,7 +3250,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a104
+            targetSchema: &a90
               type: object
               name: TagResourceResponse
         - name: "480"
@@ -3130,7 +3306,15 @@ http:
           expandParameterValues: false
           renderStyle: simple
           required: true
-          schema: *a5
+          schema:
+            type: constant
+            name: anonymous<unknown>
+            value: EC2WindowsBarleyService.UntagResource
+            valueSchema:
+              type: alias
+              name: anonymous<string>
+              aliasType: schema
+              targetSchema: *a1
       requests:
         - identity: anonymous<requestBody>
           mediaType: application/json
@@ -3139,7 +3323,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a107
+            targetSchema: &a93
               type: object
               name: UntagResourceRequest
               properties:
@@ -3156,7 +3340,7 @@ http:
                     parameter and argument for each additional tag to remove,
                     separated by an ampersand. </p>
                   required: true
-                  schema: &a125
+                  schema: &a115
                     type: alias
                     name: TagKeyList
                     aliasType: schema
@@ -3167,7 +3351,7 @@ http:
                       - type: constraint
                         name: MinimumElements
                         count: 0
-                    targetSchema: &a52
+                    targetSchema:
                       type: array
                       name: anonymous<unknown>
                       elementSchema: *a40
@@ -3180,7 +3364,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a106
+            targetSchema: &a92
               type: object
               name: UntagResourceResponse
         - name: "480"
@@ -3228,7 +3412,15 @@ http:
           expandParameterValues: false
           renderStyle: simple
           required: true
-          schema: *a5
+          schema:
+            type: constant
+            name: anonymous<unknown>
+            value: EC2WindowsBarleyService.UpdateApplication
+            valueSchema:
+              type: alias
+              name: anonymous<string>
+              aliasType: schema
+              targetSchema: *a1
       requests:
         - identity: anonymous<requestBody>
           mediaType: application/json
@@ -3237,7 +3429,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a109
+            targetSchema: &a95
               type: object
               name: UpdateApplicationRequest
               properties:
@@ -3273,7 +3465,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a108
+            targetSchema: &a94
               type: object
               name: UpdateApplicationResponse
               properties:
@@ -3334,7 +3526,15 @@ http:
           expandParameterValues: false
           renderStyle: simple
           required: true
-          schema: *a5
+          schema:
+            type: constant
+            name: anonymous<unknown>
+            value: EC2WindowsBarleyService.UpdateComponent
+            valueSchema:
+              type: alias
+              name: anonymous<string>
+              aliasType: schema
+              targetSchema: *a1
       requests:
         - identity: anonymous<requestBody>
           mediaType: application/json
@@ -3343,7 +3543,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a111
+            targetSchema: &a97
               type: object
               name: UpdateComponentRequest
               properties:
@@ -3370,7 +3570,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a110
+            targetSchema: &a96
               type: object
               name: UpdateComponentResponse
         - name: "480"
@@ -3437,7 +3637,15 @@ http:
           expandParameterValues: false
           renderStyle: simple
           required: true
-          schema: *a5
+          schema:
+            type: constant
+            name: anonymous<unknown>
+            value: EC2WindowsBarleyService.UpdateComponentConfiguration
+            valueSchema:
+              type: alias
+              name: anonymous<string>
+              aliasType: schema
+              targetSchema: *a1
       requests:
         - identity: anonymous<requestBody>
           mediaType: application/json
@@ -3446,7 +3654,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a113
+            targetSchema: &a99
               type: object
               name: UpdateComponentConfigurationRequest
               properties:
@@ -3488,7 +3696,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a112
+            targetSchema: &a98
               type: object
               name: UpdateComponentConfigurationResponse
         - name: "480"
@@ -3544,7 +3752,15 @@ http:
           expandParameterValues: false
           renderStyle: simple
           required: true
-          schema: *a5
+          schema:
+            type: constant
+            name: anonymous<unknown>
+            value: EC2WindowsBarleyService.UpdateLogPattern
+            valueSchema:
+              type: alias
+              name: anonymous<string>
+              aliasType: schema
+              targetSchema: *a1
       requests:
         - identity: anonymous<requestBody>
           mediaType: application/json
@@ -3553,7 +3769,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a115
+            targetSchema: &a101
               type: object
               name: UpdateLogPatternRequest
               properties:
@@ -3584,7 +3800,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a114
+            targetSchema: &a100
               type: object
               name: UpdateLogPatternResponse
               properties:
@@ -3688,263 +3904,45 @@ schemas:
   primitives:
     - *a1
     - *a2
-    - *a41
     - *a5
-    - *a42
     - *a16
     - *a24
-    - *a43
-    - *a44
-    - *a45
-    - *a46
-    - *a47
-    - *a48
-    - *a49
-    - *a50
-    - *a51
-    - *a52
+    - *a41
   constants:
     - type: constant
       name: anonymous<unknown>
       value: INSIGHTS_FEEDBACK
-      valueSchema: &a126
-        type: alias
-        name: anonymous<string>
-        aliasType: schema
-        targetSchema: *a1
-    - type: constant
-      name: anonymous<unknown>
-      value: EC2WindowsBarleyService.CreateApplication
-      valueSchema: &a127
-        type: alias
-        name: anonymous<string>
-        aliasType: schema
-        targetSchema: *a1
-    - type: constant
-      name: anonymous<unknown>
-      value: EC2WindowsBarleyService.CreateComponent
-      valueSchema: &a128
-        type: alias
-        name: anonymous<string>
-        aliasType: schema
-        targetSchema: *a1
-    - type: constant
-      name: anonymous<unknown>
-      value: EC2WindowsBarleyService.CreateLogPattern
-      valueSchema: &a129
-        type: alias
-        name: anonymous<string>
-        aliasType: schema
-        targetSchema: *a1
-    - type: constant
-      name: anonymous<unknown>
-      value: EC2WindowsBarleyService.DeleteApplication
-      valueSchema: &a130
-        type: alias
-        name: anonymous<string>
-        aliasType: schema
-        targetSchema: *a1
-    - type: constant
-      name: anonymous<unknown>
-      value: EC2WindowsBarleyService.DeleteComponent
-      valueSchema: &a131
-        type: alias
-        name: anonymous<string>
-        aliasType: schema
-        targetSchema: *a1
-    - type: constant
-      name: anonymous<unknown>
-      value: EC2WindowsBarleyService.DeleteLogPattern
-      valueSchema: &a132
-        type: alias
-        name: anonymous<string>
-        aliasType: schema
-        targetSchema: *a1
-    - type: constant
-      name: anonymous<unknown>
-      value: EC2WindowsBarleyService.DescribeApplication
-      valueSchema: &a133
-        type: alias
-        name: anonymous<string>
-        aliasType: schema
-        targetSchema: *a1
-    - type: constant
-      name: anonymous<unknown>
-      value: EC2WindowsBarleyService.DescribeComponent
-      valueSchema: &a134
-        type: alias
-        name: anonymous<string>
-        aliasType: schema
-        targetSchema: *a1
-    - type: constant
-      name: anonymous<unknown>
-      value: EC2WindowsBarleyService.DescribeComponentConfiguration
-      valueSchema: &a135
-        type: alias
-        name: anonymous<string>
-        aliasType: schema
-        targetSchema: *a1
-    - type: constant
-      name: anonymous<unknown>
-      value: EC2WindowsBarleyService.DescribeComponentConfigurationRecommendation
-      valueSchema: &a136
-        type: alias
-        name: anonymous<string>
-        aliasType: schema
-        targetSchema: *a1
-    - type: constant
-      name: anonymous<unknown>
-      value: EC2WindowsBarleyService.DescribeLogPattern
-      valueSchema: &a137
-        type: alias
-        name: anonymous<string>
-        aliasType: schema
-        targetSchema: *a1
-    - type: constant
-      name: anonymous<unknown>
-      value: EC2WindowsBarleyService.DescribeObservation
-      valueSchema: &a138
-        type: alias
-        name: anonymous<string>
-        aliasType: schema
-        targetSchema: *a1
-    - type: constant
-      name: anonymous<unknown>
-      value: EC2WindowsBarleyService.DescribeProblem
-      valueSchema: &a139
-        type: alias
-        name: anonymous<string>
-        aliasType: schema
-        targetSchema: *a1
-    - type: constant
-      name: anonymous<unknown>
-      value: EC2WindowsBarleyService.DescribeProblemObservations
-      valueSchema: &a140
-        type: alias
-        name: anonymous<string>
-        aliasType: schema
-        targetSchema: *a1
-    - type: constant
-      name: anonymous<unknown>
-      value: EC2WindowsBarleyService.ListApplications
-      valueSchema: &a141
-        type: alias
-        name: anonymous<string>
-        aliasType: schema
-        targetSchema: *a1
-    - type: constant
-      name: anonymous<unknown>
-      value: EC2WindowsBarleyService.ListComponents
-      valueSchema: &a142
-        type: alias
-        name: anonymous<string>
-        aliasType: schema
-        targetSchema: *a1
-    - type: constant
-      name: anonymous<unknown>
-      value: EC2WindowsBarleyService.ListConfigurationHistory
-      valueSchema: &a143
-        type: alias
-        name: anonymous<string>
-        aliasType: schema
-        targetSchema: *a1
-    - type: constant
-      name: anonymous<unknown>
-      value: EC2WindowsBarleyService.ListLogPatternSets
-      valueSchema: &a144
-        type: alias
-        name: anonymous<string>
-        aliasType: schema
-        targetSchema: *a1
-    - type: constant
-      name: anonymous<unknown>
-      value: EC2WindowsBarleyService.ListLogPatterns
-      valueSchema: &a145
-        type: alias
-        name: anonymous<string>
-        aliasType: schema
-        targetSchema: *a1
-    - type: constant
-      name: anonymous<unknown>
-      value: EC2WindowsBarleyService.ListProblems
-      valueSchema: &a146
-        type: alias
-        name: anonymous<string>
-        aliasType: schema
-        targetSchema: *a1
-    - type: constant
-      name: anonymous<unknown>
-      value: EC2WindowsBarleyService.ListTagsForResource
-      valueSchema: &a147
-        type: alias
-        name: anonymous<string>
-        aliasType: schema
-        targetSchema: *a1
-    - type: constant
-      name: anonymous<unknown>
-      value: EC2WindowsBarleyService.TagResource
-      valueSchema: &a148
-        type: alias
-        name: anonymous<string>
-        aliasType: schema
-        targetSchema: *a1
-    - type: constant
-      name: anonymous<unknown>
-      value: EC2WindowsBarleyService.UntagResource
-      valueSchema: &a149
-        type: alias
-        name: anonymous<string>
-        aliasType: schema
-        targetSchema: *a1
-    - type: constant
-      name: anonymous<unknown>
-      value: EC2WindowsBarleyService.UpdateApplication
-      valueSchema: &a150
-        type: alias
-        name: anonymous<string>
-        aliasType: schema
-        targetSchema: *a1
-    - type: constant
-      name: anonymous<unknown>
-      value: EC2WindowsBarleyService.UpdateComponent
-      valueSchema: &a151
-        type: alias
-        name: anonymous<string>
-        aliasType: schema
-        targetSchema: *a1
-    - type: constant
-      name: anonymous<unknown>
-      value: EC2WindowsBarleyService.UpdateComponentConfiguration
-      valueSchema: &a152
-        type: alias
-        name: anonymous<string>
-        aliasType: schema
-        targetSchema: *a1
-    - type: constant
-      name: anonymous<unknown>
-      value: EC2WindowsBarleyService.UpdateLogPattern
-      valueSchema: &a153
+      valueSchema:
         type: alias
         name: anonymous<string>
         aliasType: schema
         targetSchema: *a1
   enums:
     - *a20
+    - *a42
+    - *a35
+    - *a43
+    - *a44
+    - *a45
+    - *a46
+    - *a47
+  objects:
+    - *a48
+    - *a49
+    - *a50
+    - *a51
+    - *a52
     - *a53
     - *a54
     - *a55
     - *a56
     - *a57
-    - *a35
     - *a58
-  objects:
-    - *a17
     - *a59
     - *a60
     - *a61
     - *a62
     - *a63
-    - *a22
     - *a64
     - *a65
     - *a66
@@ -3955,7 +3953,6 @@ schemas:
     - *a71
     - *a72
     - *a73
-    - *a33
     - *a74
     - *a75
     - *a76
@@ -3964,10 +3961,8 @@ schemas:
     - *a79
     - *a80
     - *a81
-    - *a31
     - *a82
     - *a83
-    - *a37
     - *a84
     - *a85
     - *a86
@@ -3986,77 +3981,36 @@ schemas:
     - *a99
     - *a100
     - *a101
+    - *a33
+    - *a17
     - *a102
+    - *a22
+    - *a31
     - *a103
+    - *a37
     - *a104
+  aliases:
+    - *a39
     - *a105
+    - *a3
+    - *a4
     - *a106
+    - *a21
     - *a107
+    - *a38
+    - *a19
+    - *a13
+    - *a14
+    - *a15
+    - *a23
+    - *a27
     - *a108
+    - *a32
     - *a109
     - *a110
     - *a111
     - *a112
     - *a113
+    - *a40
     - *a114
     - *a115
-  aliases:
-    - *a3
-    - *a4
-    - *a40
-    - *a116
-    - *a38
-    - *a117
-    - *a19
-    - *a13
-    - *a14
-    - *a15
-    - *a18
-    - *a21
-    - *a23
-    - *a25
-    - *a26
-    - *a27
-    - *a28
-    - *a29
-    - *a30
-    - *a118
-    - *a119
-    - *a32
-    - *a120
-    - *a34
-    - *a36
-    - *a121
-    - *a122
-    - *a123
-    - *a124
-    - *a39
-    - *a125
-    - *a126
-    - *a127
-    - *a128
-    - *a129
-    - *a130
-    - *a131
-    - *a132
-    - *a133
-    - *a134
-    - *a135
-    - *a136
-    - *a137
-    - *a138
-    - *a139
-    - *a140
-    - *a141
-    - *a142
-    - *a143
-    - *a144
-    - *a145
-    - *a146
-    - *a147
-    - *a148
-    - *a149
-    - *a150
-    - *a151
-    - *a152
-    - *a153

@@ -17,7 +17,6 @@ export async function consume<T>(g: AsyncGenerator<T>) {
   }
 }
 
-
 export function isObjectSchema(schema: v3.Schema) {
   return schema.type == common.JsonType.Object ||
     length(schema.properties) > 0 ||

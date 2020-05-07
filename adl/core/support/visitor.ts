@@ -210,7 +210,7 @@ export class Visitor<TSourceModel extends OAIModel> {
     }
     const node = this.findNode(path, targetContext.sourceModel);
     if (node) {
-      yield * await targetContext.process(action, node);
+      yield * targetContext.process(action, node);
       return;
     }
     throw new Error(`Unable to process Ref ${sourceFile}#/${path}`);
@@ -361,7 +361,7 @@ export class Context<TSourceModel extends OAIModel> {
       }
       // if we came to processInline, then that means 
       // by defintion, we are processing an anonymous element.
-      yield * await this.process(action, <TIn>value, <TOptions>{ ...options, isAnonymous: true });
+      yield * this.process(action, <TIn>value, <TOptions>{ ...options, isAnonymous: true });
     }
   }
 

@@ -27,11 +27,11 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a7
+            targetSchema: &a6
               type: alias
               name: Pets
               aliasType: schema
-              targetSchema: &a6
+              targetSchema:
                 type: array
                 name: anonymous<unknown>
                 elementSchema: &a4
@@ -121,9 +121,8 @@ schemas:
     - *a2
     - *a5
     - *a1
-    - *a6
   objects:
     - *a4
     - *a3
   aliases:
-    - *a7
+    - *a6

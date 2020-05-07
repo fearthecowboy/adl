@@ -1,11 +1,12 @@
 import { v3 } from '@azure-tools/openapi';
+import { Alias as A } from '../../../model/alias';
 import { Element } from '../../../model/element';
-import { consume } from '../common';
+import { Alias, AndSchema, AnyOfSchema, AnySchema, ArraySchema, Constant, Enum, ObjectSchema, Primitive, XorSchema } from '../../../model/schema';
 import { header } from './header';
 import { parameter } from './parameter';
 import { requestBody } from './request-body';
 import { response } from './response';
-import { processSchemas } from './schema';
+import { processSchema } from './schema';
 import { securityScheme } from './security-schemes';
 import { Context } from './serializer';
 
@@ -21,7 +22,38 @@ export async function *processComponents(components: v3.Components, $: Context):
   }
 
   // definitely, schemas first, since so much will $ref them
-  await consume($.process(processSchemas, components.schemas));
+  // await consume($.process(processSchemas, components.schemas));
+  for await (const schema of $.processDictionary(processSchema, components.schemas) ) {
+    // we have to split up where schemas go 
+    if( schema instanceof A) {
+      throw new Error('schemas have their own alias type');
+    }
+    if( schema instanceof Alias) {
+      $.api.schemas.aliases.push(schema);
+      continue;
+    } 
+    if (schema instanceof ObjectSchema) {
+      $.api.schemas.objects.push(schema);
+      continue;
+    }
+    if (schema instanceof Enum) {
+      $.api.schemas.enums.push(schema);
+      continue;
+    } 
+    if (schema instanceof Constant) {
+      $.api.schemas.constants.push(schema);
+      continue;
+    }
+    if (schema instanceof AndSchema || schema instanceof XorSchema || schema instanceof AnyOfSchema ) {
+      $.api.schemas.combinations.push(schema);
+      continue;
+    }
+    if(schema instanceof AnySchema || schema instanceof ArraySchema || schema instanceof Primitive) {
+      continue;
+    }
+    
+    throw new Error('Should not get here.');
+  }
   
   // if there are vendor extensions in the dictionary, they should be handled like this:
   // for (const { key, value: extension } of vendorExtensions(components.headers)) {

@@ -1,1 +1,184 @@
-{}
+paths:
+  "/repos/{owner}/{repo}/branches/{branch}/protection":
+    put:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                allow_force_pushes:
+                  nullable: true
+                enforce_admins:
+                  nullable: true
+                required_pull_request_reviews:
+                  nullable: true
+                required_status_checks:
+                  nullable: true
+                restrictions:
+                  nullable: true
+  "/repos/{owner}/{repo}/check-runs":
+    post:
+      requestBody:
+        content:
+          application/json:
+            examples:
+              example-of-completed-conclusion:
+                summary: Example of completed conclusion
+                value:
+                  actions:
+                    - description: Allow us to fix these errors for you
+                      identifier: fix_errors
+                      label: Fix
+                  completed_at: 2017-11-30T19:49:10Z
+                  conclusion: success
+                  head_sha: ce587453ced02b1526dfb4cb910479d431683101
+                  name: mighty_readme
+                  output:
+                    annotations:
+                      - annotation_level: warning
+                        end_line: 2
+                        message: Check your spelling for 'banaas'.
+                        path: README.md
+                        raw_details: Do you mean 'bananas' or 'banana'?
+                        start_line: 2
+                        title: Spell Checker
+                      - annotation_level: warning
+                        end_line: 4
+                        message: Check your spelling for 'aples'
+                        path: README.md
+                        raw_details: Do you mean 'apples' or 'Naples'
+                        start_line: 4
+                        title: Spell Checker
+                    images:
+                      - alt: Super bananas
+                        image_url: http://example.com/images/42
+                    summary: There are 0 failures, 2 warnings, and 1 notices.
+                    text: You may have some misspelled words on lines 2 and 4. You also may want to
+                      add a section in your README about how to install your
+                      app.
+                    title: Mighty Readme report
+                  started_at: 2017-11-30T19:39:10Z
+                  status: completed
+              example-of-in-progress-conclusion:
+                summary: Example of in_progress conclusion
+                value:
+                  external_id: "42"
+                  head_sha: ce587453ced02b1526dfb4cb910479d431683101
+                  name: mighty_readme
+                  output:
+                    summary: ""
+                    text: ""
+                    title: Mighty Readme report
+                  started_at: 2018-05-04T01:14:52Z
+                  status: in_progress
+  "/repos/{owner}/{repo}/contents/{path}":
+    put:
+      requestBody:
+        content:
+          application/json:
+            examples:
+              example-for-creating-a-file:
+                summary: Example for creating a file
+                value:
+                  committer:
+                    email: octocat@github.com
+                    name: Monalisa Octocat
+                  content: bXkgbmV3IGZpbGUgY29udGVudHM=
+                  message: my commit message
+              example-for-updating-a-file:
+                summary: Example for updating a file
+                value:
+                  committer:
+                    email: octocat@github.com
+                    name: Monalisa Octocat
+                  content: bXkgdXBkYXRlZCBmaWxlIGNvbnRlbnRz
+                  message: a new commit message
+                  sha: 95b966ae1c166bd92f8ae7d1c313e738c731dfc3
+  "/repos/{owner}/{repo}/deployments":
+    post:
+      requestBody:
+        content:
+          application/json:
+            examples:
+              advanced-example:
+                summary: Advanced example
+                value:
+                  auto_merge: false
+                  description: Deploy request from hubot
+                  payload:
+                    deploy: migrate
+                  ref: topic-branch
+                  required_contexts:
+                    - ci/janky
+                    - security/brakeman
+              simple-example:
+                summary: Simple example
+                value:
+                  description: Deploy request from hubot
+                  payload:
+                    deploy: migrate
+                  ref: topic-branch
+  "/repos/{owner}/{repo}/git/trees":
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                tree:
+                  items:
+                    properties:
+                      sha:
+                        nullable: true
+  "/repos/{owner}/{repo}/import":
+    patch:
+      requestBody:
+        content:
+          application/json:
+            examples:
+              example-1:
+                summary: Example 1
+                value:
+                  vcs_password: secret
+                  vcs_username: octocat
+  "/repos/{owner}/{repo}/issues/{issue_number}":
+    patch:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                milestone:
+                  nullable: true
+  "/repos/{owner}/{repo}/pulls/{pull_number}/comments":
+    post:
+      requestBody:
+        content:
+          application/json:
+            examples:
+              example-for-a-multi-line-comment:
+                summary: Example for a multi-line comment
+                value:
+                  body: Can you expand on this?
+                  line: 3
+                  path: test-plan.md
+                  side: RIGHT
+                  start_line: 1
+                  start_side: LEFT
+              example-for-a-single-line-comment:
+                summary: Example for a single-line comment
+                value:
+                  body: Let's add this deleted line back.
+                  line: 5
+                  path: test-plan.md
+                  side: LEFT
+  "/repos/{owner}/{repo}/releases/{release_id}/assets":
+    post:
+      servers:
+        - url: "{origin}"
+          variables:
+            origin:
+              default: https://uploads.github.com
+              description: The URL origin (protocol + host name + port) is included in
+                `upload_url` returned in the response of the "Create a release"
+                endpoint
