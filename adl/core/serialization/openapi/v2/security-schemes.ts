@@ -74,7 +74,7 @@ function *oauth2Authentication(scheme: v2.OAuthSecurityBase, $: Context) {
       return;
   }
 
-  for (const { key: name, value: description } of items(use(scheme.scopes))) {
+  for (const [ name, description] of items(use(scheme.scopes))) {
     flow.scopes.push(new OAuth2Scope(name, description));
   }
 
