@@ -93,7 +93,7 @@ function addUnusedTo(target: any, source: any) {
     return;
   }
 
-  for (const [ key, value ] of items(<any>source)) {
+  for (const [key, value] of items(<any>source)) {
     if (value === undefined || value === null) {
       continue;
     }
@@ -157,7 +157,7 @@ export class Visitor<TSourceModel extends OAIModel> {
 
   async process<TOutput, TOptions extends Options = Options>(action: fnActionOnRoot<TSourceModel, TSourceModel, TOutput, TOptions>) {
 
-    for (const value  of values(this.sourceFiles)) {
+    for (const value of values(this.sourceFiles)) {
       const ctx = await value;
       const watch = new Stopwatch();
 
@@ -210,7 +210,7 @@ export class Visitor<TSourceModel extends OAIModel> {
     }
     const node = this.findNode(path, targetContext.sourceModel);
     if (node) {
-      yield * targetContext.process(action, node);
+      yield* targetContext.process(action, node);
       return;
     }
     throw new Error(`Unable to process Ref ${sourceFile}#/${path}`);
@@ -267,7 +267,7 @@ export class Context<TSourceModel extends OAIModel> {
     if (value) {
       for (const each of value) {
         use(value);
-        yield *this.process(action, each);
+        yield* this.process(action, each);
       }
     }
   }
@@ -280,7 +280,7 @@ export class Context<TSourceModel extends OAIModel> {
       const ref = refTo(value);
       const refResult = this.visitor.$refs.get(ref);
       if (refResult) {
-        for( const each of refResult) {
+        for (const each of refResult) {
           yield each;
         }
         return;
@@ -288,7 +288,7 @@ export class Context<TSourceModel extends OAIModel> {
 
       const results = new Array<TOutput>();
       // ok, call the action
-      for await (let result of action(value!, this, options) ) {
+      for await (let result of action(value!, this, options)) {
         // we're going to mark the original value as used
         // note: does not mark the children as used. 
         use(value);
@@ -300,12 +300,12 @@ export class Context<TSourceModel extends OAIModel> {
           // track it so we don't redo it if asked for it again later.
           this.visitor.$refs.set(ref, results);
           results.push(result);
-          if( result.versionInfo.length === 0 ) {
+          if (result.versionInfo.length === 0) {
             // only add this if we haven't added it before
             // when a result is returned up the chain more than once
             result.versionInfo.push(new VersionInfo({
-            // deprecated isn't on everything, but this is safe when it's not there
-              deprecated: use((<any>value).deprecated) ?  this.apiVersion: undefined,
+              // deprecated isn't on everything, but this is safe when it's not there
+              deprecated: use((<any>value).deprecated) ? this.apiVersion : undefined,
               added: this.apiVersion,
             }));
             result.addInternalData(this.visitor.inputType, { preferredFile: getSourceFile(value) });
@@ -317,7 +317,7 @@ export class Context<TSourceModel extends OAIModel> {
     }
   }
 
-  addVersionInfo( result: any, value: any ) {
+  addVersionInfo(result: any, value: any) {
     // 
     if (result.versionInfo.length === 0) {
       // only add this if we haven't added it before
@@ -331,7 +331,7 @@ export class Context<TSourceModel extends OAIModel> {
     }
   }
 
-  async *processInline<TIn, TOut extends Element, TOptions extends Options = Options>(action: fnAction<TSourceModel, TIn, TOut,TOptions>, value: TIn | common.JsonReference<TIn> | undefined, options?: TOptions): AsyncGenerator<TOut|Alias<TOut>> {
+  async *processInline<TIn, TOut extends Element, TOptions extends Options = Options>(action: fnAction<TSourceModel, TIn, TOut, TOptions>, value: TIn | common.JsonReference<TIn> | undefined, options?: TOptions): AsyncGenerator<TOut | Alias<TOut>> {
     if (value !== undefined) {
       if (isReference(value)) {
         const name = options?.isAnonymous ? anonymous(action.name) : nameOf(value);
@@ -340,17 +340,17 @@ export class Context<TSourceModel extends OAIModel> {
         use(value.$ref);
 
         const targets = <Array<TOut>>this.visitor.$refs.get($ref);
-        if( targets ) {
+        if (targets) {
           // already processed?
-          for( const target of targets) {
-          // if this is a direct link to the target, we return it as-is
-          // otherwise it's got a name, so we're creating an alias to the actual target 
+          for (const target of targets) {
+            // if this is a direct link to the target, we return it as-is
+            // otherwise it's got a name, so we're creating an alias to the actual target 
 
-            yield options?.isAnonymous ? target : new Alias(action.name, name, target) ;
+            yield options?.isAnonymous ? target : new Alias(action.name, name, target);
           }
           return;
         }
-          
+
         // nope, this will process them
         for await (const target of this.visitor.processRef2(file, path, action)) {
           // if this is a direct link to the target, we return it as-is
@@ -361,16 +361,16 @@ export class Context<TSourceModel extends OAIModel> {
       }
       // if we came to processInline, then that means 
       // by defintion, we are processing an anonymous element.
-      yield * this.process(action, <TIn>value, <TOptions>{ ...options, isAnonymous: true });
+      yield* this.process(action, <TIn>value, <TOptions>{ ...options, isAnonymous: true });
     }
   }
 
-  async *processDictionary<TInput, TOutput extends Element, TOptions extends Options>(action: fnAction<TSourceModel, TInput, TOutput, TOptions>, dictionary: Dictionary<TInput | JsonReference<TInput>>|undefined, options?: TOptions ): AsyncGenerator<TOutput|Alias<TOutput>>{
-    for (const [key,value] of items(dictionary)) {
-      if( isVendorExtension(key)) {
+  async *processDictionary<TInput, TOutput extends Element, TOptions extends Options>(action: fnAction<TSourceModel, TInput, TOutput, TOptions>, dictionary: Dictionary<TInput | JsonReference<TInput>> | undefined, options?: TOptions): AsyncGenerator<TOutput | Alias<TOutput>> {
+    for (const [key, value] of items(dictionary)) {
+      if (isVendorExtension(key)) {
         continue;
-      } 
-      yield* isReference(value) ? this.processInline<TInput,TOutput,TOptions>(action, value, options) : this.process(action, value, options);
+      }
+      yield* isReference(value) ? this.processInline<TInput, TOutput, TOptions>(action, value, options) : this.process(action, value, options);
     }
   }
 
