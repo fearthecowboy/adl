@@ -23,6 +23,7 @@ export async function *requestBody(requestBody: v3.RequestBody, $: Context, opti
 
     // example data we can figure out later.
     request.addToAttic('example', type.example);
+    request.addToAttic('examples', (<any>type).examples);
 
     // encoding information not necessary yet... 
     request.addToAttic('encoding', type.encoding);
