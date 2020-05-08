@@ -11,6 +11,13 @@ export async function toArray<T>(g: AsyncGenerator<T>) {
   return result;
 }
 
+export async function push<T>(destination: Array<T>, g: AsyncGenerator<T>) {
+  for await (const each of g) {
+    destination.push(each);
+  }
+  return destination;
+}
+
 export async function consume<T>(g: AsyncGenerator<T>) {
   for await (const each of g) {
     // just consume it.

@@ -20,9 +20,432 @@ http:
         requested ID
       id: findTweetsById
       parameters:
+        - type: query
+          name: ids
+          description: A comma separated list of Tweet IDs. Up to 100 are allowed in a
+            single request.
+          expandParameterValues: false
+          renderStyle: form
+          required: true
+          schema:
+            type: alias
+            name: schema
+            aliasType: schema
+            constraints:
+              - type: constraint
+                name: MaximumElements
+                count: 100
+              - type: constraint
+                name: MinimumElements
+                count: 1
+            targetSchema:
+              type: array
+              name: anonymous<unknown>
+              elementSchema: &a11
+                type: alias
+                name: anonymous<string>
+                aliasType: schema
+                constraints:
+                  - type: constraint
+                    name: RegularExpression
+                    length: ^[0-9]{1,19}$
+                description: Unique identifier of this Tweet. This is returned as a string in
+                  order to avoid complications with languages and tools that
+                  cannot handle large integers.
+                targetSchema: *a1
+                attic:
+                  example: "120897978112909812"
+        - name: "1"
+          aliasType: parameter
+          target: &a41
+            type: query
+            name: expansions
+            description: A comma separated list of fields to expand.
+            expandParameterValues: false
+            renderStyle: form
+            schema:
+              type: alias
+              name: schema
+              aliasType: schema
+              constraints:
+                - type: constraint
+                  name: MinimumElements
+                  count: 1
+                - type: constraint
+                  name: UniqueElements
+                  unique: true
+              description: The list of fields you can expand for a [Tweet](#Tweet) object. If
+                the field has an ID, it can be expanded into a full object.
+              targetSchema:
+                type: array
+                name: anonymous<unknown>
+                elementSchema:
+                  type: enum
+                  name: items
+                  elementSchema: &a2
+                    type: alias
+                    name: anonymous<string>
+                    aliasType: schema
+                    targetSchema: *a1
+                  sealed: true
+                  values:
+                    - type: constant
+                      name: anonymous<unknown>
+                      value: author_id
+                      valueSchema: *a2
+                    - type: constant
+                      name: anonymous<unknown>
+                      value: referenced_tweets.id
+                      valueSchema: *a2
+                    - type: constant
+                      name: anonymous<unknown>
+                      value: in_reply_to_user_id
+                      valueSchema: *a2
+                    - type: constant
+                      name: anonymous<unknown>
+                      value: geo.place_id
+                      valueSchema: *a2
+                    - type: constant
+                      name: anonymous<unknown>
+                      value: attachments.media_keys
+                      valueSchema: *a2
+                    - type: constant
+                      name: anonymous<unknown>
+                      value: attachments.poll_ids
+                      valueSchema: *a2
+                    - type: constant
+                      name: anonymous<unknown>
+                      value: entities.mentions.username
+                      valueSchema: *a2
+                    - type: constant
+                      name: anonymous<unknown>
+                      value: referenced_tweets.id.author_id
+                      valueSchema: *a2
+              attic:
+                example: author_id
+        - name: "2"
+          aliasType: parameter
+          target: &a42
+            type: query
+            name: tweet.fields
+            description: A comma separated list of Tweet fields to display.
+            expandParameterValues: false
+            renderStyle: form
+            required: false
+            schema:
+              type: alias
+              name: schema
+              aliasType: schema
+              constraints:
+                - type: constraint
+                  name: MinimumElements
+                  count: 1
+                - type: constraint
+                  name: UniqueElements
+                  unique: true
+              description: The list of fields you can display for a [Tweet](#Tweet) object.
+              targetSchema:
+                type: array
+                name: anonymous<unknown>
+                elementSchema:
+                  type: enum
+                  name: items
+                  elementSchema: &a3
+                    type: alias
+                    name: anonymous<string>
+                    aliasType: schema
+                    targetSchema: *a1
+                  sealed: true
+                  values:
+                    - type: constant
+                      name: anonymous<unknown>
+                      value: id
+                      valueSchema: *a3
+                    - type: constant
+                      name: anonymous<unknown>
+                      value: created_at
+                      valueSchema: *a3
+                    - type: constant
+                      name: anonymous<unknown>
+                      value: text
+                      valueSchema: *a3
+                    - type: constant
+                      name: anonymous<unknown>
+                      value: author_id
+                      valueSchema: *a3
+                    - type: constant
+                      name: anonymous<unknown>
+                      value: in_reply_to_user_id
+                      valueSchema: *a3
+                    - type: constant
+                      name: anonymous<unknown>
+                      value: referenced_tweets
+                      valueSchema: *a3
+                    - type: constant
+                      name: anonymous<unknown>
+                      value: attachments
+                      valueSchema: *a3
+                    - type: constant
+                      name: anonymous<unknown>
+                      value: withheld
+                      valueSchema: *a3
+                    - type: constant
+                      name: anonymous<unknown>
+                      value: geo
+                      valueSchema: *a3
+                    - type: constant
+                      name: anonymous<unknown>
+                      value: entities
+                      valueSchema: *a3
+                    - type: constant
+                      name: anonymous<unknown>
+                      value: public_metrics
+                      valueSchema: *a3
+                    - type: constant
+                      name: anonymous<unknown>
+                      value: possibly_sensitive
+                      valueSchema: *a3
+                    - type: constant
+                      name: anonymous<unknown>
+                      value: source
+                      valueSchema: *a3
+                    - type: constant
+                      name: anonymous<unknown>
+                      value: lang
+                      valueSchema: *a3
+                    - type: constant
+                      name: anonymous<unknown>
+                      value: context_annotations
+                      valueSchema: *a3
+              attic:
+                example: created_at
+        - name: "3"
+          aliasType: parameter
+          target: &a43
+            type: query
+            name: user.fields
+            description: A comma separated list of User fields to display.
+            expandParameterValues: false
+            renderStyle: form
+            required: false
+            schema:
+              type: alias
+              name: schema
+              aliasType: schema
+              constraints:
+                - type: constraint
+                  name: MinimumElements
+                  count: 1
+                - type: constraint
+                  name: UniqueElements
+                  unique: true
+              description: The list of fields you can display for a [User](#User) object.
+              targetSchema:
+                type: array
+                name: anonymous<unknown>
+                elementSchema:
+                  type: enum
+                  name: items
+                  elementSchema: &a4
+                    type: alias
+                    name: anonymous<string>
+                    aliasType: schema
+                    targetSchema: *a1
+                  sealed: true
+                  values:
+                    - type: constant
+                      name: anonymous<unknown>
+                      value: id
+                      valueSchema: *a4
+                    - type: constant
+                      name: anonymous<unknown>
+                      value: created_at
+                      valueSchema: *a4
+                    - type: constant
+                      name: anonymous<unknown>
+                      value: name
+                      valueSchema: *a4
+                    - type: constant
+                      name: anonymous<unknown>
+                      value: username
+                      valueSchema: *a4
+                    - type: constant
+                      name: anonymous<unknown>
+                      value: protected
+                      valueSchema: *a4
+                    - type: constant
+                      name: anonymous<unknown>
+                      value: verified
+                      valueSchema: *a4
+                    - type: constant
+                      name: anonymous<unknown>
+                      value: withheld
+                      valueSchema: *a4
+                    - type: constant
+                      name: anonymous<unknown>
+                      value: profile_image_url
+                      valueSchema: *a4
+                    - type: constant
+                      name: anonymous<unknown>
+                      value: location
+                      valueSchema: *a4
+                    - type: constant
+                      name: anonymous<unknown>
+                      value: url
+                      valueSchema: *a4
+                    - type: constant
+                      name: anonymous<unknown>
+                      value: description
+                      valueSchema: *a4
+                    - type: constant
+                      name: anonymous<unknown>
+                      value: entities
+                      valueSchema: *a4
+                    - type: constant
+                      name: anonymous<unknown>
+                      value: pinned_tweet_id
+                      valueSchema: *a4
+                    - type: constant
+                      name: anonymous<unknown>
+                      value: public_metrics
+                      valueSchema: *a4
+              attic:
+                example: created_at
+        - name: "4"
+          aliasType: parameter
+          target: &a44
+            type: query
+            name: media.fields
+            description: A comma separated list of Media fields to display.
+            expandParameterValues: false
+            renderStyle: form
+            required: false
+            schema:
+              type: alias
+              name: schema
+              aliasType: schema
+              constraints:
+                - type: constraint
+                  name: MinimumElements
+                  count: 1
+                - type: constraint
+                  name: UniqueElements
+                  unique: true
+              description: The list of fields you can display for a Media object.
+              targetSchema:
+                type: array
+                name: anonymous<unknown>
+                elementSchema:
+                  type: enum
+                  name: items
+                  elementSchema: &a5
+                    type: alias
+                    name: anonymous<string>
+                    aliasType: schema
+                    targetSchema: *a1
+                  sealed: true
+                  values:
+                    - type: constant
+                      name: anonymous<unknown>
+                      value: media_key
+                      valueSchema: *a5
+                    - type: constant
+                      name: anonymous<unknown>
+                      value: duration_ms
+                      valueSchema: *a5
+                    - type: constant
+                      name: anonymous<unknown>
+                      value: height
+                      valueSchema: *a5
+                    - type: constant
+                      name: anonymous<unknown>
+                      value: preview_image_url
+                      valueSchema: *a5
+                    - type: constant
+                      name: anonymous<unknown>
+                      value: type
+                      valueSchema: *a5
+                    - type: constant
+                      name: anonymous<unknown>
+                      value: url
+                      valueSchema: *a5
+                    - type: constant
+                      name: anonymous<unknown>
+                      value: width
+                      valueSchema: *a5
+              attic:
+                example: created_at
+        - name: "5"
+          aliasType: parameter
+          target: &a45
+            type: query
+            name: place.fields
+            description: A comma separated list of Place fields to display.
+            expandParameterValues: false
+            renderStyle: form
+            required: false
+            schema:
+              type: alias
+              name: schema
+              aliasType: schema
+              constraints:
+                - type: constraint
+                  name: MinimumElements
+                  count: 1
+                - type: constraint
+                  name: UniqueElements
+                  unique: true
+              description: The list of fields you can display for a Place object.
+              targetSchema:
+                type: array
+                name: anonymous<unknown>
+                elementSchema:
+                  type: enum
+                  name: items
+                  elementSchema: &a6
+                    type: alias
+                    name: anonymous<string>
+                    aliasType: schema
+                    targetSchema: *a1
+                  sealed: true
+                  values:
+                    - type: constant
+                      name: anonymous<unknown>
+                      value: id
+                      valueSchema: *a6
+                    - type: constant
+                      name: anonymous<unknown>
+                      value: name
+                      valueSchema: *a6
+                    - type: constant
+                      name: anonymous<unknown>
+                      value: country_code
+                      valueSchema: *a6
+                    - type: constant
+                      name: anonymous<unknown>
+                      value: place_type
+                      valueSchema: *a6
+                    - type: constant
+                      name: anonymous<unknown>
+                      value: full_name
+                      valueSchema: *a6
+                    - type: constant
+                      name: anonymous<unknown>
+                      value: country
+                      valueSchema: *a6
+                    - type: constant
+                      name: anonymous<unknown>
+                      value: contained_within
+                      valueSchema: *a6
+                    - type: constant
+                      name: anonymous<unknown>
+                      value: geo
+                      valueSchema: *a6
+              attic:
+                example: country_code
         - name: "6"
           aliasType: parameter
-          target: &a35
+          target: &a46
             type: query
             name: poll.fields
             description: A comma separated list of Poll fields to display.
@@ -47,7 +470,7 @@ http:
                 elementSchema:
                   type: enum
                   name: items
-                  elementSchema: &a2
+                  elementSchema: &a7
                     type: alias
                     name: anonymous<string>
                     aliasType: schema
@@ -57,23 +480,23 @@ http:
                     - type: constant
                       name: anonymous<unknown>
                       value: id
-                      valueSchema: *a2
+                      valueSchema: *a7
                     - type: constant
                       name: anonymous<unknown>
                       value: options
-                      valueSchema: *a2
+                      valueSchema: *a7
                     - type: constant
                       name: anonymous<unknown>
                       value: voting_status
-                      valueSchema: *a2
+                      valueSchema: *a7
                     - type: constant
                       name: anonymous<unknown>
                       value: end_datetime
-                      valueSchema: *a2
+                      valueSchema: *a7
                     - type: constant
                       name: anonymous<unknown>
                       value: duration_minutes
-                      valueSchema: *a2
+                      valueSchema: *a7
               attic:
                 example: end_datetime
       responses:
@@ -84,7 +507,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a74
+            targetSchema: &a80
               type: object
               name: TweetLookupResponse
               properties:
@@ -100,7 +523,7 @@ http:
                     targetSchema:
                       type: array
                       name: anonymous<unknown>
-                      elementSchema: &a30
+                      elementSchema: &a35
                         type: object
                         name: Tweet
                         properties:
@@ -127,7 +550,7 @@ http:
                                     targetSchema:
                                       type: array
                                       name: anonymous<unknown>
-                                      elementSchema: &a19
+                                      elementSchema: &a24
                                         type: alias
                                         name: anonymous<string>
                                         aliasType: schema
@@ -151,7 +574,7 @@ http:
                                     targetSchema:
                                       type: array
                                       name: anonymous<unknown>
-                                      elementSchema: &a28
+                                      elementSchema: &a33
                                         type: alias
                                         name: anonymous<string>
                                         aliasType: schema
@@ -162,7 +585,7 @@ http:
                                         description: Unique identifier of this poll.
                                         targetSchema: *a1
                           - name: author_id
-                            schema: &a6
+                            schema: &a12
                               type: alias
                               name: anonymous<string>
                               aliasType: schema
@@ -188,14 +611,14 @@ http:
                               targetSchema:
                                 type: array
                                 name: anonymous<unknown>
-                                elementSchema: &a55
+                                elementSchema: &a61
                                   type: object
                                   name: ContextAnnotation
                                   description: Annotation inferred from the tweet text.
                                   properties:
                                     - name: domain
                                       required: true
-                                      schema: &a56
+                                      schema: &a62
                                         type: object
                                         name: ContextAnnotationDomainFields
                                         description: Represents the data for the context annotation domain.
@@ -231,7 +654,7 @@ http:
                                               targetSchema: *a1
                                     - name: entity
                                       required: true
-                                      schema: &a57
+                                      schema: &a63
                                         type: object
                                         name: ContextAnnotationEntityFields
                                         description: Represents the data for the context annotation entity.
@@ -267,11 +690,11 @@ http:
                                               targetSchema: *a1
                           - name: created_at
                             description: Creation time of the Tweet.
-                            schema: &a27
+                            schema: &a32
                               type: dateTime
                               name: anonymous<unknown>
                           - name: entities
-                            schema: &a31
+                            schema: &a36
                               type: object
                               name: FullTextEntities
                               properties:
@@ -287,11 +710,11 @@ http:
                                     targetSchema:
                                       type: array
                                       name: anonymous<unknown>
-                                      elementSchema: &a52
+                                      elementSchema: &a58
                                         type: object
                                         name: CashtagEntity
                                         extends:
-                                          - &a4
+                                          - &a9
                                             type: object
                                             name: EntityIndices
                                             description: Represent a boundary range (start and end index) for a recognized
@@ -311,7 +734,7 @@ http:
                                                       name: Minimum
                                                       minimum: 0
                                                   description: Index (zero-based) at which position this entity ends.
-                                                  targetSchema: &a3
+                                                  targetSchema: &a8
                                                     type: int64
                                                     name: anonymous<unknown>
                                               - name: start
@@ -326,8 +749,8 @@ http:
                                                       name: Minimum
                                                       minimum: 0
                                                   description: Index (zero-based) at which position this entity starts.
-                                                  targetSchema: *a3
-                                          - &a53
+                                                  targetSchema: *a8
+                                          - &a59
                                             type: object
                                             name: CashtagFields
                                             description: Represent the portion of text recognized as a Cashtag, and its
@@ -349,12 +772,12 @@ http:
                                     targetSchema:
                                       type: array
                                       name: anonymous<unknown>
-                                      elementSchema: &a62
+                                      elementSchema: &a68
                                         type: object
                                         name: HashtagEntity
                                         extends:
-                                          - *a4
-                                          - &a63
+                                          - *a9
+                                          - &a69
                                             type: object
                                             name: HashtagFields
                                             description: Represent the portion of text recognized as a Hashtag, and its
@@ -382,12 +805,12 @@ http:
                                     targetSchema:
                                       type: array
                                       name: anonymous<unknown>
-                                      elementSchema: &a65
+                                      elementSchema: &a71
                                         type: object
                                         name: MentionEntity
                                         extends:
-                                          - *a4
-                                          - &a66
+                                          - *a9
+                                          - &a72
                                             type: object
                                             name: MentionFields
                                             description: Represent the portion of text recognized as a User mention, and its
@@ -396,7 +819,7 @@ http:
                                             properties:
                                               - name: username
                                                 required: true
-                                                schema: &a33
+                                                schema: &a38
                                                   type: alias
                                                   name: anonymous<string>
                                                   aliasType: schema
@@ -418,14 +841,14 @@ http:
                                     targetSchema:
                                       type: array
                                       name: anonymous<unknown>
-                                      elementSchema: &a32
+                                      elementSchema: &a37
                                         type: object
                                         name: UrlEntity
                                         description: Represent the portion of text recognized as a URL, and its start
                                           and end position within the text.
                                         extends:
-                                          - *a4
-                                          - &a77
+                                          - *a9
+                                          - &a83
                                             type: object
                                             name: URLFields
                                             description: Represent the portion of text recognized as a URL.
@@ -447,7 +870,7 @@ http:
                                                   description: The URL as displayed in the Twitter client.
                                                   targetSchema: *a1
                                               - name: expanded_url
-                                                schema: &a5
+                                                schema: &a10
                                                   type: alias
                                                   name: anonymous<string>
                                                   aliasType: schema
@@ -467,13 +890,13 @@ http:
                                                   targetSchema:
                                                     type: array
                                                     name: anonymous<unknown>
-                                                    elementSchema: &a78
+                                                    elementSchema: &a84
                                                       type: object
                                                       name: URLImage
                                                       description: Represent the information for the URL image
                                                       properties:
                                                         - name: height
-                                                          schema: &a18
+                                                          schema: &a23
                                                             type: alias
                                                             name: anonymous<number>
                                                             aliasType: schema
@@ -482,11 +905,11 @@ http:
                                                                 name: Minimum
                                                                 minimum: 0
                                                             description: The height of the media in pixels
-                                                            targetSchema: *a3
+                                                            targetSchema: *a8
                                                         - name: url
-                                                          schema: *a5
+                                                          schema: *a10
                                                         - name: width
-                                                          schema: &a20
+                                                          schema: &a25
                                                             type: alias
                                                             name: anonymous<number>
                                                             aliasType: schema
@@ -495,9 +918,9 @@ http:
                                                                 name: Minimum
                                                                 minimum: 0
                                                             description: The width of the media in pixels
-                                                            targetSchema: *a3
+                                                            targetSchema: *a8
                                               - name: status
-                                                schema: &a83
+                                                schema: &a89
                                                   type: alias
                                                   name: anonymous<number>
                                                   aliasType: schema
@@ -509,7 +932,7 @@ http:
                                                       name: Maximum
                                                       maximum: 599
                                                   description: HTTP Status Code.
-                                                  targetSchema: *a3
+                                                  targetSchema: *a8
                                               - name: title
                                                 description: Title of the page the URL points to.
                                                 schema:
@@ -528,7 +951,7 @@ http:
                                                   targetSchema: *a1
                                               - name: url
                                                 required: true
-                                                schema: *a5
+                                                schema: *a10
                           - name: geo
                             description: The location tagged on the Tweet, if the user provided one.
                             schema:
@@ -537,7 +960,7 @@ http:
                               description: The location tagged on the Tweet, if the user provided one.
                               properties:
                                 - name: coordinates
-                                  schema: &a25
+                                  schema: &a30
                                     type: object
                                     name: Point
                                     description: A [GeoJson
@@ -546,7 +969,7 @@ http:
                                     properties:
                                       - name: coordinates
                                         required: true
-                                        schema: &a84
+                                        schema: &a90
                                           type: alias
                                           name: Position
                                           aliasType: schema
@@ -564,7 +987,7 @@ http:
                                           targetSchema:
                                             type: array
                                             name: anonymous<unknown>
-                                            elementSchema: &a24
+                                            elementSchema: &a29
                                               type: double
                                               name: anonymous<unknown>
                                       - name: type
@@ -579,7 +1002,7 @@ http:
                                             aliasType: schema
                                             targetSchema: *a1
                                 - name: place_id
-                                  schema: &a22
+                                  schema: &a27
                                     type: alias
                                     name: anonymous<string>
                                     aliasType: schema
@@ -587,22 +1010,9 @@ http:
                                     targetSchema: *a1
                           - name: id
                             required: true
-                            schema: &a7
-                              type: alias
-                              name: anonymous<string>
-                              aliasType: schema
-                              constraints:
-                                - type: constraint
-                                  name: RegularExpression
-                                  length: ^[0-9]{1,19}$
-                              description: Unique identifier of this Tweet. This is returned as a string in
-                                order to avoid complications with languages and
-                                tools that cannot handle large integers.
-                              targetSchema: *a1
-                              attic:
-                                example: "120897978112909812"
+                            schema: *a11
                           - name: in_reply_to_user_id
-                            schema: *a6
+                            schema: *a12
                           - name: lang
                             description: Language of the Tweet, if detected by Twitter. Returned as a BCP47
                               language tag.
@@ -616,7 +1026,7 @@ http:
                           - name: possibly_sensitive
                             description: Indicates if this Tweet contains URLs marked as sensitive, for
                               example content suitable for mature audiences.
-                            schema: &a9
+                            schema: &a14
                               type: boolean
                               name: anonymous<unknown>
                           - name: public_metrics
@@ -634,7 +1044,7 @@ http:
                                     name: anonymous<number>
                                     aliasType: schema
                                     description: Number of times this Tweet has been liked.
-                                    targetSchema: *a3
+                                    targetSchema: *a8
                                 - name: quote_count
                                   description: Number of times this Tweet has been quoted.
                                   schema:
@@ -642,7 +1052,7 @@ http:
                                     name: anonymous<number>
                                     aliasType: schema
                                     description: Number of times this Tweet has been quoted.
-                                    targetSchema: *a3
+                                    targetSchema: *a8
                                 - name: reply_count
                                   description: Number of times this Tweet has been replied to.
                                   required: true
@@ -651,7 +1061,7 @@ http:
                                     name: anonymous<number>
                                     aliasType: schema
                                     description: Number of times this Tweet has been replied to.
-                                    targetSchema: *a3
+                                    targetSchema: *a8
                                 - name: retweet_count
                                   description: Number of times this Tweet has been Retweeted.
                                   required: true
@@ -660,7 +1070,7 @@ http:
                                     name: anonymous<number>
                                     aliasType: schema
                                     description: Number of times this Tweet has been Retweeted.
-                                    targetSchema: *a3
+                                    targetSchema: *a8
                           - name: referenced_tweets
                             description: A list of Tweets this Tweet refers to. For example, if the parent
                               Tweet is a Retweet, a Quoted Tweet or a Reply, it
@@ -687,13 +1097,13 @@ http:
                                   properties:
                                     - name: id
                                       required: true
-                                      schema: *a7
+                                      schema: *a11
                                     - name: type
                                       required: true
                                       schema:
                                         type: enum
                                         name: type
-                                        elementSchema: &a8
+                                        elementSchema: &a13
                                           type: alias
                                           name: anonymous<string>
                                           aliasType: schema
@@ -703,15 +1113,15 @@ http:
                                           - type: constant
                                             name: anonymous<unknown>
                                             value: retweeted
-                                            valueSchema: *a8
+                                            valueSchema: *a13
                                           - type: constant
                                             name: anonymous<unknown>
                                             value: quoted
-                                            valueSchema: *a8
+                                            valueSchema: *a13
                                           - type: constant
                                             name: anonymous<unknown>
                                             value: replied_to
-                                            valueSchema: *a8
+                                            valueSchema: *a13
                           - name: source
                             description: The name of the app the user Tweeted from.
                             schema:
@@ -730,7 +1140,7 @@ http:
                               description: The content of the Tweet.
                               targetSchema: *a1
                           - name: withheld
-                            schema: &a76
+                            schema: &a82
                               type: object
                               name: TweetWithheld
                               description: Indicates withholding details for [withheld
@@ -740,7 +1150,7 @@ http:
                                   description: Indicates if the content is being withheld for on the basis of
                                     copyright infringement.
                                   required: true
-                                  schema: *a9
+                                  schema: *a14
                                 - name: country_codes
                                   description: Provides a list of countries where this content is not available.
                                   required: true
@@ -759,7 +1169,7 @@ http:
                                     targetSchema:
                                       type: array
                                       name: anonymous<unknown>
-                                      elementSchema: &a23
+                                      elementSchema: &a28
                                         type: alias
                                         name: anonymous<string>
                                         aliasType: schema
@@ -774,7 +1184,7 @@ http:
                                   schema:
                                     type: enum
                                     name: scope
-                                    elementSchema: &a10
+                                    elementSchema: &a15
                                       type: alias
                                       name: anonymous<string>
                                       aliasType: schema
@@ -786,11 +1196,11 @@ http:
                                       - type: constant
                                         name: anonymous<unknown>
                                         value: tweet
-                                        valueSchema: *a10
+                                        valueSchema: *a15
                                       - type: constant
                                         name: anonymous<unknown>
                                         value: user
-                                        valueSchema: *a10
+                                        valueSchema: *a15
                         attic:
                           example:
                             author_id: "712089797812"
@@ -809,19 +1219,19 @@ http:
                     targetSchema:
                       type: array
                       name: anonymous<unknown>
-                      elementSchema: &a34
+                      elementSchema: &a39
                         type: Xor
                         name: Problem
                         description: An HTTP Problem Details object, as defined in IETF RFC 7807
                           (https://tools.ietf.org/html/rfc7807).
                         oneOf:
-                          - &a60
+                          - &a66
                             type: object
                             name: GenericProblem
                             description: A generic problem with no additional information beyond that
                               provided by the HTTP status code.
                             extends:
-                              - &a11
+                              - &a16
                                 type: object
                                 name: ProblemFields
                                 properties:
@@ -837,7 +1247,7 @@ http:
                             properties:
                               - name: status
                                 required: true
-                                schema: *a3
+                                schema: *a8
                               - name: type
                                 schema:
                                   type: constant
@@ -848,12 +1258,12 @@ http:
                                     name: anonymous<string>
                                     aliasType: schema
                                     targetSchema: *a1
-                          - &a64
+                          - &a70
                             type: object
                             name: InvalidRequestProblem
                             description: A problem that indicates this request is invalid.
                             extends:
-                              - *a11
+                              - *a16
                             properties:
                               - name: errors
                                 schema:
@@ -887,19 +1297,19 @@ http:
                                     name: anonymous<string>
                                     aliasType: schema
                                     targetSchema: *a1
-                          - &a54
+                          - &a60
                             type: object
                             name: ClientForbiddenProblem
                             description: A problem that indicates your client is forbidden from making this
                               request.
                             extends:
-                              - *a11
+                              - *a16
                             properties:
                               - name: reason
                                 schema:
                                   type: enum
                                   name: reason
-                                  elementSchema: &a12
+                                  elementSchema: &a17
                                     type: alias
                                     name: anonymous<string>
                                     aliasType: schema
@@ -909,11 +1319,11 @@ http:
                                     - type: constant
                                       name: anonymous<unknown>
                                       value: official-client-forbidden
-                                      valueSchema: *a12
+                                      valueSchema: *a17
                                     - type: constant
                                       name: anonymous<unknown>
                                       value: client-not-enrolled
-                                      valueSchema: *a12
+                                      valueSchema: *a17
                               - name: registration_url
                                 schema: *a1
                               - name: type
@@ -926,13 +1336,13 @@ http:
                                     name: anonymous<string>
                                     aliasType: schema
                                     targetSchema: *a1
-                          - &a71
+                          - &a77
                             type: object
                             name: ResourceNotFoundProblem
                             description: A problem that indicates that a given Tweet, User, etc. does not
                               exist.
                             extends:
-                              - *a11
+                              - *a16
                             properties:
                               - name: parameter
                                 required: true
@@ -950,7 +1360,7 @@ http:
                                 schema:
                                   type: enum
                                   name: resource_type
-                                  elementSchema: &a13
+                                  elementSchema: &a18
                                     type: alias
                                     name: anonymous<string>
                                     aliasType: schema
@@ -960,11 +1370,11 @@ http:
                                     - type: constant
                                       name: anonymous<unknown>
                                       value: user
-                                      valueSchema: *a13
+                                      valueSchema: *a18
                                     - type: constant
                                       name: anonymous<unknown>
                                       value: tweet
-                                      valueSchema: *a13
+                                      valueSchema: *a18
                               - name: type
                                 schema:
                                   type: constant
@@ -978,16 +1388,16 @@ http:
                               - name: value
                                 description: Value will match the schema of the field.
                                 required: true
-                                schema: &a48
+                                schema: &a54
                                   type: any
                                   name: anonymous<unknown>
-                          - &a72
+                          - &a78
                             type: object
                             name: ResourceUnauthorizedProblem
                             description: A problem that indicates you are not allowed to see a particular
                               Tweet, User, etc.
                             extends:
-                              - *a11
+                              - *a16
                             properties:
                               - name: resource_id
                                 required: true
@@ -1008,7 +1418,7 @@ http:
                                 schema:
                                   type: enum
                                   name: section
-                                  elementSchema: &a14
+                                  elementSchema: &a19
                                     type: alias
                                     name: anonymous<string>
                                     aliasType: schema
@@ -1018,11 +1428,11 @@ http:
                                     - type: constant
                                       name: anonymous<unknown>
                                       value: data
-                                      valueSchema: *a14
+                                      valueSchema: *a19
                                     - type: constant
                                       name: anonymous<unknown>
                                       value: includes
-                                      valueSchema: *a14
+                                      valueSchema: *a19
                               - name: type
                                 schema:
                                   type: constant
@@ -1033,13 +1443,13 @@ http:
                                     name: anonymous<string>
                                     aliasType: schema
                                     targetSchema: *a1
-                          - &a58
+                          - &a64
                             type: object
                             name: DisallowedResourceProblem
                             description: A problem that indicates that the resource requested violates the
                               precepts of this API.
                             extends:
-                              - *a11
+                              - *a16
                             properties:
                               - name: resource_id
                                 required: true
@@ -1060,7 +1470,7 @@ http:
                                 schema:
                                   type: enum
                                   name: section
-                                  elementSchema: &a15
+                                  elementSchema: &a20
                                     type: alias
                                     name: anonymous<string>
                                     aliasType: schema
@@ -1070,11 +1480,11 @@ http:
                                     - type: constant
                                       name: anonymous<unknown>
                                       value: data
-                                      valueSchema: *a15
+                                      valueSchema: *a20
                                     - type: constant
                                       name: anonymous<unknown>
                                       value: includes
-                                      valueSchema: *a15
+                                      valueSchema: *a20
                               - name: type
                                 schema:
                                   type: constant
@@ -1085,13 +1495,13 @@ http:
                                     name: anonymous<string>
                                     aliasType: schema
                                     targetSchema: *a1
-                          - &a79
+                          - &a85
                             type: object
                             name: UnsupportedAuthenticationProblem
                             description: A problem that indicates that the authentication used is not
                               supported.
                             extends:
-                              - *a11
+                              - *a16
                             properties:
                               - name: type
                                 schema:
@@ -1103,18 +1513,18 @@ http:
                                     name: anonymous<string>
                                     aliasType: schema
                                     targetSchema: *a1
-                          - &a80
+                          - &a86
                             type: object
                             name: UsageCapExceededProblem
                             description: A problem that indicates that a usage cap has been exceeded.
                             extends:
-                              - *a11
+                              - *a16
                             properties:
                               - name: period
                                 schema:
                                   type: enum
                                   name: period
-                                  elementSchema: &a16
+                                  elementSchema: &a21
                                     type: alias
                                     name: anonymous<string>
                                     aliasType: schema
@@ -1124,16 +1534,16 @@ http:
                                     - type: constant
                                       name: anonymous<unknown>
                                       value: Daily
-                                      valueSchema: *a16
+                                      valueSchema: *a21
                                     - type: constant
                                       name: anonymous<unknown>
                                       value: Monthly
-                                      valueSchema: *a16
+                                      valueSchema: *a21
                               - name: scope
                                 schema:
                                   type: enum
                                   name: scope
-                                  elementSchema: &a17
+                                  elementSchema: &a22
                                     type: alias
                                     name: anonymous<string>
                                     aliasType: schema
@@ -1143,11 +1553,11 @@ http:
                                     - type: constant
                                       name: anonymous<unknown>
                                       value: Account
-                                      valueSchema: *a17
+                                      valueSchema: *a22
                                     - type: constant
                                       name: anonymous<unknown>
                                       value: Product
-                                      valueSchema: *a17
+                                      valueSchema: *a22
                               - name: type
                                 schema:
                                   type: constant
@@ -1159,7 +1569,7 @@ http:
                                     aliasType: schema
                                     targetSchema: *a1
                 - name: includes
-                  schema: &a36
+                  schema: &a47
                     type: object
                     name: Expansions
                     properties:
@@ -1175,26 +1585,26 @@ http:
                           targetSchema:
                             type: array
                             name: anonymous<unknown>
-                            elementSchema: &a49
+                            elementSchema: &a55
                               type: Xor
                               name: Media
                               oneOf:
-                                - &a67
+                                - &a73
                                   type: object
                                   name: Photo
                                   extends:
-                                    - &a21
+                                    - &a26
                                       type: object
                                       name: CommonMediaFields
                                       description: This contains the list of the fields that are common to all media
                                         returned.
                                       properties:
                                         - name: height
-                                          schema: *a18
+                                          schema: *a23
                                         - name: media_key
-                                          schema: *a19
+                                          schema: *a24
                                         - name: width
-                                          schema: *a20
+                                          schema: *a25
                                   properties:
                                     - name: type
                                       schema:
@@ -1208,14 +1618,14 @@ http:
                                           targetSchema: *a1
                                     - name: url
                                       schema: *a1
-                                - &a82
+                                - &a88
                                   type: object
                                   name: Video
                                   extends:
-                                    - *a21
+                                    - *a26
                                   properties:
                                     - name: duration_ms
-                                      schema: *a3
+                                      schema: *a8
                                     - name: preview_image_url
                                       schema: *a1
                                     - name: type
@@ -1228,11 +1638,11 @@ http:
                                           name: anonymous<string>
                                           aliasType: schema
                                           targetSchema: *a1
-                                - &a51
+                                - &a57
                                   type: object
                                   name: AnimatedGif
                                   extends:
-                                    - *a21
+                                    - *a26
                                   properties:
                                     - name: preview_image_url
                                       schema: *a1
@@ -1258,7 +1668,7 @@ http:
                           targetSchema:
                             type: array
                             name: anonymous<unknown>
-                            elementSchema: &a68
+                            elementSchema: &a74
                               type: object
                               name: Place
                               properties:
@@ -1274,16 +1684,16 @@ http:
                                     targetSchema:
                                       type: array
                                       name: anonymous<unknown>
-                                      elementSchema: *a22
+                                      elementSchema: *a27
                                 - name: country
                                   schema: *a1
                                 - name: country_code
-                                  schema: *a23
+                                  schema: *a28
                                 - name: full_name
                                   required: true
                                   schema: *a1
                                 - name: geo
-                                  schema: &a61
+                                  schema: &a67
                                     type: object
                                     name: Geo
                                     properties:
@@ -1314,9 +1724,9 @@ http:
                                                 - type: constraint
                                                   name: Maximum
                                                   maximum: 180
-                                              targetSchema: *a24
+                                              targetSchema: *a29
                                       - name: geometry
-                                        schema: *a25
+                                        schema: *a30
                                       - name: properties
                                         required: true
                                         schema:
@@ -1335,7 +1745,7 @@ http:
                                             targetSchema: *a1
                                 - name: id
                                   required: true
-                                  schema: *a22
+                                  schema: *a27
                                 - name: name
                                   description: The human readable name of this place.
                                   schema:
@@ -1345,10 +1755,10 @@ http:
                                     description: The human readable name of this place.
                                     targetSchema: *a1
                                 - name: place_type
-                                  schema: &a50
+                                  schema: &a56
                                     type: enum
                                     name: PlaceType
-                                    elementSchema: &a26
+                                    elementSchema: &a31
                                       type: alias
                                       name: anonymous<string>
                                       aliasType: schema
@@ -1358,27 +1768,27 @@ http:
                                       - type: constant
                                         name: anonymous<unknown>
                                         value: poi
-                                        valueSchema: *a26
+                                        valueSchema: *a31
                                       - type: constant
                                         name: anonymous<unknown>
                                         value: neighborhood
-                                        valueSchema: *a26
+                                        valueSchema: *a31
                                       - type: constant
                                         name: anonymous<unknown>
                                         value: city
-                                        valueSchema: *a26
+                                        valueSchema: *a31
                                       - type: constant
                                         name: anonymous<unknown>
                                         value: admin
-                                        valueSchema: *a26
+                                        valueSchema: *a31
                                       - type: constant
                                         name: anonymous<unknown>
                                         value: country
-                                        valueSchema: *a26
+                                        valueSchema: *a31
                                       - type: constant
                                         name: anonymous<unknown>
                                         value: unknown
-                                        valueSchema: *a26
+                                        valueSchema: *a31
                       - name: polls
                         schema:
                           type: alias
@@ -1391,18 +1801,18 @@ http:
                           targetSchema:
                             type: array
                             name: anonymous<unknown>
-                            elementSchema: &a69
+                            elementSchema: &a75
                               type: object
                               name: Poll
                               description: Represent a Poll attached to a Tweet
                               properties:
                                 - name: duration_minutes
-                                  schema: *a3
+                                  schema: *a8
                                 - name: end_datetime
-                                  schema: *a27
+                                  schema: *a32
                                 - name: id
                                   required: true
-                                  schema: *a28
+                                  schema: *a33
                                 - name: options
                                   required: true
                                   schema:
@@ -1419,7 +1829,7 @@ http:
                                     targetSchema:
                                       type: array
                                       name: anonymous<unknown>
-                                      elementSchema: &a70
+                                      elementSchema: &a76
                                         type: object
                                         name: PollOption
                                         description: Describes a choice in a Poll object.
@@ -1441,7 +1851,7 @@ http:
                                               name: anonymous<number>
                                               aliasType: schema
                                               description: Position of this choice in the poll.
-                                              targetSchema: *a3
+                                              targetSchema: *a8
                                           - name: votes
                                             description: Number of users who voted for this choice.
                                             required: true
@@ -1450,12 +1860,12 @@ http:
                                               name: anonymous<number>
                                               aliasType: schema
                                               description: Number of users who voted for this choice.
-                                              targetSchema: *a3
+                                              targetSchema: *a8
                                 - name: voting_status
                                   schema:
                                     type: enum
                                     name: voting_status
-                                    elementSchema: &a29
+                                    elementSchema: &a34
                                       type: alias
                                       name: anonymous<string>
                                       aliasType: schema
@@ -1465,11 +1875,11 @@ http:
                                       - type: constant
                                         name: anonymous<unknown>
                                         value: open
-                                        valueSchema: *a29
+                                        valueSchema: *a34
                                       - type: constant
                                         name: anonymous<unknown>
                                         value: closed
-                                        valueSchema: *a29
+                                        valueSchema: *a34
                       - name: tweets
                         schema:
                           type: alias
@@ -1482,7 +1892,7 @@ http:
                           targetSchema:
                             type: array
                             name: anonymous<unknown>
-                            elementSchema: *a30
+                            elementSchema: *a35
                       - name: users
                         schema:
                           type: alias
@@ -1495,14 +1905,14 @@ http:
                           targetSchema:
                             type: array
                             name: anonymous<unknown>
-                            elementSchema: &a40
+                            elementSchema: &a50
                               type: object
                               name: User
                               description: The Twitter User object
                               properties:
                                 - name: created_at
                                   description: Creation time of this user.
-                                  schema: *a27
+                                  schema: *a32
                                 - name: description
                                   description: The text of this user's profile description (also known as bio), if
                                     the user provided one.
@@ -1521,7 +1931,7 @@ http:
                                     description: A list of metadata found in the user's profile description.
                                     properties:
                                       - name: description
-                                        schema: *a31
+                                        schema: *a36
                                       - name: url
                                         description: Expanded details for the URL specified in the user's profile, with
                                           start and end indices.
@@ -1543,10 +1953,10 @@ http:
                                                 targetSchema:
                                                   type: array
                                                   name: anonymous<unknown>
-                                                  elementSchema: *a32
+                                                  elementSchema: *a37
                                 - name: id
                                   required: true
-                                  schema: *a6
+                                  schema: *a12
                                 - name: location
                                   description: The location specified in the user's profile, if the user provided
                                     one. As this is a freeform value, it may not
@@ -1573,7 +1983,7 @@ http:
                                     description: The friendly name of this user, as shown on their profile.
                                     targetSchema: *a1
                                 - name: pinned_tweet_id
-                                  schema: *a7
+                                  schema: *a11
                                 - name: profile_image_url
                                   description: The URL to the profile image for this user.
                                   schema:
@@ -1585,7 +1995,7 @@ http:
                                 - name: protected
                                   description: Indicates if this user has chosen to protect their Tweets (in other
                                     words, if this user's Tweets are private).
-                                  schema: *a9
+                                  schema: *a14
                                 - name: public_metrics
                                   description: A list of metrics for this user
                                   schema:
@@ -1601,7 +2011,7 @@ http:
                                           name: anonymous<number>
                                           aliasType: schema
                                           description: Number of users who are following this user.
-                                          targetSchema: *a3
+                                          targetSchema: *a8
                                       - name: following_count
                                         description: Number of users this user is following.
                                         required: true
@@ -1610,7 +2020,7 @@ http:
                                           name: anonymous<number>
                                           aliasType: schema
                                           description: Number of users this user is following.
-                                          targetSchema: *a3
+                                          targetSchema: *a8
                                       - name: listed_count
                                         description: The number of lists that include this user.
                                         required: true
@@ -1619,7 +2029,7 @@ http:
                                           name: anonymous<number>
                                           aliasType: schema
                                           description: The number of lists that include this user.
-                                          targetSchema: *a3
+                                          targetSchema: *a8
                                       - name: tweet_count
                                         description: The number of Tweets (including Retweets) posted by this user.
                                         required: true
@@ -1628,7 +2038,7 @@ http:
                                           name: anonymous<number>
                                           aliasType: schema
                                           description: The number of Tweets (including Retweets) posted by this user.
-                                          targetSchema: *a3
+                                          targetSchema: *a8
                                 - name: url
                                   description: The URL specified in the user's profile.
                                   schema:
@@ -1639,12 +2049,12 @@ http:
                                     targetSchema: *a1
                                 - name: username
                                   required: true
-                                  schema: *a33
+                                  schema: *a38
                                 - name: verified
                                   description: Indicate if this user is a verified Twitter User.
-                                  schema: *a9
+                                  schema: *a14
                                 - name: withheld
-                                  schema: &a81
+                                  schema: &a87
                                     type: object
                                     name: UserWithheld
                                     description: Indicates withholding details for [withheld
@@ -1668,7 +2078,7 @@ http:
                                           targetSchema:
                                             type: array
                                             name: anonymous<unknown>
-                                            elementSchema: *a23
+                                            elementSchema: *a28
                                       - name: scope
                                         description: Indicates that the content being withheld is a `user`.
                                         schema:
@@ -1690,7 +2100,7 @@ http:
                                   username: twitterapi
         - name: default
           aliasType: response
-          target: &a38
+          target: &a48
             name: HttpErrorResponse
             description: The request has failed.
             mediaType: application/json
@@ -1698,13 +2108,13 @@ http:
               type: alias
               name: schema
               aliasType: schema
-              targetSchema: &a59
+              targetSchema: &a65
                 type: object
                 name: Error
                 properties:
                   - name: code
                     required: true
-                    schema: &a37
+                    schema: &a40
                       type: int32
                       name: anonymous<unknown>
                   - name: message
@@ -1712,7 +2122,7 @@ http:
                     schema: *a1
         - name: default
           aliasType: response
-          target: &a39
+          target: &a49
             name: HttpErrorResponse
             description: The request has failed.
             mediaType: application/problem+json
@@ -1720,16 +2130,124 @@ http:
               type: alias
               name: schema
               aliasType: schema
-              targetSchema: *a34
+              targetSchema: *a39
       summary: Returns hydrated Tweet objects
       tags:
         - Tweets
     - description: Returns Tweets from the last 7 days that match a search query.
       id: tweetsRecentSearch
       parameters:
+        - type: query
+          name: query
+          description: One query/rule/filter for matching Tweets. Up to 512 characters.
+          expandParameterValues: true
+          renderStyle: form
+          required: true
+          schema:
+            type: alias
+            name: anonymous<string>
+            aliasType: schema
+            constraints:
+              - type: constraint
+                name: MaxLength
+                length: 512
+              - type: constraint
+                name: MinLength
+                length: 1
+            targetSchema: *a1
+        - type: query
+          name: start_time
+          description: YYYY-MM-DDTHH:mm:ssZ. The oldest UTC timestamp (from most recent 7
+            days) from which the Tweets will be provided. Timestamp is in second
+            granularity and is inclusive (i.e. 12:00:01 includes the first
+            second of the minute).
+          expandParameterValues: true
+          renderStyle: form
+          required: false
+          schema: *a32
+        - type: query
+          name: end_time
+          description: YYYY-MM-DDTHH:mm:ssZ. The newest, most recent UTC timestamp to
+            which the Tweets will be provided. Timestamp is in second
+            granularity and is exclusive (i.e. 12:00:01 excludes the first
+            second of the minute).
+          expandParameterValues: true
+          renderStyle: form
+          required: false
+          schema: *a32
+        - type: query
+          name: since_id
+          description: Returns results with a Tweet ID greater than (that is, more recent
+            than) the specified ID.
+          expandParameterValues: true
+          renderStyle: form
+          required: false
+          schema:
+            type: alias
+            name: schema
+            aliasType: schema
+            targetSchema: *a11
+        - type: query
+          name: until_id
+          description: Returns results with a Tweet ID less than (that is, older than) the
+            specified ID.
+          expandParameterValues: true
+          renderStyle: form
+          required: false
+          schema:
+            type: alias
+            name: schema
+            aliasType: schema
+            targetSchema: *a11
+        - type: query
+          name: max_results
+          description: The maximum number of search results to be returned by a request.
+          expandParameterValues: true
+          renderStyle: form
+          required: false
+          schema:
+            type: alias
+            name: anonymous<number>
+            aliasType: schema
+            constraints:
+              - type: constraint
+                name: Minimum
+                minimum: 10
+              - type: constraint
+                name: Maximum
+                maximum: 100
+            defaults:
+              - type: server-default
+                name: anonymous<unknown>
+                value: 10
+            targetSchema: *a40
+        - type: query
+          name: next_token
+          description: This parameter is used to get the next 'page' of results. The value
+            used with the parameter is pulled directly from the response
+            provided by the API, and should not be modified.
+          expandParameterValues: true
+          renderStyle: form
+          required: false
+          schema: *a1
+        - name: "7"
+          aliasType: parameter
+          target: *a41
+        - name: "8"
+          aliasType: parameter
+          target: *a42
+        - name: "9"
+          aliasType: parameter
+          target: *a43
+        - name: "10"
+          aliasType: parameter
+          target: *a44
+        - name: "11"
+          aliasType: parameter
+          target: *a45
         - name: "12"
           aliasType: parameter
-          target: *a35
+          target: *a46
       responses:
         - name: "200"
           description: Tweets recent search response
@@ -1738,7 +2256,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a75
+            targetSchema: &a81
               type: object
               name: TweetSearchResponse
               properties:
@@ -1754,7 +2272,7 @@ http:
                     targetSchema:
                       type: array
                       name: anonymous<unknown>
-                      elementSchema: *a30
+                      elementSchema: *a35
                 - name: errors
                   schema:
                     type: alias
@@ -1767,9 +2285,9 @@ http:
                     targetSchema:
                       type: array
                       name: anonymous<unknown>
-                      elementSchema: *a34
+                      elementSchema: *a39
                 - name: includes
-                  schema: *a36
+                  schema: *a47
                 - name: meta
                   schema:
                     type: object
@@ -1816,13 +2334,13 @@ http:
                           name: anonymous<number>
                           aliasType: schema
                           description: Number of search query results
-                          targetSchema: *a37
+                          targetSchema: *a40
         - name: default
           aliasType: response
-          target: *a38
+          target: *a48
         - name: default
           aliasType: response
-          target: *a39
+          target: *a49
       summary: Returns Tweets from the last 7 days that match a search query.
       tags:
         - Search
@@ -1831,9 +2349,35 @@ http:
         requested ID
       id: findTweetById
       parameters:
+        - type: path
+          name: id
+          description: A single Tweet ID.
+          expandParameterValues: false
+          renderStyle: simple
+          required: true
+          schema:
+            type: alias
+            name: schema
+            aliasType: schema
+            targetSchema: *a11
+        - name: "1"
+          aliasType: parameter
+          target: *a41
+        - name: "2"
+          aliasType: parameter
+          target: *a42
+        - name: "3"
+          aliasType: parameter
+          target: *a43
+        - name: "4"
+          aliasType: parameter
+          target: *a44
+        - name: "5"
+          aliasType: parameter
+          target: *a45
         - name: "6"
           aliasType: parameter
-          target: *a35
+          target: *a46
       responses:
         - name: "200"
           description: The request was successful
@@ -1842,12 +2386,12 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a73
+            targetSchema: &a79
               type: object
               name: SingleTweetLookupResponse
               properties:
                 - name: data
-                  schema: *a30
+                  schema: *a35
                 - name: errors
                   schema:
                     type: alias
@@ -1860,15 +2404,15 @@ http:
                     targetSchema:
                       type: array
                       name: anonymous<unknown>
-                      elementSchema: *a34
+                      elementSchema: *a39
                 - name: includes
-                  schema: *a36
+                  schema: *a47
         - name: default
           aliasType: response
-          target: *a38
+          target: *a48
         - name: default
           aliasType: response
-          target: *a39
+          target: *a49
       summary: Returns hydrated Tweet objects
       tags:
         - Tweets
@@ -1885,7 +2429,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: *a7
+            targetSchema: *a11
       requests:
         - identity: anonymous<requestBody>
           mediaType: application/json
@@ -1898,7 +2442,7 @@ http:
                   type: constant
                   name: anonymous<unknown>
                   value: true
-                  valueSchema: *a9
+                  valueSchema: *a14
       responses:
         - name: "200"
           description: A successful response. The reply has been hidden.
@@ -1917,22 +2461,91 @@ http:
                         type: constant
                         name: anonymous<unknown>
                         value: true
-                        valueSchema: *a9
+                        valueSchema: *a14
         - name: default
           aliasType: response
-          target: *a38
+          target: *a48
         - name: default
           aliasType: response
-          target: *a39
+          target: *a49
       summary: Hides a reply to an owned conversation.
       tags:
         - Tweets
     - description: This endpoint returns information about users. Specify users by their ID.
       id: findUsersById
       parameters:
+        - type: query
+          name: ids
+          description: Required. A list of User IDs, comma-separated. You can specify up
+            to 100 IDs.
+          expandParameterValues: false
+          renderStyle: form
+          required: true
+          schema:
+            type: alias
+            name: schema
+            aliasType: schema
+            constraints:
+              - type: constraint
+                name: MaximumElements
+                count: 100
+              - type: constraint
+                name: MinimumElements
+                count: 1
+            targetSchema:
+              type: array
+              name: anonymous<unknown>
+              elementSchema: *a12
+        - name: "1"
+          aliasType: parameter
+          target: &a51
+            type: query
+            name: expansions
+            description: A comma separated list of fields to expand.
+            expandParameterValues: false
+            renderStyle: form
+            schema:
+              type: alias
+              name: schema
+              aliasType: schema
+              constraints:
+                - type: constraint
+                  name: MinimumElements
+                  count: 1
+                - type: constraint
+                  name: UniqueElements
+                  unique: true
+              description: The list of fields you can expand for a [User](#User) object. If
+                the field has an ID, it can be expanded into a full object.
+              targetSchema:
+                type: array
+                name: anonymous<unknown>
+                elementSchema:
+                  type: constant
+                  name: anonymous<unknown>
+                  value: pinned_tweet_id
+                  valueSchema:
+                    type: alias
+                    name: anonymous<string>
+                    aliasType: schema
+                    targetSchema: *a1
+              attic:
+                example: pinned_tweet_id
+        - name: "2"
+          aliasType: parameter
+          target: *a42
+        - name: "3"
+          aliasType: parameter
+          target: *a43
+        - name: "4"
+          aliasType: parameter
+          target: *a44
+        - name: "5"
+          aliasType: parameter
+          target: *a45
         - name: "6"
           aliasType: parameter
-          target: *a35
+          target: *a46
       responses:
         - name: "200"
           description: The request was successful
@@ -1941,7 +2554,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a41
+            targetSchema: &a52
               type: object
               name: UserLookupResponse
               properties:
@@ -1957,7 +2570,7 @@ http:
                     targetSchema:
                       type: array
                       name: anonymous<unknown>
-                      elementSchema: *a40
+                      elementSchema: *a50
                 - name: errors
                   schema:
                     type: alias
@@ -1970,15 +2583,15 @@ http:
                     targetSchema:
                       type: array
                       name: anonymous<unknown>
-                      elementSchema: *a34
+                      elementSchema: *a39
                 - name: includes
-                  schema: *a36
+                  schema: *a47
         - name: default
           aliasType: response
-          target: *a38
+          target: *a48
         - name: default
           aliasType: response
-          target: *a39
+          target: *a49
       summary: Return details for the specified users
       tags:
         - Users
@@ -1986,9 +2599,46 @@ http:
         their username.
       id: findUsersByUsername
       parameters:
+        - type: query
+          name: usernames
+          description: Required . A list of usernames, comma-separated. You can specify up
+            to 100 usernames.
+          expandParameterValues: false
+          renderStyle: form
+          required: true
+          schema:
+            type: alias
+            name: schema
+            aliasType: schema
+            constraints:
+              - type: constraint
+                name: MaximumElements
+                count: 100
+              - type: constraint
+                name: MinimumElements
+                count: 1
+            targetSchema:
+              type: array
+              name: anonymous<unknown>
+              elementSchema: *a38
+        - name: "1"
+          aliasType: parameter
+          target: *a51
+        - name: "2"
+          aliasType: parameter
+          target: *a42
+        - name: "3"
+          aliasType: parameter
+          target: *a43
+        - name: "4"
+          aliasType: parameter
+          target: *a44
+        - name: "5"
+          aliasType: parameter
+          target: *a45
         - name: "6"
           aliasType: parameter
-          target: *a35
+          target: *a46
       responses:
         - name: "200"
           description: The request was successful
@@ -1997,22 +2647,48 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: *a41
+            targetSchema: *a52
         - name: default
           aliasType: response
-          target: *a38
+          target: *a48
         - name: default
           aliasType: response
-          target: *a39
+          target: *a49
       summary: Return details for the specified users
       tags:
         - Users
     - description: This endpoint returns information about a user. Specify user by username.
       id: findUserByUsername
       parameters:
+        - type: path
+          name: username
+          description: Required. A username.
+          expandParameterValues: false
+          renderStyle: simple
+          required: true
+          schema:
+            type: alias
+            name: schema
+            aliasType: schema
+            targetSchema: *a38
+        - name: "1"
+          aliasType: parameter
+          target: *a51
+        - name: "2"
+          aliasType: parameter
+          target: *a42
+        - name: "3"
+          aliasType: parameter
+          target: *a43
+        - name: "4"
+          aliasType: parameter
+          target: *a44
+        - name: "5"
+          aliasType: parameter
+          target: *a45
         - name: "6"
           aliasType: parameter
-          target: *a35
+          target: *a46
       responses:
         - name: "200"
           description: The request was successful
@@ -2021,12 +2697,12 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a42
+            targetSchema: &a53
               type: object
               name: SingleUserLookupResponse
               properties:
                 - name: data
-                  schema: *a40
+                  schema: *a50
                 - name: errors
                   schema:
                     type: alias
@@ -2039,24 +2715,50 @@ http:
                     targetSchema:
                       type: array
                       name: anonymous<unknown>
-                      elementSchema: *a34
+                      elementSchema: *a39
                 - name: includes
-                  schema: *a36
+                  schema: *a47
         - name: default
           aliasType: response
-          target: *a38
+          target: *a48
         - name: default
           aliasType: response
-          target: *a39
+          target: *a49
       summary: Return details for the specified users
       tags:
         - Users
     - description: This endpoint returns information about a user. Specify user by ID.
       id: findUserById
       parameters:
+        - type: path
+          name: id
+          description: Required. A User ID.
+          expandParameterValues: false
+          renderStyle: simple
+          required: true
+          schema:
+            type: alias
+            name: schema
+            aliasType: schema
+            targetSchema: *a12
+        - name: "1"
+          aliasType: parameter
+          target: *a51
+        - name: "2"
+          aliasType: parameter
+          target: *a42
+        - name: "3"
+          aliasType: parameter
+          target: *a43
+        - name: "4"
+          aliasType: parameter
+          target: *a44
+        - name: "5"
+          aliasType: parameter
+          target: *a45
         - name: "6"
           aliasType: parameter
-          target: *a35
+          target: *a46
       responses:
         - name: "200"
           description: The request was successful
@@ -2065,426 +2767,27 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: *a42
+            targetSchema: *a53
         - name: default
           aliasType: response
-          target: *a38
+          target: *a48
         - name: default
           aliasType: response
-          target: *a39
+          target: *a49
       summary: Return details for the specified users
       tags:
         - Users
   parameters:
-    - type: query
-      name: media.fields
-      description: A comma separated list of Media fields to display.
-      expandParameterValues: false
-      renderStyle: form
-      required: false
-      schema:
-        type: alias
-        name: schema
-        aliasType: schema
-        constraints:
-          - type: constraint
-            name: MinimumElements
-            count: 1
-          - type: constraint
-            name: UniqueElements
-            unique: true
-        description: The list of fields you can display for a Media object.
-        targetSchema:
-          type: array
-          name: anonymous<unknown>
-          elementSchema:
-            type: enum
-            name: items
-            elementSchema: &a43
-              type: alias
-              name: anonymous<string>
-              aliasType: schema
-              targetSchema: *a1
-            sealed: true
-            values:
-              - type: constant
-                name: anonymous<unknown>
-                value: media_key
-                valueSchema: *a43
-              - type: constant
-                name: anonymous<unknown>
-                value: duration_ms
-                valueSchema: *a43
-              - type: constant
-                name: anonymous<unknown>
-                value: height
-                valueSchema: *a43
-              - type: constant
-                name: anonymous<unknown>
-                value: preview_image_url
-                valueSchema: *a43
-              - type: constant
-                name: anonymous<unknown>
-                value: type
-                valueSchema: *a43
-              - type: constant
-                name: anonymous<unknown>
-                value: url
-                valueSchema: *a43
-              - type: constant
-                name: anonymous<unknown>
-                value: width
-                valueSchema: *a43
-        attic:
-          example: created_at
-    - type: query
-      name: place.fields
-      description: A comma separated list of Place fields to display.
-      expandParameterValues: false
-      renderStyle: form
-      required: false
-      schema:
-        type: alias
-        name: schema
-        aliasType: schema
-        constraints:
-          - type: constraint
-            name: MinimumElements
-            count: 1
-          - type: constraint
-            name: UniqueElements
-            unique: true
-        description: The list of fields you can display for a Place object.
-        targetSchema:
-          type: array
-          name: anonymous<unknown>
-          elementSchema:
-            type: enum
-            name: items
-            elementSchema: &a44
-              type: alias
-              name: anonymous<string>
-              aliasType: schema
-              targetSchema: *a1
-            sealed: true
-            values:
-              - type: constant
-                name: anonymous<unknown>
-                value: id
-                valueSchema: *a44
-              - type: constant
-                name: anonymous<unknown>
-                value: name
-                valueSchema: *a44
-              - type: constant
-                name: anonymous<unknown>
-                value: country_code
-                valueSchema: *a44
-              - type: constant
-                name: anonymous<unknown>
-                value: place_type
-                valueSchema: *a44
-              - type: constant
-                name: anonymous<unknown>
-                value: full_name
-                valueSchema: *a44
-              - type: constant
-                name: anonymous<unknown>
-                value: country
-                valueSchema: *a44
-              - type: constant
-                name: anonymous<unknown>
-                value: contained_within
-                valueSchema: *a44
-              - type: constant
-                name: anonymous<unknown>
-                value: geo
-                valueSchema: *a44
-        attic:
-          example: country_code
-    - *a35
-    - type: query
-      name: expansions
-      description: A comma separated list of fields to expand.
-      expandParameterValues: false
-      renderStyle: form
-      schema:
-        type: alias
-        name: schema
-        aliasType: schema
-        constraints:
-          - type: constraint
-            name: MinimumElements
-            count: 1
-          - type: constraint
-            name: UniqueElements
-            unique: true
-        description: The list of fields you can expand for a [Tweet](#Tweet) object. If
-          the field has an ID, it can be expanded into a full object.
-        targetSchema:
-          type: array
-          name: anonymous<unknown>
-          elementSchema:
-            type: enum
-            name: items
-            elementSchema: &a45
-              type: alias
-              name: anonymous<string>
-              aliasType: schema
-              targetSchema: *a1
-            sealed: true
-            values:
-              - type: constant
-                name: anonymous<unknown>
-                value: author_id
-                valueSchema: *a45
-              - type: constant
-                name: anonymous<unknown>
-                value: referenced_tweets.id
-                valueSchema: *a45
-              - type: constant
-                name: anonymous<unknown>
-                value: in_reply_to_user_id
-                valueSchema: *a45
-              - type: constant
-                name: anonymous<unknown>
-                value: geo.place_id
-                valueSchema: *a45
-              - type: constant
-                name: anonymous<unknown>
-                value: attachments.media_keys
-                valueSchema: *a45
-              - type: constant
-                name: anonymous<unknown>
-                value: attachments.poll_ids
-                valueSchema: *a45
-              - type: constant
-                name: anonymous<unknown>
-                value: entities.mentions.username
-                valueSchema: *a45
-              - type: constant
-                name: anonymous<unknown>
-                value: referenced_tweets.id.author_id
-                valueSchema: *a45
-        attic:
-          example: author_id
-    - type: query
-      name: tweet.fields
-      description: A comma separated list of Tweet fields to display.
-      expandParameterValues: false
-      renderStyle: form
-      required: false
-      schema:
-        type: alias
-        name: schema
-        aliasType: schema
-        constraints:
-          - type: constraint
-            name: MinimumElements
-            count: 1
-          - type: constraint
-            name: UniqueElements
-            unique: true
-        description: The list of fields you can display for a [Tweet](#Tweet) object.
-        targetSchema:
-          type: array
-          name: anonymous<unknown>
-          elementSchema:
-            type: enum
-            name: items
-            elementSchema: &a46
-              type: alias
-              name: anonymous<string>
-              aliasType: schema
-              targetSchema: *a1
-            sealed: true
-            values:
-              - type: constant
-                name: anonymous<unknown>
-                value: id
-                valueSchema: *a46
-              - type: constant
-                name: anonymous<unknown>
-                value: created_at
-                valueSchema: *a46
-              - type: constant
-                name: anonymous<unknown>
-                value: text
-                valueSchema: *a46
-              - type: constant
-                name: anonymous<unknown>
-                value: author_id
-                valueSchema: *a46
-              - type: constant
-                name: anonymous<unknown>
-                value: in_reply_to_user_id
-                valueSchema: *a46
-              - type: constant
-                name: anonymous<unknown>
-                value: referenced_tweets
-                valueSchema: *a46
-              - type: constant
-                name: anonymous<unknown>
-                value: attachments
-                valueSchema: *a46
-              - type: constant
-                name: anonymous<unknown>
-                value: withheld
-                valueSchema: *a46
-              - type: constant
-                name: anonymous<unknown>
-                value: geo
-                valueSchema: *a46
-              - type: constant
-                name: anonymous<unknown>
-                value: entities
-                valueSchema: *a46
-              - type: constant
-                name: anonymous<unknown>
-                value: public_metrics
-                valueSchema: *a46
-              - type: constant
-                name: anonymous<unknown>
-                value: possibly_sensitive
-                valueSchema: *a46
-              - type: constant
-                name: anonymous<unknown>
-                value: source
-                valueSchema: *a46
-              - type: constant
-                name: anonymous<unknown>
-                value: lang
-                valueSchema: *a46
-              - type: constant
-                name: anonymous<unknown>
-                value: context_annotations
-                valueSchema: *a46
-        attic:
-          example: created_at
-    - type: query
-      name: expansions
-      description: A comma separated list of fields to expand.
-      expandParameterValues: false
-      renderStyle: form
-      schema:
-        type: alias
-        name: schema
-        aliasType: schema
-        constraints:
-          - type: constraint
-            name: MinimumElements
-            count: 1
-          - type: constraint
-            name: UniqueElements
-            unique: true
-        description: The list of fields you can expand for a [User](#User) object. If
-          the field has an ID, it can be expanded into a full object.
-        targetSchema:
-          type: array
-          name: anonymous<unknown>
-          elementSchema:
-            type: constant
-            name: anonymous<unknown>
-            value: pinned_tweet_id
-            valueSchema:
-              type: alias
-              name: anonymous<string>
-              aliasType: schema
-              targetSchema: *a1
-        attic:
-          example: pinned_tweet_id
-    - type: query
-      name: user.fields
-      description: A comma separated list of User fields to display.
-      expandParameterValues: false
-      renderStyle: form
-      required: false
-      schema:
-        type: alias
-        name: schema
-        aliasType: schema
-        constraints:
-          - type: constraint
-            name: MinimumElements
-            count: 1
-          - type: constraint
-            name: UniqueElements
-            unique: true
-        description: The list of fields you can display for a [User](#User) object.
-        targetSchema:
-          type: array
-          name: anonymous<unknown>
-          elementSchema:
-            type: enum
-            name: items
-            elementSchema: &a47
-              type: alias
-              name: anonymous<string>
-              aliasType: schema
-              targetSchema: *a1
-            sealed: true
-            values:
-              - type: constant
-                name: anonymous<unknown>
-                value: id
-                valueSchema: *a47
-              - type: constant
-                name: anonymous<unknown>
-                value: created_at
-                valueSchema: *a47
-              - type: constant
-                name: anonymous<unknown>
-                value: name
-                valueSchema: *a47
-              - type: constant
-                name: anonymous<unknown>
-                value: username
-                valueSchema: *a47
-              - type: constant
-                name: anonymous<unknown>
-                value: protected
-                valueSchema: *a47
-              - type: constant
-                name: anonymous<unknown>
-                value: verified
-                valueSchema: *a47
-              - type: constant
-                name: anonymous<unknown>
-                value: withheld
-                valueSchema: *a47
-              - type: constant
-                name: anonymous<unknown>
-                value: profile_image_url
-                valueSchema: *a47
-              - type: constant
-                name: anonymous<unknown>
-                value: location
-                valueSchema: *a47
-              - type: constant
-                name: anonymous<unknown>
-                value: url
-                valueSchema: *a47
-              - type: constant
-                name: anonymous<unknown>
-                value: description
-                valueSchema: *a47
-              - type: constant
-                name: anonymous<unknown>
-                value: entities
-                valueSchema: *a47
-              - type: constant
-                name: anonymous<unknown>
-                value: pinned_tweet_id
-                valueSchema: *a47
-              - type: constant
-                name: anonymous<unknown>
-                value: public_metrics
-                valueSchema: *a47
-        attic:
-          example: created_at
+    - *a44
+    - *a45
+    - *a46
+    - *a41
+    - *a42
+    - *a51
+    - *a43
   responses:
-    - *a38
-    - *a39
+    - *a48
+    - *a49
 metaData:
   name: Tweets and Users
   contacts:
@@ -2532,72 +2835,72 @@ metaData:
     x-serviceName: labs
 schemas:
   primitives:
-    - *a3
+    - *a8
     - *a1
-    - *a37
-    - *a24
-    - *a27
-    - *a9
-    - *a48
-  combinations:
-    - *a49
-    - *a34
-  enums:
-    - *a50
-  objects:
-    - *a51
-    - *a52
-    - *a53
+    - *a40
+    - *a29
+    - *a32
+    - *a14
     - *a54
-    - *a21
+  combinations:
     - *a55
+    - *a39
+  enums:
     - *a56
+  objects:
     - *a57
     - *a58
-    - *a4
     - *a59
-    - *a36
-    - *a31
     - *a60
+    - *a26
     - *a61
     - *a62
     - *a63
     - *a64
+    - *a9
     - *a65
+    - *a47
+    - *a36
     - *a66
     - *a67
     - *a68
-    - *a25
     - *a69
     - *a70
-    - *a11
     - *a71
     - *a72
     - *a73
-    - *a42
-    - *a30
     - *a74
+    - *a30
     - *a75
     - *a76
+    - *a16
     - *a77
     - *a78
     - *a79
-    - *a32
+    - *a53
+    - *a35
     - *a80
-    - *a40
-    - *a41
     - *a81
     - *a82
-  aliases:
-    - *a23
     - *a83
-    - *a18
-    - *a19
-    - *a20
-    - *a22
-    - *a28
     - *a84
-    - *a7
-    - *a5
-    - *a6
+    - *a85
+    - *a37
+    - *a86
+    - *a50
+    - *a52
+    - *a87
+    - *a88
+  aliases:
+    - *a28
+    - *a89
+    - *a23
+    - *a24
+    - *a25
+    - *a27
     - *a33
+    - *a90
+    - *a11
+    - *a10
+    - *a12
+    - *a38

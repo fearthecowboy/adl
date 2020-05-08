@@ -4,7 +4,7 @@ import { anonymous, isUsed, nameOf, unusedMembers, use, using } from '@azure-too
 import { Alias as A } from '../../../model/alias';
 import { Identity } from '../../../model/name';
 import { Alias, AndSchema, AnyOfSchema, ArraySchema, Constant, DictionarySchema, Enum, ExclusiveMaximumConstraint, ExclusiveMinimumConstraint, MaximumConstraint, MaximumElementsConstraint, MaximumPropertiesConstraint, MaxLengthConstraint, MinimumConstraint, MinimumElementsConstraint, MinimumPropertiesConstraint, MinLengthConstraint, MultipleOfConstraint, ObjectSchema, Property, RegularExpressionConstraint, Schema, ServerDefaultValue, UniqueElementsConstraint, XorSchema } from '../../../model/schema';
-import { firstOrDefault, isEnumSchema, isObjectSchema, isPrimitiveSchema, toArray } from '../common';
+import { firstOrDefault, isEnumSchema, isObjectSchema, isPrimitiveSchema, push, toArray } from '../common';
 import { Context } from './serializer';
 
 /** Schema processing options */
@@ -610,8 +610,8 @@ export async function *processObjectSchema(schema: v3.Schema, $: Context, option
   result.addToAttic('example', (<any>schema).example);
 
   const schemas = getSchemas(schema.allOf, $);
-  result.extends.push(...await toArray(schemas));
-
+  await push( result.extends, schemas);
+  
   // yeild this as soon as possible in case we recurse.
   yield result;
   

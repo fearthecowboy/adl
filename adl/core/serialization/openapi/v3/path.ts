@@ -3,7 +3,7 @@ import { common, v3, vendorExtensions } from '@azure-tools/openapi';
 import { nameOf } from '@azure-tools/sourcemap';
 import { Element } from '../../../model/element';
 import { Operation } from '../../../model/http/operation';
-import { addExtensionsToAttic, toArray } from '../common';
+import { addExtensionsToAttic, push } from '../common';
 import { processExternalDocs } from '../common/info';
 import { parameter } from './parameter';
 import { requestBody } from './request-body';
@@ -55,23 +55,15 @@ export async function* operation(path: string, operation: v3.Operation, shared: 
   $.addVersionInfo(result, operation);
 
   // OAI3 parameters are all in the operation
-  if( shared.parameters) {
-    for (const p of shared.parameters ) {
+  for (const p of values(shared.parameters)) {
     // create each parameter in the operation 
-      if (p) {
-        result.parameters =await toArray($.processInline(parameter, p));
-      }
-    }
+    await push( result.parameters, $.processInline(parameter, p));
   }
-  if (operation.parameters) {
-    for (const p of operation.parameters) {
-      // create each parameter in the operation 
-      if (p) {
-        result.parameters = await toArray($.processInline(parameter, p));
-      }
-    }
+  
+  for (const p of values(operation.parameters)) {
+    // create each parameter in the operation 
+    await push(result.parameters, $.processInline(parameter, p));
   }
-
 
   // request body
   for await (const request of $.processInline(requestBody, operation.requestBody, { isAnonymous: true })) {
