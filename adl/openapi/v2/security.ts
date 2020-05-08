@@ -1,6 +1,6 @@
+import { Dictionary } from '../common/dictionary';
 import { Url } from '../common/uri';
 import { VendorExtensions } from '../common/vendor-extensions';
-import { Dictionary } from '../common/dictionary';
 
 /**
  * Allows the definition of a security scheme that can be used by the operations. Supported schemes are basic authentication, an API key (either as a header or as a query parameter) and OAuth2's common flows (implicit, password, application and access code).
@@ -17,7 +17,7 @@ export interface SecuritySchemeBase extends VendorExtensions {
 
 /** Basic Auth Security Scheme */
 export interface BasicAuthenticationSecurityScheme extends SecuritySchemeBase {
-
+  type: 'basic';
 }
 
 /** ApiKey Security Scheme */
@@ -25,60 +25,57 @@ export interface ApiKeySecurityScheme extends SecuritySchemeBase {
   /** ApiKey  */
   type: 'apiKey';
   /**
- * The name of the header or query parameter to be used.
- */
+   * The name of the header or query parameter to be used.
+   */
   name: string;
 
   /** The location of the API key. Valid values are "query" or "header". */
   'in': 'query' | 'header';
 }
 
-interface OAuthSecuirtyBase extends SecuritySchemeBase {
+export interface OAuthSecurityBase extends SecuritySchemeBase {
+  type: 'oauth2';
+
   /** The flow used by the OAuth2 security scheme */
-  flow: string;
+  flow: 'implicit' | 'password' | 'application' | 'accessCode';
+
+  /** The available scopes for the OAuth2 security scheme. A map between the scope name and a short description for it. */
+  scopes: Dictionary<string>;
 }
 
 /** OAuth2 Implicit Security Scheme */
-export interface OAuth2ImplicitSecurityScheme extends OAuthSecuirtyBase {
+export interface OAuth2ImplicitSecurityScheme extends OAuthSecurityBase {
+  flow: 'implicit';
 
   /** The authorization URL to be used for this flow. This MUST be in the form of a URL. */
   authorizationUrl: Url;
 }
 
 /** OAuth2 Password Security Scheme */
-export interface OAuth2PasswordSecurityScheme extends OAuthSecuirtyBase {
+export interface OAuth2PasswordSecurityScheme extends OAuthSecurityBase {
+  flow: 'password';
+
   /** The token URL to be used for this flow. This MUST be in the form of a URL. */
   tokenUrl: Url;
-
-  /** The available scopes for the OAuth2 security scheme. A map between the scope name and a short description for it. */
-  scopes?: Array<OAuthScope>;
 }
 
 /** OAuth2 Application Security Scheme */
-export interface OAuth2ApplicationSecurityScheme extends OAuthSecuirtyBase {
+export interface OAuth2ApplicationSecurityScheme extends OAuthSecurityBase {
+  flow: 'application';
+
   /** The token URL to be used for this flow. This MUST be in the form of a URL. */
   tokenUrl: Url;
-
-  /** The available scopes for the OAuth2 security scheme. A map between the scope name and a short description for it. */
-  scopes?: Array<OAuthScope>;
 }
 
 /** OAuth2 Security Code Security Scheme */
-export interface OAuth2AccessCodeSecurityScheme extends OAuthSecuirtyBase {
+export interface OAuth2AccessCodeSecurityScheme extends OAuthSecurityBase {
+  flow: 'accessCode';
+
   /** The authorization URL to be used for this flow. This MUST be in the form of a URL. */
   authorizationUrl: Url;
 
   /** The token URL to be used for this flow. This MUST be in the form of a URL. */
   tokenUrl: Url;
-
-  /** The available scopes for the OAuth2 security scheme. A map between the scope name and a short description for it. */
-  scopes: Dictionary<string>;
-}
-
-/** OAuth2 Scope */
-export interface OAuthScope {
-  /** The available scopes for the OAuth2 security scheme. A map between the scope name and a short description for it. */
-  scopes: Dictionary<string>;
 }
 
 /** 

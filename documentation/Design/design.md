@@ -8,6 +8,13 @@
 
 <hr>
 
+## Target Scenarios:
+ - Reviewing - Easy to review changes to APIs.  Diffs are readable by engineers unfamiliar with the API review process.
+ - Tooling - Supports multi-versioning well without the need for confusing or extensive tooling.
+ - Authoring - Easier for those creating the API definitions.
+ 
+<hr>
+
 ## Primary Goals:
 
 #### - Name 

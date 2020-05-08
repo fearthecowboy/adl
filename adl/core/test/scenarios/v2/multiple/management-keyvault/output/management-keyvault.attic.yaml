@@ -1,6 +1,3 @@
-host: management.azure.com
-schemes:
-  - https
 paths:
   "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.KeyVault/vaults/{vaultName}/secrets/{secretName}":
     put:
@@ -308,14 +305,6 @@ parameters:
     required: true
     type: string
     description: Client Api Version.
-securityDefinitions:
-  azure_auth:
-    type: oauth2
-    authorizationUrl: https://login.microsoftonline.com/common/oauth2/authorize
-    flow: implicit
-    description: Azure Active Directory OAuth2 Flow
-    scopes:
-      user_impersonation: impersonate your user account
 produces:
   - application/json
 consumes:

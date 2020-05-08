@@ -1,9 +1,51 @@
-http: {}
+http:
+  authentications:
+    - type: oauth2
+      name: oauth_2_0
+      description: >
+        OAuth2 is a protocol that lets external apps request authorization to
+        private
+
+        details in a user's GitHub account without getting their password. This is
+
+        preferred over Basic Authentication because tokens can be limited to specific
+
+        types of data, and can be revoked by users at any time.
+      flows:
+        authorizationCode:
+          authorizationUrl: https://github.com/login/oauth/authorize
+          scopes:
+            - name: admin:org
+            - name: admin:org_hook
+            - name: admin:public_key
+            - name: admin:repo_hook
+            - name: delete_repo
+            - name: gist
+            - name: notifications
+            - name: public_repo
+            - name: read:org
+            - name: read:public_key
+            - name: read:repo_hook
+            - name: repo
+            - name: repo:status
+            - name: repo_deployment
+            - name: user
+            - name: user:email
+            - name: user:follow
+            - name: write:org
+            - name: write:public_key
+            - name: write:repo_hook
+          tokenUrl: https://github.com/login/oauth/access_token
+  connections:
+    - url: https://api.github.com/
 metaData:
   name: GitHub
   description: >
     Powerful collaboration, code review, and code management for open source and
     private projects.
+  references:
+    - name: external-documentation
+      location: https://developer.github.com/v3/
   termsOfService: https://help.github.com/articles/github-terms-of-service/#b-api-terms
   attic:
     x-apisguru-categories:

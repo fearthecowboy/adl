@@ -1,49 +1,7 @@
-schemes:
-  - https
-host: api.github.com
-basePath: /
-externalDocs:
-  url: https://developer.github.com/v3/
 consumes:
   - application/json
 produces:
   - application/json
-securityDefinitions:
-  oauth_2_0:
-    authorizationUrl: https://github.com/login/oauth/authorize
-    description: >
-      OAuth2 is a protocol that lets external apps request authorization to
-      private
-
-      details in a user's GitHub account without getting their password. This is
-
-      preferred over Basic Authentication because tokens can be limited to specific
-
-      types of data, and can be revoked by users at any time.
-    flow: accessCode
-    scopes:
-      admin:org: ""
-      admin:org_hook: ""
-      admin:public_key: ""
-      admin:repo_hook: ""
-      delete_repo: ""
-      gist: ""
-      notifications: ""
-      public_repo: ""
-      read:org: ""
-      read:public_key: ""
-      read:repo_hook: ""
-      repo: ""
-      repo:status: ""
-      repo_deployment: ""
-      user: ""
-      user:email: ""
-      user:follow: ""
-      write:org: ""
-      write:public_key: ""
-      write:repo_hook: ""
-    tokenUrl: https://github.com/login/oauth/access_token
-    type: oauth2
 paths:
   /emojis:
     get:

@@ -1,4 +1,36 @@
-http: {}
+http:
+  authentications:
+    - type: oauth2
+      name: azure_auth
+      description: Azure Active Directory OAuth2 Flow
+      flows:
+        implicit:
+          authorizationUrl: https://login.microsoftonline.com/common/oauth2/authorize
+          scopes:
+            - name: user_impersonation
+              description: impersonate your user account
+    - type: oauth2
+      name: azure_auth
+      description: Azure Active Directory OAuth2 Flow
+      flows:
+        implicit:
+          authorizationUrl: https://login.microsoftonline.com/common/oauth2/authorize
+          scopes:
+            - name: user_impersonation
+              description: impersonate your user account
+    - type: oauth2
+      name: azure_auth
+      description: Azure Active Directory OAuth2 Flow
+      flows:
+        implicit:
+          authorizationUrl: https://login.microsoftonline.com/common/oauth2/authorize
+          scopes:
+            - name: user_impersonation
+              description: impersonate your user account
+  connections:
+    - url: https://management.azure.com/
+    - url: https://management.azure.com/
+    - url: https://management.azure.com/
 metaData:
   name: KeyVaultManagementClient
   description: The Azure management API provides a RESTful set of web services
