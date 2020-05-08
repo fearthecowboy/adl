@@ -690,9 +690,14 @@ http:
                                               targetSchema: *a1
                           - name: created_at
                             description: Creation time of the Tweet.
-                            schema: &a32
-                              type: dateTime
+                            schema:
+                              type: alias
                               name: anonymous<unknown>
+                              aliasType: schema
+                              description: Creation time of the Tweet.
+                              targetSchema: &a32
+                                type: dateTime
+                                name: anonymous<unknown>
                           - name: entities
                             schema: &a36
                               type: object
@@ -1026,9 +1031,15 @@ http:
                           - name: possibly_sensitive
                             description: Indicates if this Tweet contains URLs marked as sensitive, for
                               example content suitable for mature audiences.
-                            schema: &a14
-                              type: boolean
+                            schema:
+                              type: alias
                               name: anonymous<unknown>
+                              aliasType: schema
+                              description: Indicates if this Tweet contains URLs marked as sensitive, for
+                                example content suitable for mature audiences.
+                              targetSchema: &a14
+                                type: boolean
+                                name: anonymous<unknown>
                           - name: public_metrics
                             description: Engagement metrics for the Tweet at the time of the request.
                             schema:
@@ -1150,7 +1161,13 @@ http:
                                   description: Indicates if the content is being withheld for on the basis of
                                     copyright infringement.
                                   required: true
-                                  schema: *a14
+                                  schema:
+                                    type: alias
+                                    name: anonymous<unknown>
+                                    aliasType: schema
+                                    description: Indicates if the content is being withheld for on the basis of
+                                      copyright infringement.
+                                    targetSchema: *a14
                                 - name: country_codes
                                   description: Provides a list of countries where this content is not available.
                                   required: true
@@ -1912,7 +1929,12 @@ http:
                               properties:
                                 - name: created_at
                                   description: Creation time of this user.
-                                  schema: *a32
+                                  schema:
+                                    type: alias
+                                    name: anonymous<unknown>
+                                    aliasType: schema
+                                    description: Creation time of this user.
+                                    targetSchema: *a32
                                 - name: description
                                   description: The text of this user's profile description (also known as bio), if
                                     the user provided one.
@@ -1995,7 +2017,13 @@ http:
                                 - name: protected
                                   description: Indicates if this user has chosen to protect their Tweets (in other
                                     words, if this user's Tweets are private).
-                                  schema: *a14
+                                  schema:
+                                    type: alias
+                                    name: anonymous<unknown>
+                                    aliasType: schema
+                                    description: Indicates if this user has chosen to protect their Tweets (in other
+                                      words, if this user's Tweets are private).
+                                    targetSchema: *a14
                                 - name: public_metrics
                                   description: A list of metrics for this user
                                   schema:
@@ -2052,7 +2080,12 @@ http:
                                   schema: *a38
                                 - name: verified
                                   description: Indicate if this user is a verified Twitter User.
-                                  schema: *a14
+                                  schema:
+                                    type: alias
+                                    name: anonymous<unknown>
+                                    aliasType: schema
+                                    description: Indicate if this user is a verified Twitter User.
+                                    targetSchema: *a14
                                 - name: withheld
                                   schema: &a87
                                     type: object

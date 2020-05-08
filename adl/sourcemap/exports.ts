@@ -1,14 +1,15 @@
-import { Origin } from './proxies';
+import { Origin, valueOf } from './proxies';
 
 // eslint-disable-next-line @typescript-eslint/class-name-casing
 export interface anonymous extends Anonymous { }
 
 class Anonymous {
-  constructor(protected anonymous: string) {
-    if (!anonymous) {
-      this.anonymous = 'unknown';
-    }
+  protected anonymous: string;
+  constructor( identity: string|anonymous) {
+    
+    this.anonymous = identity instanceof Anonymous ? identity.anonymous :  valueOf(identity) ||  'unknown';
   }
+ 
   get name() {
     return `anonymous<${this.anonymous}>`;
   }

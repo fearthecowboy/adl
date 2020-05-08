@@ -35,6 +35,9 @@ function commonProperties(schema: v3.Schema) {
   return {
     description: schema.description,
     summary: schema.title,
+
+    // todo: I'm not fond of having this in schema -- we should strongly consider refactoring this so the consumer gets it (ie, the property)
+    nullable: schema.nullable
   };
 }
 
@@ -336,9 +339,11 @@ export async function *processByteArraySchema(schema: v3.Schema, $: Context): As
 }
 
 function addAliasWithDefault(schema: v3.Schema, resultSchema: Schema, $: Context) {
-  if (schema.default) {
-    const alias = new Alias(anonymous('?'),resultSchema, commonProperties(schema));
-    alias.defaults.push(new ServerDefaultValue(schema.default));
+  if (schema.default || schema.description || schema.title || schema.nullable ) {
+    const alias = new Alias(anonymous(resultSchema.name),resultSchema, commonProperties(schema));
+    if( schema.default) {
+      alias.defaults.push(new ServerDefaultValue(schema.default));
+    }
     use( schema.default, true);
     return alias;
   }
@@ -619,7 +624,7 @@ export async function *processObjectSchema(schema: v3.Schema, $: Context, option
   for (const [propertyName, property] of items(use(schema.properties))) {
     // process schema/reference inline
     const propSchema = await firstOrDefault( processInline(property, $, { isAnonymous: true }))|| $.api.schemas.Any;
-
+    
     // grabs the 'required' value for the property
     let required = undefined;
 
@@ -633,6 +638,7 @@ export async function *processObjectSchema(schema: v3.Schema, $: Context, option
       description: property.description,
       writeonly: property.writeOnly,
       readonly: property.readOnly,
+      
     });
     p.addToAttic('example', (<any>property).example);
     $.addVersionInfo(p,property);

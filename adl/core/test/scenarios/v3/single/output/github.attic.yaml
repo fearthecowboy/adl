@@ -1,21 +1,4 @@
 paths:
-  "/repos/{owner}/{repo}/branches/{branch}/protection":
-    put:
-      requestBody:
-        content:
-          application/json:
-            schema:
-              properties:
-                allow_force_pushes:
-                  nullable: true
-                enforce_admins:
-                  nullable: true
-                required_pull_request_reviews:
-                  nullable: true
-                required_status_checks:
-                  nullable: true
-                restrictions:
-                  nullable: true
   "/repos/{owner}/{repo}/check-runs":
     post:
       requestBody:
@@ -118,18 +101,6 @@ paths:
                   payload:
                     deploy: migrate
                   ref: topic-branch
-  "/repos/{owner}/{repo}/git/trees":
-    post:
-      requestBody:
-        content:
-          application/json:
-            schema:
-              properties:
-                tree:
-                  items:
-                    properties:
-                      sha:
-                        nullable: true
   "/repos/{owner}/{repo}/import":
     patch:
       requestBody:
@@ -141,15 +112,6 @@ paths:
                 value:
                   vcs_password: secret
                   vcs_username: octocat
-  "/repos/{owner}/{repo}/issues/{issue_number}":
-    patch:
-      requestBody:
-        content:
-          application/json:
-            schema:
-              properties:
-                milestone:
-                  nullable: true
   "/repos/{owner}/{repo}/pulls/{pull_number}/comments":
     post:
       requestBody:

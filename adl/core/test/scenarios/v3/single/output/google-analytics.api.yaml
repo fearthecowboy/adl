@@ -91,7 +91,7 @@ http:
             renderStyle: form
             schema:
               type: alias
-              name: anonymous<?>
+              name: anonymous<unknown>
               aliasType: schema
               defaults:
                 - type: server-default

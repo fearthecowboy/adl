@@ -21,6 +21,12 @@ export class Schema extends Element {
   description?: string;
 
   /**
+   * if null can be substituted for a value for this schema.
+   * 
+   * @todo: I'm not fond of having this in schema -- we should strongly consider refactoring this so the consumer gets it (ie, the property)
+   */
+  nullable?:  boolean;
+  /**
    * 
    * @param type the schema 'type' that this schema represents. 
    * @param initializer optional object initializer
