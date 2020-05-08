@@ -1,4 +1,4 @@
-import { iterable } from '@azure-tools/linq';
+import { values } from '@azure-tools/linq';
 import { common, v3, vendorExtensions } from '@azure-tools/openapi';
 import { nameOf } from '@azure-tools/sourcemap';
 import { Element } from '../../../model/element';
@@ -32,7 +32,7 @@ export async function* processPaths(input: ItemsOf<v3.PathItem>, $: Context): As
 
 export async function* path(pathItem: v3.PathItem, $: Context, options?: { isAnonymous?: boolean }): AsyncGenerator<Operation> {
   const path = nameOf(pathItem);
-  for (const method of iterable(common.HttpMethod)) {
+  for (const method of values(common.HttpMethod)) {
     if (method in pathItem) {
       yield* operation(path, pathItem[<common.HttpMethod>method], pathItem, $);
     }

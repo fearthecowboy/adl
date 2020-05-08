@@ -1,5 +1,5 @@
-import { JSDocableNode, Project, ClassDeclaration, JSDocStructure, SourceFile, InterfaceDeclaration, EnumDeclaration, Type, VariableDeclarationKind, IndentationText, QuoteKind, MethodDeclaration, Directory } from 'ts-morph';
-import { length, values, IterableWithLinq } from '@azure-tools/linq';
+import { IterableWithLinq, linq } from '@azure-tools/linq';
+import { JSDocableNode } from 'ts-morph';
 
 export interface TagInfo {
   tag: string;
@@ -9,7 +9,7 @@ export interface TagInfo {
 }
 
 export function getTags(node: JSDocableNode, name: string): IterableWithLinq<TagInfo> {
-  return values(node.getJsDocs()).selectMany(each => values(each.getTags()).where(each => each.getTagName() === name)).select(each => {
+  return linq.values(node.getJsDocs()).selectMany(each => linq.values(each.getTags()).where(each => each.getTagName() === name)).select(each => {
     const fullText = each.getComment();
     const s = fullText?.split(' ', 2);
     return {

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/ban-types */
-import { items, iterable, keys, length } from '@azure-tools/linq';
+import { items, keys, length, values } from '@azure-tools/linq';
 import { common, Dictionary, Info, isReference, isVendorExtension, JsonReference } from '@azure-tools/openapi';
 import { anonymous, getSourceFile, isAnonymous, isUsed, nameOf, Path, refTo, TrackedSource, TrackedTarget, Tracker, use, using, valueOf } from '@azure-tools/sourcemap';
 import { fail } from 'assert';
@@ -25,7 +25,7 @@ export function is<T extends Object>(instance: any): instance is T {
     return false;
   }
 
-  for (const each of iterable(instance)) {
+  for (const each of values(instance)) {
     if (typeof each === 'object') {
       if (is(each)) {
         return true;
@@ -47,7 +47,7 @@ export function is<T extends Object>(instance: any): instance is T {
 export function isObjectClean(obj: any): boolean {
   if (obj && typeof obj === 'object') {
 
-    for (const each of iterable(obj)) {
+    for (const each of values(obj)) {
       if (each !== undefined && typeof each === 'object') {
         if (!isObjectClean(each)) {
           return false;
@@ -157,7 +157,7 @@ export class Visitor<TSourceModel extends OAIModel> {
 
   async process<TOutput, TOptions extends Options = Options>(action: fnActionOnRoot<TSourceModel, TSourceModel, TOutput, TOptions>) {
 
-    for (const value  of iterable(this.sourceFiles)) {
+    for (const value  of values(this.sourceFiles)) {
       const ctx = await value;
       const watch = new Stopwatch();
 

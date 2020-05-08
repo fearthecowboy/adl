@@ -1,4 +1,4 @@
-import { keys } from '@azure-tools/linq';
+import { linq } from '@azure-tools/linq';
 import { isAnonymous } from '@azure-tools/sourcemap';
 import { AST, CST, Document, stringify } from 'yaml';
 import { Schema, YAMLMap } from 'yaml/types';
@@ -71,7 +71,7 @@ export const elementTag = <Schema.CustomTag>{
     const s = <any>(YAMLMap);
     const y = new s(schema);
 
-    for (const key of keys(value).toArray().sort(sortWithPriorty)) {
+    for (const key of linq.keys(value).toArray().sort(sortWithPriorty)) {
 
       let v = value[<any>key];
       // don't serialize undefined/null/''/functions

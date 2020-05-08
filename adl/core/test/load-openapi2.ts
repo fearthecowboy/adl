@@ -1,5 +1,5 @@
 import { isFile, writeFile } from '@azure-tools/async-io';
-import { values } from '@azure-tools/linq';
+import { linq } from '@azure-tools/linq';
 import { v2 } from '@azure-tools/openapi';
 import { equal, fail } from 'assert';
 import * as chalk from 'chalk';
@@ -36,7 +36,7 @@ async function checkAttic(api: ApiModel, errors: Errors, atticOutput: string) {
 describe('Load Single OAI2 files', () => {
   const inputRoot = `${scenarios}/single/input`;
   const outputRoot = `${scenarios}/single/output`;
-  const files = values(readdirSync(inputRoot)).where(each => statSync(`${inputRoot}/${each}`).isFile()).toArray();
+  const files = linq.values(readdirSync(inputRoot)).where(each => statSync(`${inputRoot}/${each}`).isFile()).toArray();
 
   for (const file of files) {
     it(`Processes '${file}'`, async () => {
@@ -64,7 +64,7 @@ describe('Load Single OAI2 files', () => {
 
 describe('Load Multiple OAI2 files', () => {
   const root = `${scenarios}/multiple`;
-  const folders = values(readdirSync(root)).where(each => statSync(`${root}/${each}`).isDirectory()).toArray();
+  const folders = linq.values(readdirSync(root)).where(each => statSync(`${root}/${each}`).isDirectory()).toArray();
 
   for (const folder of folders) {
     const inputRoot = resolve(root, folder, 'input');
@@ -74,7 +74,7 @@ describe('Load Multiple OAI2 files', () => {
       console.log('\n');
       const host = createHost(inputRoot);
 
-      const files = values(readdirSync(inputRoot)).where(each => statSync(`${inputRoot}/${each}`).isFile()).toArray();
+      const files = linq.values(readdirSync(inputRoot)).where(each => statSync(`${inputRoot}/${each}`).isFile()).toArray();
       const api = await deserializeOpenAPI2(host, ...files);
       const apiOutput = resolve(`${outputRoot}/${folder}.yaml`);
       const atticOutput = resolve(`${outputRoot}/${folder}.attic.yaml`);

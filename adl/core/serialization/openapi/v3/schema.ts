@@ -1,4 +1,4 @@
-import { items, iterable, length } from '@azure-tools/linq';
+import { items, length, values } from '@azure-tools/linq';
 import { IntegerFormat, NumberFormat, StringFormat, v3, XMSEnumValue } from '@azure-tools/openapi';
 import { anonymous, isUsed, nameOf, unusedMembers, use, using } from '@azure-tools/sourcemap';
 import { Alias as A } from '../../../model/alias';
@@ -54,7 +54,7 @@ export async function *processInline(schema: v3.Schema | v3.SchemaReference | un
 }
 
 async function *getSchemas(schemas: Array<v3.Schema|v3.SchemaReference>|undefined, $: Context): AsyncGenerator<Schema>{
-  for(const each of iterable(use(schemas))) {
+  for(const each of values(use(schemas))) {
     for await( const schema of $.processInline(processSchema,each, {isAnonymous:true})) {
       yield schema instanceof A ? schema.target : schema;
     }

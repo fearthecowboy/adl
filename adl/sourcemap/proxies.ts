@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-types */
-import { items, values } from '@azure-tools/linq';
+import { items, linq } from '@azure-tools/linq';
 import { Path, Tracker } from './exports';
 
 
@@ -58,7 +58,7 @@ export function unusedMembers<T>(value: T) {
     return [];
   }
 
-  return items(<any>value).where((each) => !isUsed(each[1])).select(each => each[0]).toArray();
+  return linq.items(<any>value).where((each) => !isUsed(each[1])).select(each => each[0]).toArray();
 }
 
 export function isProxy<T>(value: T) {
@@ -211,7 +211,7 @@ export class TrackedSource<T extends Object, instanceType> {
         } else {
           // if we have children, the final state of isUsed is dependent on all them being used.
           // this check only happens if we set an object to used and 
-          this.isUsed = values(<any>this.proxy).all(each =>isUsed(each));
+          this.isUsed = linq.values(<any>this.proxy).all(each =>isUsed(each));
         }
 
         // if the parent has been marked as used (ie, 'false')

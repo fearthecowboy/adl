@@ -13,7 +13,7 @@ export * from './uri';
 export * from './vendor-extensions';
 export * from './xml';
 
-import { items } from '@azure-tools/linq';
+import { linq } from '@azure-tools/linq';
 import { Dictionary } from './dictionary';
 import { JsonReference } from './json-reference';
 import { VendorExtensions } from './vendor-extensions';
@@ -33,5 +33,5 @@ export function isVendorExtension(key: string | number | symbol): boolean {
 }
 
 export function vendorExtensions(instance: VendorExtensions|any) {
-  return items(<Dictionary<any>>instance).where(each => isVendorExtension(each[0]));
+  return linq.items(<Dictionary<any>>instance).where(each => isVendorExtension(each[0]));
 }
