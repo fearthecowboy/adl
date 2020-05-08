@@ -1,5 +1,5 @@
 import { v3 } from '@azure-tools/openapi';
-import { Alias as A } from '../../../model/alias';
+import { Alias as GenericAlias } from '../../../model/alias';
 import { Element } from '../../../model/element';
 import { Alias, AndSchema, AnyOfSchema, AnySchema, ArraySchema, Constant, Enum, ObjectSchema, Primitive, XorSchema } from '../../../model/schema';
 import { header } from './header';
@@ -25,7 +25,7 @@ export async function* processComponents(components: v3.Components, $: Context):
   // await consume($.process(processSchemas, components.schemas));
   for await (const schema of $.processDictionary(processSchema, components.schemas)) {
     // we have to split up where schemas go 
-    if (schema instanceof A) {
+    if (schema instanceof GenericAlias) {
       throw new Error('schemas have their own alias type');
     }
     if (schema instanceof Alias) {

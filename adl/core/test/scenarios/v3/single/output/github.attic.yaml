@@ -1,11 +1,1 @@
-paths:
-  "/repos/{owner}/{repo}/releases/{release_id}/assets":
-    post:
-      servers:
-        - url: "{origin}"
-          variables:
-            origin:
-              default: https://uploads.github.com
-              description: The URL origin (protocol + host name + port) is included in
-                `upload_url` returned in the response of the "Create a release"
-                endpoint
+{}

@@ -1,7 +1,7 @@
 import { items, length, values } from '@azure-tools/linq';
 import { IntegerFormat, NumberFormat, StringFormat, v3, XMSEnumValue } from '@azure-tools/openapi';
 import { anonymous, isUsed, nameOf, unusedMembers, use, using } from '@azure-tools/sourcemap';
-import { Alias as A } from '../../../model/alias';
+import { Alias as GenericAlias } from '../../../model/alias';
 import { Identity } from '../../../model/name';
 import { Alias, AndSchema, AnyOfSchema, ArraySchema, Constant, DictionarySchema, Enum, ExclusiveMaximumConstraint, ExclusiveMinimumConstraint, MaximumConstraint, MaximumElementsConstraint, MaximumPropertiesConstraint, MaxLengthConstraint, MinimumConstraint, MinimumElementsConstraint, MinimumPropertiesConstraint, MinLengthConstraint, MultipleOfConstraint, ObjectSchema, Property, RegularExpressionConstraint, Schema, ServerDefaultValue, UniqueElementsConstraint, XorSchema } from '../../../model/schema';
 import { firstOrDefault, isEnumSchema, isObjectSchema, isPrimitiveSchema, push, toArray } from '../common';
@@ -47,9 +47,9 @@ export async function *processInline(schema: v3.Schema | v3.SchemaReference | un
       if( result ) {
         if( options?.isAnonymous ) {
         // if this was anonymous, we just want back the target object 
-          yield result instanceof A ? result.target : result;
+          yield result instanceof GenericAlias ? result.target : result;
         } else {
-          yield result instanceof A ? new Alias(result.name, result.target,commonProperties(<any>schema)) : result;
+          yield result instanceof GenericAlias ? new Alias(result.name, result.target,commonProperties(<any>schema)) : result;
         }
       }
     }
@@ -59,7 +59,7 @@ export async function *processInline(schema: v3.Schema | v3.SchemaReference | un
 async function *getSchemas(schemas: Array<v3.Schema|v3.SchemaReference>|undefined, $: Context): AsyncGenerator<Schema>{
   for(const each of values(use(schemas))) {
     for await( const schema of $.processInline(processSchema,each, {isAnonymous:true})) {
-      yield schema instanceof A ? schema.target : schema;
+      yield schema instanceof GenericAlias ? schema.target : schema;
     }
   }
 }

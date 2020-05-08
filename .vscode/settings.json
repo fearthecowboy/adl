@@ -83,4 +83,5 @@
     "source.fixAll.eslint": true,
     "source.organizeImports": true
   },
+  "eslint.format.enable": true,
 }

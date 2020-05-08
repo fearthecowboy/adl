@@ -50,6 +50,7 @@ export async function* operation(path: string, operation: v3.Operation, shared: 
 
   // push to the attic for now
   result.addToAttic('security', operation.security);
+  result.addToAttic('servers', operation.servers);
 
   // since we're not going thru $.process
   $.addVersionInfo(result, operation);
