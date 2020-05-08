@@ -16,7 +16,7 @@ const { vendorExtensions } = v3;
 // eslint-disable-next-line require-yield
 export async function *processComponents(components: v3.Components, $: Context): AsyncGenerator<Element> {
 
-  for (const { key, value: extension } of vendorExtensions(components)) {
+  for (const [key, extension] of vendorExtensions(components)) {
     // switch(key)
 
   }

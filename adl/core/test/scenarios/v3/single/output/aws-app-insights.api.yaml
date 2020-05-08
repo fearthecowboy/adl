@@ -82,71 +82,6 @@ http:
     - description: Adds an application that is created from a resource group.
       id: CreateApplication
       parameters:
-        - name: "0"
-          aliasType: parameter
-          target: &a6
-            type: header
-            name: X-Amz-Content-Sha256
-            expandParameterValues: false
-            renderStyle: simple
-            required: false
-            schema: &a1
-              type: string
-              name: anonymous<unknown>
-        - name: "1"
-          aliasType: parameter
-          target: &a7
-            type: header
-            name: X-Amz-Date
-            expandParameterValues: false
-            renderStyle: simple
-            required: false
-            schema: *a1
-        - name: "2"
-          aliasType: parameter
-          target: &a8
-            type: header
-            name: X-Amz-Algorithm
-            expandParameterValues: false
-            renderStyle: simple
-            required: false
-            schema: *a1
-        - name: "3"
-          aliasType: parameter
-          target: &a9
-            type: header
-            name: X-Amz-Credential
-            expandParameterValues: false
-            renderStyle: simple
-            required: false
-            schema: *a1
-        - name: "4"
-          aliasType: parameter
-          target: &a10
-            type: header
-            name: X-Amz-Security-Token
-            expandParameterValues: false
-            renderStyle: simple
-            required: false
-            schema: *a1
-        - name: "5"
-          aliasType: parameter
-          target: &a11
-            type: header
-            name: X-Amz-Signature
-            expandParameterValues: false
-            renderStyle: simple
-            required: false
-            schema: *a1
-        - name: "6"
-          aliasType: parameter
-          target: &a12
-            type: header
-            name: X-Amz-SignedHeaders
-            expandParameterValues: false
-            renderStyle: simple
-            required: false
-            schema: *a1
         - type: header
           name: X-Amz-Target
           expandParameterValues: false
@@ -160,7 +95,9 @@ http:
               type: alias
               name: anonymous<string>
               aliasType: schema
-              targetSchema: *a1
+              targetSchema: &a1
+                type: string
+                name: anonymous<unknown>
       requests:
         - identity: anonymous<requestBody>
           mediaType: application/json
@@ -169,7 +106,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a49
+            targetSchema: &a42
               type: object
               name: CreateApplicationRequest
               properties:
@@ -224,7 +161,7 @@ http:
                     and an associated tag value (<code>Value</code>). The
                     maximum length of a tag key is 128 characters. The maximum
                     length of a tag value is 256 characters.
-                  schema: &a38
+                  schema: &a31
                     type: alias
                     name: TagList
                     aliasType: schema
@@ -238,7 +175,7 @@ http:
                     targetSchema:
                       type: array
                       name: anonymous<unknown>
-                      elementSchema: &a104
+                      elementSchema: &a97
                         type: object
                         name: Tag
                         description: "<p>An object that defines the tags associated with an application.
@@ -270,7 +207,7 @@ http:
                               of a tag key is 128 characters. The minimum length
                               is 1 character.
                             required: true
-                            schema: &a40
+                            schema: &a33
                               type: alias
                               name: anonymous<string>
                               aliasType: schema
@@ -289,7 +226,7 @@ http:
                               want an application to have a specific tag value,
                               don't specify a value for this parameter.
                             required: true
-                            schema: &a114
+                            schema: &a107
                               type: alias
                               name: anonymous<string>
                               aliasType: schema
@@ -310,13 +247,13 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a48
+            targetSchema: &a41
               type: object
               name: CreateApplicationResponse
               properties:
                 - name: ApplicationInfo
                   description: Information about the application.
-                  schema: &a17
+                  schema: &a10
                     type: object
                     name: ApplicationInfo
                     description: Describes the status of the application.
@@ -397,27 +334,6 @@ http:
         to monitor.
       id: CreateComponent
       parameters:
-        - name: "0"
-          aliasType: parameter
-          target: *a6
-        - name: "1"
-          aliasType: parameter
-          target: *a7
-        - name: "2"
-          aliasType: parameter
-          target: *a8
-        - name: "3"
-          aliasType: parameter
-          target: *a9
-        - name: "4"
-          aliasType: parameter
-          target: *a10
-        - name: "5"
-          aliasType: parameter
-          target: *a11
-        - name: "6"
-          aliasType: parameter
-          target: *a12
         - type: header
           name: X-Amz-Target
           expandParameterValues: false
@@ -440,7 +356,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a51
+            targetSchema: &a44
               type: object
               name: CreateComponentRequest
               properties:
@@ -455,14 +371,14 @@ http:
                 - name: ResourceList
                   description: The list of resource ARNs that belong to the component.
                   required: true
-                  schema: &a19
+                  schema: &a12
                     type: alias
                     name: ResourceList
                     aliasType: schema
                     targetSchema:
                       type: array
                       name: anonymous<unknown>
-                      elementSchema: &a113
+                      elementSchema: &a106
                         type: alias
                         name: anonymous<string>
                         aliasType: schema
@@ -483,7 +399,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a50
+            targetSchema: &a43
               type: object
               name: CreateComponentResponse
         - name: "480"
@@ -521,27 +437,6 @@ http:
     - description: Adds an log pattern to a <code>LogPatternSet</code>.
       id: CreateLogPattern
       parameters:
-        - name: "0"
-          aliasType: parameter
-          target: *a6
-        - name: "1"
-          aliasType: parameter
-          target: *a7
-        - name: "2"
-          aliasType: parameter
-          target: *a8
-        - name: "3"
-          aliasType: parameter
-          target: *a9
-        - name: "4"
-          aliasType: parameter
-          target: *a10
-        - name: "5"
-          aliasType: parameter
-          target: *a11
-        - name: "6"
-          aliasType: parameter
-          target: *a12
         - type: header
           name: X-Amz-Target
           expandParameterValues: false
@@ -564,7 +459,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a53
+            targetSchema: &a46
               type: object
               name: CreateLogPatternRequest
               properties:
@@ -575,7 +470,7 @@ http:
                 - name: PatternSetName
                   description: The name of the log pattern set.
                   required: true
-                  schema: &a13
+                  schema: &a6
                     type: alias
                     name: anonymous<string>
                     aliasType: schema
@@ -593,7 +488,7 @@ http:
                 - name: PatternName
                   description: The name of the log pattern.
                   required: true
-                  schema: &a14
+                  schema: &a7
                     type: alias
                     name: anonymous<string>
                     aliasType: schema
@@ -611,7 +506,7 @@ http:
                 - name: Pattern
                   description: The log pattern.
                   required: true
-                  schema: &a15
+                  schema: &a8
                     type: alias
                     name: anonymous<string>
                     aliasType: schema
@@ -626,7 +521,7 @@ http:
                 - name: Rank
                   description: Rank of the log pattern.
                   required: true
-                  schema: &a16
+                  schema: &a9
                     type: int64
                     name: anonymous<unknown>
               summary: CreateLogPatternRequest
@@ -638,13 +533,13 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a52
+            targetSchema: &a45
               type: object
               name: CreateLogPatternResponse
               properties:
                 - name: LogPattern
                   description: The successfully created log pattern.
-                  schema: &a22
+                  schema: &a15
                     type: object
                     name: LogPattern
                     description: An object that defines the log patterns that belongs to a
@@ -655,21 +550,21 @@ http:
                           many as 30 characters, and it cannot be empty. The
                           characters can be Unicode letters, digits or one of
                           the following symbols: period, dash, underscore."
-                        schema: *a13
+                        schema: *a6
                       - name: PatternName
                         description: "The name of the log pattern. A log pattern name can contains at
                           many as 50 characters, and it cannot be empty. The
                           characters can be Unicode letters, digits or one of
                           the following symbols: period, dash, underscore."
-                        schema: *a14
+                        schema: *a7
                       - name: Pattern
                         description: A regular expression that defines the log pattern. A log pattern
                           can contains at many as 50 characters, and it cannot
                           be empty.
-                        schema: *a15
+                        schema: *a8
                       - name: Rank
                         description: Rank of the log pattern.
-                        schema: *a16
+                        schema: *a9
                 - name: ResourceGroupName
                   description: The name of the resource group.
                   schema: *a3
@@ -709,27 +604,6 @@ http:
         the application.
       id: DeleteApplication
       parameters:
-        - name: "0"
-          aliasType: parameter
-          target: *a6
-        - name: "1"
-          aliasType: parameter
-          target: *a7
-        - name: "2"
-          aliasType: parameter
-          target: *a8
-        - name: "3"
-          aliasType: parameter
-          target: *a9
-        - name: "4"
-          aliasType: parameter
-          target: *a10
-        - name: "5"
-          aliasType: parameter
-          target: *a11
-        - name: "6"
-          aliasType: parameter
-          target: *a12
         - type: header
           name: X-Amz-Target
           expandParameterValues: false
@@ -752,7 +626,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a55
+            targetSchema: &a48
               type: object
               name: DeleteApplicationRequest
               properties:
@@ -769,7 +643,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a54
+            targetSchema: &a47
               type: object
               name: DeleteApplicationResponse
         - name: "480"
@@ -809,27 +683,6 @@ http:
         and the instances revert to their standalone status.
       id: DeleteComponent
       parameters:
-        - name: "0"
-          aliasType: parameter
-          target: *a6
-        - name: "1"
-          aliasType: parameter
-          target: *a7
-        - name: "2"
-          aliasType: parameter
-          target: *a8
-        - name: "3"
-          aliasType: parameter
-          target: *a9
-        - name: "4"
-          aliasType: parameter
-          target: *a10
-        - name: "5"
-          aliasType: parameter
-          target: *a11
-        - name: "6"
-          aliasType: parameter
-          target: *a12
         - type: header
           name: X-Amz-Target
           expandParameterValues: false
@@ -852,7 +705,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a57
+            targetSchema: &a50
               type: object
               name: DeleteComponentRequest
               properties:
@@ -873,7 +726,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a56
+            targetSchema: &a49
               type: object
               name: DeleteComponentResponse
         - name: "480"
@@ -903,27 +756,6 @@ http:
     - description: Removes the specified log pattern from a <code>LogPatternSet</code>.
       id: DeleteLogPattern
       parameters:
-        - name: "0"
-          aliasType: parameter
-          target: *a6
-        - name: "1"
-          aliasType: parameter
-          target: *a7
-        - name: "2"
-          aliasType: parameter
-          target: *a8
-        - name: "3"
-          aliasType: parameter
-          target: *a9
-        - name: "4"
-          aliasType: parameter
-          target: *a10
-        - name: "5"
-          aliasType: parameter
-          target: *a11
-        - name: "6"
-          aliasType: parameter
-          target: *a12
         - type: header
           name: X-Amz-Target
           expandParameterValues: false
@@ -946,7 +778,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a59
+            targetSchema: &a52
               type: object
               name: DeleteLogPatternRequest
               properties:
@@ -957,11 +789,11 @@ http:
                 - name: PatternSetName
                   description: The name of the log pattern set.
                   required: true
-                  schema: *a13
+                  schema: *a6
                 - name: PatternName
                   description: The name of the log pattern.
                   required: true
-                  schema: *a14
+                  schema: *a7
               summary: DeleteLogPatternRequest
       responses:
         - name: "200"
@@ -971,7 +803,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a58
+            targetSchema: &a51
               type: object
               name: DeleteLogPatternResponse
         - name: "480"
@@ -1009,27 +841,6 @@ http:
     - description: Describes the application.
       id: DescribeApplication
       parameters:
-        - name: "0"
-          aliasType: parameter
-          target: *a6
-        - name: "1"
-          aliasType: parameter
-          target: *a7
-        - name: "2"
-          aliasType: parameter
-          target: *a8
-        - name: "3"
-          aliasType: parameter
-          target: *a9
-        - name: "4"
-          aliasType: parameter
-          target: *a10
-        - name: "5"
-          aliasType: parameter
-          target: *a11
-        - name: "6"
-          aliasType: parameter
-          target: *a12
         - type: header
           name: X-Amz-Target
           expandParameterValues: false
@@ -1052,7 +863,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a61
+            targetSchema: &a54
               type: object
               name: DescribeApplicationRequest
               properties:
@@ -1069,13 +880,13 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a60
+            targetSchema: &a53
               type: object
               name: DescribeApplicationResponse
               properties:
                 - name: ApplicationInfo
                   description: Information about the application.
-                  schema: *a17
+                  schema: *a10
         - name: "480"
           description: ResourceNotFoundException
           mediaType: application/json
@@ -1104,27 +915,6 @@ http:
         together in a component.
       id: DescribeComponent
       parameters:
-        - name: "0"
-          aliasType: parameter
-          target: *a6
-        - name: "1"
-          aliasType: parameter
-          target: *a7
-        - name: "2"
-          aliasType: parameter
-          target: *a8
-        - name: "3"
-          aliasType: parameter
-          target: *a9
-        - name: "4"
-          aliasType: parameter
-          target: *a10
-        - name: "5"
-          aliasType: parameter
-          target: *a11
-        - name: "6"
-          aliasType: parameter
-          target: *a12
         - type: header
           name: X-Amz-Target
           expandParameterValues: false
@@ -1147,7 +937,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a63
+            targetSchema: &a56
               type: object
               name: DescribeComponentRequest
               properties:
@@ -1168,12 +958,12 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a62
+            targetSchema: &a55
               type: object
               name: DescribeComponentResponse
               properties:
                 - name: ApplicationComponent
-                  schema: &a33
+                  schema: &a26
                     type: object
                     name: ApplicationComponent
                     description: Describes a standalone resource or similarly grouped resources that
@@ -1189,10 +979,10 @@ http:
                         schema: *a1
                       - name: Tier
                         description: The stack tier of the application component.
-                        schema: &a20
+                        schema: &a13
                           type: enum
                           name: Tier
-                          elementSchema: &a18
+                          elementSchema: &a11
                             type: alias
                             name: anonymous<string>
                             aliasType: schema
@@ -1209,29 +999,29 @@ http:
                             - type: constant
                               name: anonymous<unknown>
                               value: DEFAULT
-                              valueSchema: *a18
+                              valueSchema: *a11
                             - type: constant
                               name: anonymous<unknown>
                               value: DOT_NET_CORE
-                              valueSchema: *a18
+                              valueSchema: *a11
                             - type: constant
                               name: anonymous<unknown>
                               value: DOT_NET_WORKER
-                              valueSchema: *a18
+                              valueSchema: *a11
                             - type: constant
                               name: anonymous<unknown>
                               value: DOT_NET_WEB
-                              valueSchema: *a18
+                              valueSchema: *a11
                             - type: constant
                               name: anonymous<unknown>
                               value: SQL_SERVER
-                              valueSchema: *a18
+                              valueSchema: *a11
                       - name: Monitor
                         description: "Indicates whether the application component is monitored. "
                         schema: *a2
                 - name: ResourceList
                   description: The list of resource ARNs that belong to the component.
-                  schema: *a19
+                  schema: *a12
         - name: "480"
           description: ResourceNotFoundException
           mediaType: application/json
@@ -1259,27 +1049,6 @@ http:
     - description: Describes the monitoring configuration of the component.
       id: DescribeComponentConfiguration
       parameters:
-        - name: "0"
-          aliasType: parameter
-          target: *a6
-        - name: "1"
-          aliasType: parameter
-          target: *a7
-        - name: "2"
-          aliasType: parameter
-          target: *a8
-        - name: "3"
-          aliasType: parameter
-          target: *a9
-        - name: "4"
-          aliasType: parameter
-          target: *a10
-        - name: "5"
-          aliasType: parameter
-          target: *a11
-        - name: "6"
-          aliasType: parameter
-          target: *a12
         - type: header
           name: X-Amz-Target
           expandParameterValues: false
@@ -1302,7 +1071,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a65
+            targetSchema: &a58
               type: object
               name: DescribeComponentConfigurationRequest
               properties:
@@ -1323,7 +1092,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a64
+            targetSchema: &a57
               type: object
               name: DescribeComponentConfigurationResponse
               properties:
@@ -1335,11 +1104,11 @@ http:
                     <code>DOT_NET_CORE</code>, <code>DOT_NET_WORKER</code>,
                     <code>DOT_NET_WEB</code>, <code>SQL_SERVER</code>, and
                     <code>DEFAULT</code> "
-                  schema: *a20
+                  schema: *a13
                 - name: ComponentConfiguration
                   description: The configuration settings of the component. The value is the
                     escaped JSON of the configuration.
-                  schema: &a21
+                  schema: &a14
                     type: alias
                     name: anonymous<string>
                     aliasType: schema
@@ -1378,27 +1147,6 @@ http:
     - description: Describes the recommended monitoring configuration of the component.
       id: DescribeComponentConfigurationRecommendation
       parameters:
-        - name: "0"
-          aliasType: parameter
-          target: *a6
-        - name: "1"
-          aliasType: parameter
-          target: *a7
-        - name: "2"
-          aliasType: parameter
-          target: *a8
-        - name: "3"
-          aliasType: parameter
-          target: *a9
-        - name: "4"
-          aliasType: parameter
-          target: *a10
-        - name: "5"
-          aliasType: parameter
-          target: *a11
-        - name: "6"
-          aliasType: parameter
-          target: *a12
         - type: header
           name: X-Amz-Target
           expandParameterValues: false
@@ -1421,7 +1169,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a67
+            targetSchema: &a60
               type: object
               name: DescribeComponentConfigurationRecommendationRequest
               properties:
@@ -1439,7 +1187,7 @@ http:
                     <code>DOT_NET_WEB</code>, <code>SQL_SERVER</code>, and
                     <code>DEFAULT</code>.
                   required: true
-                  schema: *a20
+                  schema: *a13
               summary: DescribeComponentConfigurationRecommendationRequest
       responses:
         - name: "200"
@@ -1449,14 +1197,14 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a66
+            targetSchema: &a59
               type: object
               name: DescribeComponentConfigurationRecommendationResponse
               properties:
                 - name: ComponentConfiguration
                   description: The recommended configuration settings of the component. The value
                     is the escaped JSON of the configuration.
-                  schema: *a21
+                  schema: *a14
         - name: "480"
           description: ResourceNotFoundException
           mediaType: application/json
@@ -1484,27 +1232,6 @@ http:
     - description: Describe a specific log pattern from a <code>LogPatternSet</code>.
       id: DescribeLogPattern
       parameters:
-        - name: "0"
-          aliasType: parameter
-          target: *a6
-        - name: "1"
-          aliasType: parameter
-          target: *a7
-        - name: "2"
-          aliasType: parameter
-          target: *a8
-        - name: "3"
-          aliasType: parameter
-          target: *a9
-        - name: "4"
-          aliasType: parameter
-          target: *a10
-        - name: "5"
-          aliasType: parameter
-          target: *a11
-        - name: "6"
-          aliasType: parameter
-          target: *a12
         - type: header
           name: X-Amz-Target
           expandParameterValues: false
@@ -1527,7 +1254,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a69
+            targetSchema: &a62
               type: object
               name: DescribeLogPatternRequest
               properties:
@@ -1538,11 +1265,11 @@ http:
                 - name: PatternSetName
                   description: The name of the log pattern set.
                   required: true
-                  schema: *a13
+                  schema: *a6
                 - name: PatternName
                   description: The name of the log pattern.
                   required: true
-                  schema: *a14
+                  schema: *a7
               summary: DescribeLogPatternRequest
       responses:
         - name: "200"
@@ -1552,7 +1279,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a68
+            targetSchema: &a61
               type: object
               name: DescribeLogPatternResponse
               properties:
@@ -1561,7 +1288,7 @@ http:
                   schema: *a3
                 - name: LogPattern
                   description: The successfully created log pattern.
-                  schema: *a22
+                  schema: *a15
         - name: "480"
           description: ResourceNotFoundException
           mediaType: application/json
@@ -1589,27 +1316,6 @@ http:
     - description: Describes an anomaly or error with the application.
       id: DescribeObservation
       parameters:
-        - name: "0"
-          aliasType: parameter
-          target: *a6
-        - name: "1"
-          aliasType: parameter
-          target: *a7
-        - name: "2"
-          aliasType: parameter
-          target: *a8
-        - name: "3"
-          aliasType: parameter
-          target: *a9
-        - name: "4"
-          aliasType: parameter
-          target: *a10
-        - name: "5"
-          aliasType: parameter
-          target: *a11
-        - name: "6"
-          aliasType: parameter
-          target: *a12
         - type: header
           name: X-Amz-Target
           expandParameterValues: false
@@ -1632,14 +1338,14 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a71
+            targetSchema: &a64
               type: object
               name: DescribeObservationRequest
               properties:
                 - name: ObservationId
                   description: The ID of the observation.
                   required: true
-                  schema: &a23
+                  schema: &a16
                     type: alias
                     name: anonymous<string>
                     aliasType: schema
@@ -1663,28 +1369,28 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a70
+            targetSchema: &a63
               type: object
               name: DescribeObservationResponse
               properties:
                 - name: Observation
                   description: Information about the observation.
-                  schema: &a31
+                  schema: &a24
                     type: object
                     name: Observation
                     description: Describes an anomaly or error with the application.
                     properties:
                       - name: Id
                         description: The ID of the observation type.
-                        schema: *a23
+                        schema: *a16
                       - name: StartTime
                         description: The time when the observation was first detected, in epoch seconds.
-                        schema: &a24
+                        schema: &a17
                           type: dateTime
                           name: anonymous<unknown>
                       - name: EndTime
                         description: The time when the observation ended, in epoch seconds.
-                        schema: *a24
+                        schema: *a17
                       - name: SourceType
                         description: The source type of the observation.
                         schema: *a1
@@ -1697,16 +1403,16 @@ http:
                       - name: LineTime
                         description: The timestamp in the CloudWatch Logs that specifies when the
                           matched line occurred.
-                        schema: *a24
+                        schema: *a17
                       - name: LogText
                         description: The log text of the observation.
                         schema: *a1
                       - name: LogFilter
                         description: The log filter of the observation.
-                        schema: &a45
+                        schema: &a38
                           type: enum
                           name: LogFilter
-                          elementSchema: &a25
+                          elementSchema: &a18
                             type: alias
                             name: anonymous<string>
                             aliasType: schema
@@ -1716,15 +1422,15 @@ http:
                             - type: constant
                               name: anonymous<unknown>
                               value: ERROR
-                              valueSchema: *a25
+                              valueSchema: *a18
                             - type: constant
                               name: anonymous<unknown>
                               value: WARN
-                              valueSchema: *a25
+                              valueSchema: *a18
                             - type: constant
                               name: anonymous<unknown>
                               value: INFO
-                              valueSchema: *a25
+                              valueSchema: *a18
                       - name: MetricNamespace
                         description: The namespace of the observation metric.
                         schema: *a1
@@ -1736,7 +1442,7 @@ http:
                         schema: *a1
                       - name: Value
                         description: The value of the source observation metric.
-                        schema: &a41
+                        schema: &a34
                           type: double
                           name: anonymous<unknown>
                       - name: CloudWatchEventId
@@ -1745,10 +1451,10 @@ http:
                         schema: *a1
                       - name: CloudWatchEventSource
                         description: " The source of the CloudWatch Event. "
-                        schema: &a42
+                        schema: &a35
                           type: enum
                           name: CloudWatchEventSource
-                          elementSchema: &a26
+                          elementSchema: &a19
                             type: alias
                             name: anonymous<string>
                             aliasType: schema
@@ -1758,15 +1464,15 @@ http:
                             - type: constant
                               name: anonymous<unknown>
                               value: EC2
-                              valueSchema: *a26
+                              valueSchema: *a19
                             - type: constant
                               name: anonymous<unknown>
                               value: CODE_DEPLOY
-                              valueSchema: *a26
+                              valueSchema: *a19
                             - type: constant
                               name: anonymous<unknown>
                               value: HEALTH
-                              valueSchema: *a26
+                              valueSchema: *a19
                       - name: CloudWatchEventDetailType
                         description: " The detail type of the CloudWatch Event-based observation, for
                           example, <code>EC2 Instance State-change
@@ -1815,19 +1521,19 @@ http:
                         schema: *a1
                       - name: XRayFaultPercent
                         description: " The X-Ray request fault percentage for this node. "
-                        schema: *a16
+                        schema: *a9
                       - name: XRayThrottlePercent
                         description: " The X-Ray request throttle percentage for this node. "
-                        schema: *a16
+                        schema: *a9
                       - name: XRayErrorPercent
                         description: " The X-Ray request error percentage for this node. "
-                        schema: *a16
+                        schema: *a9
                       - name: XRayRequestCount
                         description: " The X-Ray request count for this node. "
-                        schema: *a16
+                        schema: *a9
                       - name: XRayRequestAverageLatency
                         description: " The X-Ray node request average latency for this node. "
-                        schema: *a16
+                        schema: *a9
                       - name: XRayNodeName
                         description: " The name of the X-Ray node. "
                         schema: *a1
@@ -1861,27 +1567,6 @@ http:
     - description: Describes an application problem.
       id: DescribeProblem
       parameters:
-        - name: "0"
-          aliasType: parameter
-          target: *a6
-        - name: "1"
-          aliasType: parameter
-          target: *a7
-        - name: "2"
-          aliasType: parameter
-          target: *a8
-        - name: "3"
-          aliasType: parameter
-          target: *a9
-        - name: "4"
-          aliasType: parameter
-          target: *a10
-        - name: "5"
-          aliasType: parameter
-          target: *a11
-        - name: "6"
-          aliasType: parameter
-          target: *a12
         - type: header
           name: X-Amz-Target
           expandParameterValues: false
@@ -1904,14 +1589,14 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a73
+            targetSchema: &a66
               type: object
               name: DescribeProblemRequest
               properties:
                 - name: ProblemId
                   description: The ID of the problem.
                   required: true
-                  schema: &a27
+                  schema: &a20
                     type: alias
                     name: anonymous<string>
                     aliasType: schema
@@ -1935,20 +1620,20 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a72
+            targetSchema: &a65
               type: object
               name: DescribeProblemResponse
               properties:
                 - name: Problem
                   description: "Information about the problem. "
-                  schema: &a37
+                  schema: &a30
                     type: object
                     name: Problem
                     description: Describes a problem that is detected by correlating observations.
                     properties:
                       - name: Id
                         description: The ID of the problem.
-                        schema: *a27
+                        schema: *a20
                       - name: Title
                         description: The name of the problem.
                         schema: *a1
@@ -1957,10 +1642,10 @@ http:
                         schema: *a1
                       - name: Status
                         description: The status of the problem.
-                        schema: &a46
+                        schema: &a39
                           type: enum
                           name: Status
-                          elementSchema: &a28
+                          elementSchema: &a21
                             type: alias
                             name: anonymous<string>
                             aliasType: schema
@@ -1970,30 +1655,30 @@ http:
                             - type: constant
                               name: anonymous<unknown>
                               value: IGNORE
-                              valueSchema: *a28
+                              valueSchema: *a21
                             - type: constant
                               name: anonymous<unknown>
                               value: RESOLVED
-                              valueSchema: *a28
+                              valueSchema: *a21
                             - type: constant
                               name: anonymous<unknown>
                               value: PENDING
-                              valueSchema: *a28
+                              valueSchema: *a21
                       - name: AffectedResource
                         description: The resource affected by the problem.
                         schema: *a1
                       - name: StartTime
                         description: The time when the problem started, in epoch seconds.
-                        schema: *a24
+                        schema: *a17
                       - name: EndTime
                         description: The time when the problem ended, in epoch seconds.
-                        schema: *a24
+                        schema: *a17
                       - name: SeverityLevel
                         description: A measure of the level of impact of the problem.
-                        schema: &a47
+                        schema: &a40
                           type: enum
                           name: SeverityLevel
-                          elementSchema: &a29
+                          elementSchema: &a22
                             type: alias
                             name: anonymous<string>
                             aliasType: schema
@@ -2003,21 +1688,21 @@ http:
                             - type: constant
                               name: anonymous<unknown>
                               value: Low
-                              valueSchema: *a29
+                              valueSchema: *a22
                             - type: constant
                               name: anonymous<unknown>
                               value: Medium
-                              valueSchema: *a29
+                              valueSchema: *a22
                             - type: constant
                               name: anonymous<unknown>
                               value: High
-                              valueSchema: *a29
+                              valueSchema: *a22
                       - name: ResourceGroupName
                         description: The name of the resource group affected by the problem.
                         schema: *a3
                       - name: Feedback
                         description: Feedback provided by the user about the problem.
-                        schema: &a108
+                        schema: &a101
                           type: alias
                           name: Feedback
                           aliasType: schema
@@ -2028,10 +1713,10 @@ http:
                           targetSchema:
                             type: dictionary
                             name: anonymous<unknown>
-                            elementSchema: &a44
+                            elementSchema: &a37
                               type: enum
                               name: FeedbackValue
-                              elementSchema: &a30
+                              elementSchema: &a23
                                 type: alias
                                 name: anonymous<string>
                                 aliasType: schema
@@ -2041,15 +1726,15 @@ http:
                                 - type: constant
                                   name: anonymous<unknown>
                                   value: NOT_SPECIFIED
-                                  valueSchema: *a30
+                                  valueSchema: *a23
                                 - type: constant
                                   name: anonymous<unknown>
                                   value: USEFUL
-                                  valueSchema: *a30
+                                  valueSchema: *a23
                                 - type: constant
                                   name: anonymous<unknown>
                                   value: NOT_USEFUL
-                                  valueSchema: *a30
+                                  valueSchema: *a23
         - name: "480"
           description: InternalServerException
           mediaType: application/json
@@ -2077,27 +1762,6 @@ http:
     - description: Describes the anomalies or errors associated with the problem.
       id: DescribeProblemObservations
       parameters:
-        - name: "0"
-          aliasType: parameter
-          target: *a6
-        - name: "1"
-          aliasType: parameter
-          target: *a7
-        - name: "2"
-          aliasType: parameter
-          target: *a8
-        - name: "3"
-          aliasType: parameter
-          target: *a9
-        - name: "4"
-          aliasType: parameter
-          target: *a10
-        - name: "5"
-          aliasType: parameter
-          target: *a11
-        - name: "6"
-          aliasType: parameter
-          target: *a12
         - type: header
           name: X-Amz-Target
           expandParameterValues: false
@@ -2120,14 +1784,14 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a75
+            targetSchema: &a68
               type: object
               name: DescribeProblemObservationsRequest
               properties:
                 - name: ProblemId
                   description: The ID of the problem.
                   required: true
-                  schema: *a27
+                  schema: *a20
               summary: DescribeProblemObservationsRequest
       responses:
         - name: "200"
@@ -2137,27 +1801,27 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a74
+            targetSchema: &a67
               type: object
               name: DescribeProblemObservationsResponse
               properties:
                 - name: RelatedObservations
                   description: Observations related to the problem.
-                  schema: &a103
+                  schema: &a96
                     type: object
                     name: RelatedObservations
                     description: Describes observations related to the problem.
                     properties:
                       - name: ObservationList
                         description: The list of observations related to the problem.
-                        schema: &a112
+                        schema: &a105
                           type: alias
                           name: ObservationList
                           aliasType: schema
                           targetSchema:
                             type: array
                             name: anonymous<unknown>
-                            elementSchema: *a31
+                            elementSchema: *a24
         - name: "480"
           description: InternalServerException
           mediaType: application/json
@@ -2185,41 +1849,6 @@ http:
     - description: "Lists the IDs of the applications that you are monitoring. "
       id: ListApplications
       parameters:
-        - name: "0"
-          aliasType: parameter
-          target: *a6
-        - name: "1"
-          aliasType: parameter
-          target: *a7
-        - name: "2"
-          aliasType: parameter
-          target: *a8
-        - name: "3"
-          aliasType: parameter
-          target: *a9
-        - name: "4"
-          aliasType: parameter
-          target: *a10
-        - name: "5"
-          aliasType: parameter
-          target: *a11
-        - name: "6"
-          aliasType: parameter
-          target: *a12
-        - type: query
-          name: MaxResults
-          description: Pagination limit
-          expandParameterValues: true
-          renderStyle: form
-          required: false
-          schema: *a1
-        - type: query
-          name: NextToken
-          description: Pagination token
-          expandParameterValues: true
-          renderStyle: form
-          required: false
-          schema: *a1
         - type: header
           name: X-Amz-Target
           expandParameterValues: false
@@ -2242,7 +1871,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a77
+            targetSchema: &a70
               type: object
               name: ListApplicationsRequest
               properties:
@@ -2250,7 +1879,7 @@ http:
                   description: The maximum number of results to return in a single call. To
                     retrieve the remaining results, make another call with the
                     returned <code>NextToken</code> value.
-                  schema: &a32
+                  schema: &a25
                     type: alias
                     name: anonymous<number>
                     aliasType: schema
@@ -2261,7 +1890,7 @@ http:
                       - type: constraint
                         name: Maximum
                         maximum: 40
-                    targetSchema: *a16
+                    targetSchema: *a9
                 - name: NextToken
                   description: The token to request the next page of results.
                   schema: *a1
@@ -2274,20 +1903,20 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a76
+            targetSchema: &a69
               type: object
               name: ListApplicationsResponse
               properties:
                 - name: ApplicationInfoList
                   description: The list of applications.
-                  schema: &a106
+                  schema: &a99
                     type: alias
                     name: ApplicationInfoList
                     aliasType: schema
                     targetSchema:
                       type: array
                       name: anonymous<unknown>
-                      elementSchema: *a17
+                      elementSchema: *a10
                 - name: NextToken
                   description: "The token used to retrieve the next page of results. This value is
                     <code>null</code> when there are no more results to return.
@@ -2313,41 +1942,6 @@ http:
         application.
       id: ListComponents
       parameters:
-        - name: "0"
-          aliasType: parameter
-          target: *a6
-        - name: "1"
-          aliasType: parameter
-          target: *a7
-        - name: "2"
-          aliasType: parameter
-          target: *a8
-        - name: "3"
-          aliasType: parameter
-          target: *a9
-        - name: "4"
-          aliasType: parameter
-          target: *a10
-        - name: "5"
-          aliasType: parameter
-          target: *a11
-        - name: "6"
-          aliasType: parameter
-          target: *a12
-        - type: query
-          name: MaxResults
-          description: Pagination limit
-          expandParameterValues: true
-          renderStyle: form
-          required: false
-          schema: *a1
-        - type: query
-          name: NextToken
-          description: Pagination token
-          expandParameterValues: true
-          renderStyle: form
-          required: false
-          schema: *a1
         - type: header
           name: X-Amz-Target
           expandParameterValues: false
@@ -2370,7 +1964,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a79
+            targetSchema: &a72
               type: object
               name: ListComponentsRequest
               properties:
@@ -2382,7 +1976,7 @@ http:
                   description: The maximum number of results to return in a single call. To
                     retrieve the remaining results, make another call with the
                     returned <code>NextToken</code> value.
-                  schema: *a32
+                  schema: *a25
                 - name: NextToken
                   description: The token to request the next page of results.
                   schema: *a1
@@ -2395,20 +1989,20 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a78
+            targetSchema: &a71
               type: object
               name: ListComponentsResponse
               properties:
                 - name: ApplicationComponentList
                   description: The list of application components.
-                  schema: &a105
+                  schema: &a98
                     type: alias
                     name: ApplicationComponentList
                     aliasType: schema
                     targetSchema:
                       type: array
                       name: anonymous<unknown>
-                      elementSchema: *a33
+                      elementSchema: *a26
                 - name: NextToken
                   description: The token to request the next page of results.
                   schema: *a1
@@ -2445,41 +2039,6 @@ http:
         quotas. </p> </li> </ul>"
       id: ListConfigurationHistory
       parameters:
-        - name: "0"
-          aliasType: parameter
-          target: *a6
-        - name: "1"
-          aliasType: parameter
-          target: *a7
-        - name: "2"
-          aliasType: parameter
-          target: *a8
-        - name: "3"
-          aliasType: parameter
-          target: *a9
-        - name: "4"
-          aliasType: parameter
-          target: *a10
-        - name: "5"
-          aliasType: parameter
-          target: *a11
-        - name: "6"
-          aliasType: parameter
-          target: *a12
-        - type: query
-          name: MaxResults
-          description: Pagination limit
-          expandParameterValues: true
-          renderStyle: form
-          required: false
-          schema: *a1
-        - type: query
-          name: NextToken
-          description: Pagination token
-          expandParameterValues: true
-          renderStyle: form
-          required: false
-          schema: *a1
         - type: header
           name: X-Amz-Target
           expandParameterValues: false
@@ -2502,7 +2061,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a81
+            targetSchema: &a74
               type: object
               name: ListConfigurationHistoryRequest
               properties:
@@ -2511,17 +2070,17 @@ http:
                   schema: *a3
                 - name: StartTime
                   description: "The start time of the event. "
-                  schema: *a24
+                  schema: *a17
                 - name: EndTime
                   description: The end time of the event.
-                  schema: *a24
+                  schema: *a17
                 - name: EventStatus
                   description: The status of the configuration update event. Possible values
                     include INFO, WARN, and ERROR.
-                  schema: &a35
+                  schema: &a28
                     type: enum
                     name: ConfigurationEventStatus
-                    elementSchema: &a34
+                    elementSchema: &a27
                       type: alias
                       name: anonymous<string>
                       aliasType: schema
@@ -2531,15 +2090,15 @@ http:
                       - type: constant
                         name: anonymous<unknown>
                         value: INFO
-                        valueSchema: *a34
+                        valueSchema: *a27
                       - type: constant
                         name: anonymous<unknown>
                         value: WARN
-                        valueSchema: *a34
+                        valueSchema: *a27
                       - type: constant
                         name: anonymous<unknown>
                         value: ERROR
-                        valueSchema: *a34
+                        valueSchema: *a27
                 - name: MaxResults
                   description: " The maximum number of results returned by
                     <code>ListConfigurationHistory</code> in paginated output.
@@ -2552,7 +2111,7 @@ http:
                     the returned <code>NextToken</code> value. If this parameter
                     is not used, then <code>ListConfigurationHistory</code>
                     returns all results. "
-                  schema: *a32
+                  schema: *a25
                 - name: NextToken
                   description: The <code>NextToken</code> value returned from a previous paginated
                     <code>ListConfigurationHistory</code> request where
@@ -2571,21 +2130,21 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a80
+            targetSchema: &a73
               type: object
               name: ListConfigurationHistoryResponse
               properties:
                 - name: EventList
                   description: " The list of configuration events and their corresponding details.
                     "
-                  schema: &a107
+                  schema: &a100
                     type: alias
                     name: ConfigurationEventList
                     aliasType: schema
                     targetSchema:
                       type: array
                       name: anonymous<unknown>
-                      elementSchema: &a102
+                      elementSchema: &a95
                         type: object
                         name: ConfigurationEvent
                         description: " The event information. "
@@ -2596,14 +2155,14 @@ http:
                           - name: EventStatus
                             description: " The status of the configuration update event. Possible values
                               include INFO, WARN, and ERROR. "
-                            schema: *a35
+                            schema: *a28
                           - name: EventResourceType
                             description: " The resource type that Application Insights attempted to
                               configure, for example, CLOUDWATCH_ALARM. "
-                            schema: &a43
+                            schema: &a36
                               type: enum
                               name: ConfigurationEventResourceType
-                              elementSchema: &a36
+                              elementSchema: &a29
                                 type: alias
                                 name: anonymous<string>
                                 aliasType: schema
@@ -2613,18 +2172,18 @@ http:
                                 - type: constant
                                   name: anonymous<unknown>
                                   value: CLOUDWATCH_ALARM
-                                  valueSchema: *a36
+                                  valueSchema: *a29
                                 - type: constant
                                   name: anonymous<unknown>
                                   value: CLOUDFORMATION
-                                  valueSchema: *a36
+                                  valueSchema: *a29
                                 - type: constant
                                   name: anonymous<unknown>
                                   value: SSM_ASSOCIATION
-                                  valueSchema: *a36
+                                  valueSchema: *a29
                           - name: EventTime
                             description: " The timestamp of the event. "
-                            schema: *a24
+                            schema: *a17
                           - name: EventDetail
                             description: " The details of the event in plain text. "
                             schema: *a1
@@ -2667,41 +2226,6 @@ http:
     - description: Lists the log pattern sets in the specific application.
       id: ListLogPatternSets
       parameters:
-        - name: "0"
-          aliasType: parameter
-          target: *a6
-        - name: "1"
-          aliasType: parameter
-          target: *a7
-        - name: "2"
-          aliasType: parameter
-          target: *a8
-        - name: "3"
-          aliasType: parameter
-          target: *a9
-        - name: "4"
-          aliasType: parameter
-          target: *a10
-        - name: "5"
-          aliasType: parameter
-          target: *a11
-        - name: "6"
-          aliasType: parameter
-          target: *a12
-        - type: query
-          name: MaxResults
-          description: Pagination limit
-          expandParameterValues: true
-          renderStyle: form
-          required: false
-          schema: *a1
-        - type: query
-          name: NextToken
-          description: Pagination token
-          expandParameterValues: true
-          renderStyle: form
-          required: false
-          schema: *a1
         - type: header
           name: X-Amz-Target
           expandParameterValues: false
@@ -2724,7 +2248,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a83
+            targetSchema: &a76
               type: object
               name: ListLogPatternSetsRequest
               properties:
@@ -2736,7 +2260,7 @@ http:
                   description: The maximum number of results to return in a single call. To
                     retrieve the remaining results, make another call with the
                     returned <code>NextToken</code> value.
-                  schema: *a32
+                  schema: *a25
                 - name: NextToken
                   description: The token to request the next page of results.
                   schema: *a1
@@ -2749,7 +2273,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a82
+            targetSchema: &a75
               type: object
               name: ListLogPatternSetsResponse
               properties:
@@ -2758,14 +2282,14 @@ http:
                   schema: *a3
                 - name: LogPatternSets
                   description: The list of log pattern sets.
-                  schema: &a109
+                  schema: &a102
                     type: alias
                     name: LogPatternSetList
                     aliasType: schema
                     targetSchema:
                       type: array
                       name: anonymous<unknown>
-                      elementSchema: *a13
+                      elementSchema: *a6
                 - name: NextToken
                   description: "The token used to retrieve the next page of results. This value is
                     <code>null</code> when there are no more results to return.
@@ -2798,41 +2322,6 @@ http:
     - description: Lists the log patterns in the specific log <code>LogPatternSet</code>.
       id: ListLogPatterns
       parameters:
-        - name: "0"
-          aliasType: parameter
-          target: *a6
-        - name: "1"
-          aliasType: parameter
-          target: *a7
-        - name: "2"
-          aliasType: parameter
-          target: *a8
-        - name: "3"
-          aliasType: parameter
-          target: *a9
-        - name: "4"
-          aliasType: parameter
-          target: *a10
-        - name: "5"
-          aliasType: parameter
-          target: *a11
-        - name: "6"
-          aliasType: parameter
-          target: *a12
-        - type: query
-          name: MaxResults
-          description: Pagination limit
-          expandParameterValues: true
-          renderStyle: form
-          required: false
-          schema: *a1
-        - type: query
-          name: NextToken
-          description: Pagination token
-          expandParameterValues: true
-          renderStyle: form
-          required: false
-          schema: *a1
         - type: header
           name: X-Amz-Target
           expandParameterValues: false
@@ -2855,7 +2344,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a85
+            targetSchema: &a78
               type: object
               name: ListLogPatternsRequest
               properties:
@@ -2865,12 +2354,12 @@ http:
                   schema: *a3
                 - name: PatternSetName
                   description: The name of the log pattern set.
-                  schema: *a13
+                  schema: *a6
                 - name: MaxResults
                   description: The maximum number of results to return in a single call. To
                     retrieve the remaining results, make another call with the
                     returned <code>NextToken</code> value.
-                  schema: *a32
+                  schema: *a25
                 - name: NextToken
                   description: The token to request the next page of results.
                   schema: *a1
@@ -2883,7 +2372,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a84
+            targetSchema: &a77
               type: object
               name: ListLogPatternsResponse
               properties:
@@ -2892,14 +2381,14 @@ http:
                   schema: *a3
                 - name: LogPatterns
                   description: The list of log patterns.
-                  schema: &a110
+                  schema: &a103
                     type: alias
                     name: LogPatternList
                     aliasType: schema
                     targetSchema:
                       type: array
                       name: anonymous<unknown>
-                      elementSchema: *a22
+                      elementSchema: *a15
                 - name: NextToken
                   description: "The token used to retrieve the next page of results. This value is
                     <code>null</code> when there are no more results to return.
@@ -2932,41 +2421,6 @@ http:
     - description: Lists the problems with your application.
       id: ListProblems
       parameters:
-        - name: "0"
-          aliasType: parameter
-          target: *a6
-        - name: "1"
-          aliasType: parameter
-          target: *a7
-        - name: "2"
-          aliasType: parameter
-          target: *a8
-        - name: "3"
-          aliasType: parameter
-          target: *a9
-        - name: "4"
-          aliasType: parameter
-          target: *a10
-        - name: "5"
-          aliasType: parameter
-          target: *a11
-        - name: "6"
-          aliasType: parameter
-          target: *a12
-        - type: query
-          name: MaxResults
-          description: Pagination limit
-          expandParameterValues: true
-          renderStyle: form
-          required: false
-          schema: *a1
-        - type: query
-          name: NextToken
-          description: Pagination token
-          expandParameterValues: true
-          renderStyle: form
-          required: false
-          schema: *a1
         - type: header
           name: X-Amz-Target
           expandParameterValues: false
@@ -2989,7 +2443,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a87
+            targetSchema: &a80
               type: object
               name: ListProblemsRequest
               properties:
@@ -3000,16 +2454,16 @@ http:
                   description: The time when the problem was detected, in epoch seconds. If you
                     don't specify a time frame for the request, problems within
                     the past seven days are returned.
-                  schema: *a24
+                  schema: *a17
                 - name: EndTime
                   description: The time when the problem ended, in epoch seconds. If not
                     specified, problems within the past seven days are returned.
-                  schema: *a24
+                  schema: *a17
                 - name: MaxResults
                   description: The maximum number of results to return in a single call. To
                     retrieve the remaining results, make another call with the
                     returned <code>NextToken</code> value.
-                  schema: *a32
+                  schema: *a25
                 - name: NextToken
                   description: The token to request the next page of results.
                   schema: *a1
@@ -3022,20 +2476,20 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a86
+            targetSchema: &a79
               type: object
               name: ListProblemsResponse
               properties:
                 - name: ProblemList
                   description: "The list of problems. "
-                  schema: &a111
+                  schema: &a104
                     type: alias
                     name: ProblemList
                     aliasType: schema
                     targetSchema:
                       type: array
                       name: anonymous<unknown>
-                      elementSchema: *a37
+                      elementSchema: *a30
                 - name: NextToken
                   description: "The token used to retrieve the next page of results. This value is
                     <code>null</code> when there are no more results to return.
@@ -3073,27 +2527,6 @@ http:
         specific tag values. A tag value acts as a descriptor within a tag key.
       id: ListTagsForResource
       parameters:
-        - name: "0"
-          aliasType: parameter
-          target: *a6
-        - name: "1"
-          aliasType: parameter
-          target: *a7
-        - name: "2"
-          aliasType: parameter
-          target: *a8
-        - name: "3"
-          aliasType: parameter
-          target: *a9
-        - name: "4"
-          aliasType: parameter
-          target: *a10
-        - name: "5"
-          aliasType: parameter
-          target: *a11
-        - name: "6"
-          aliasType: parameter
-          target: *a12
         - type: header
           name: X-Amz-Target
           expandParameterValues: false
@@ -3116,7 +2549,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a89
+            targetSchema: &a82
               type: object
               name: ListTagsForResourceRequest
               properties:
@@ -3124,7 +2557,7 @@ http:
                   description: The Amazon Resource Name (ARN) of the application that you want to
                     retrieve tag information for.
                   required: true
-                  schema: &a39
+                  schema: &a32
                     type: alias
                     name: anonymous<string>
                     aliasType: schema
@@ -3145,7 +2578,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a88
+            targetSchema: &a81
               type: object
               name: ListTagsForResourceResponse
               properties:
@@ -3154,7 +2587,7 @@ http:
                     application. Each tag consists of a required tag key
                     (<code>Key</code>) and an associated tag value
                     (<code>Value</code>).
-                  schema: *a38
+                  schema: *a31
         - name: "480"
           description: ResourceNotFoundException
           mediaType: application/json
@@ -3181,27 +2614,6 @@ http:
         values. A tag value acts as a descriptor within a tag key.</p>
       id: TagResource
       parameters:
-        - name: "0"
-          aliasType: parameter
-          target: *a6
-        - name: "1"
-          aliasType: parameter
-          target: *a7
-        - name: "2"
-          aliasType: parameter
-          target: *a8
-        - name: "3"
-          aliasType: parameter
-          target: *a9
-        - name: "4"
-          aliasType: parameter
-          target: *a10
-        - name: "5"
-          aliasType: parameter
-          target: *a11
-        - name: "6"
-          aliasType: parameter
-          target: *a12
         - type: header
           name: X-Amz-Target
           expandParameterValues: false
@@ -3224,7 +2636,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a91
+            targetSchema: &a84
               type: object
               name: TagResourceRequest
               properties:
@@ -3232,7 +2644,7 @@ http:
                   description: The Amazon Resource Name (ARN) of the application that you want to
                     add one or more tags to.
                   required: true
-                  schema: *a39
+                  schema: *a32
                 - name: Tags
                   description: A list of tags that to add to the application. A tag consists of a
                     required tag key (<code>Key</code>) and an associated tag
@@ -3240,7 +2652,7 @@ http:
                     is 128 characters. The maximum length of a tag value is 256
                     characters.
                   required: true
-                  schema: *a38
+                  schema: *a31
               summary: TagResourceRequest
       responses:
         - name: "200"
@@ -3250,7 +2662,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a90
+            targetSchema: &a83
               type: object
               name: TagResourceResponse
         - name: "480"
@@ -3280,27 +2692,6 @@ http:
     - description: Remove one or more tags (keys and values) from a specified application.
       id: UntagResource
       parameters:
-        - name: "0"
-          aliasType: parameter
-          target: *a6
-        - name: "1"
-          aliasType: parameter
-          target: *a7
-        - name: "2"
-          aliasType: parameter
-          target: *a8
-        - name: "3"
-          aliasType: parameter
-          target: *a9
-        - name: "4"
-          aliasType: parameter
-          target: *a10
-        - name: "5"
-          aliasType: parameter
-          target: *a11
-        - name: "6"
-          aliasType: parameter
-          target: *a12
         - type: header
           name: X-Amz-Target
           expandParameterValues: false
@@ -3323,7 +2714,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a93
+            targetSchema: &a86
               type: object
               name: UntagResourceRequest
               properties:
@@ -3331,7 +2722,7 @@ http:
                   description: The Amazon Resource Name (ARN) of the application that you want to
                     remove one or more tags from.
                   required: true
-                  schema: *a39
+                  schema: *a32
                 - name: TagKeys
                   description: <p>The tags (tag keys) that you want to remove from the resource.
                     When you specify a tag key, the action removes both that key
@@ -3340,7 +2731,7 @@ http:
                     parameter and argument for each additional tag to remove,
                     separated by an ampersand. </p>
                   required: true
-                  schema: &a115
+                  schema: &a108
                     type: alias
                     name: TagKeyList
                     aliasType: schema
@@ -3354,7 +2745,7 @@ http:
                     targetSchema:
                       type: array
                       name: anonymous<unknown>
-                      elementSchema: *a40
+                      elementSchema: *a33
               summary: UntagResourceRequest
       responses:
         - name: "200"
@@ -3364,7 +2755,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a92
+            targetSchema: &a85
               type: object
               name: UntagResourceResponse
         - name: "480"
@@ -3386,27 +2777,6 @@ http:
     - description: Updates the application.
       id: UpdateApplication
       parameters:
-        - name: "0"
-          aliasType: parameter
-          target: *a6
-        - name: "1"
-          aliasType: parameter
-          target: *a7
-        - name: "2"
-          aliasType: parameter
-          target: *a8
-        - name: "3"
-          aliasType: parameter
-          target: *a9
-        - name: "4"
-          aliasType: parameter
-          target: *a10
-        - name: "5"
-          aliasType: parameter
-          target: *a11
-        - name: "6"
-          aliasType: parameter
-          target: *a12
         - type: header
           name: X-Amz-Target
           expandParameterValues: false
@@ -3429,7 +2799,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a95
+            targetSchema: &a88
               type: object
               name: UpdateApplicationRequest
               properties:
@@ -3465,13 +2835,13 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a94
+            targetSchema: &a87
               type: object
               name: UpdateApplicationResponse
               properties:
                 - name: ApplicationInfo
                   description: "Information about the application. "
-                  schema: *a17
+                  schema: *a10
         - name: "480"
           description: InternalServerException
           mediaType: application/json
@@ -3500,27 +2870,6 @@ http:
         make up the component.
       id: UpdateComponent
       parameters:
-        - name: "0"
-          aliasType: parameter
-          target: *a6
-        - name: "1"
-          aliasType: parameter
-          target: *a7
-        - name: "2"
-          aliasType: parameter
-          target: *a8
-        - name: "3"
-          aliasType: parameter
-          target: *a9
-        - name: "4"
-          aliasType: parameter
-          target: *a10
-        - name: "5"
-          aliasType: parameter
-          target: *a11
-        - name: "6"
-          aliasType: parameter
-          target: *a12
         - type: header
           name: X-Amz-Target
           expandParameterValues: false
@@ -3543,7 +2892,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a97
+            targetSchema: &a90
               type: object
               name: UpdateComponentRequest
               properties:
@@ -3560,7 +2909,7 @@ http:
                   schema: *a1
                 - name: ResourceList
                   description: The list of resource ARNs that belong to the component.
-                  schema: *a19
+                  schema: *a12
               summary: UpdateComponentRequest
       responses:
         - name: "200"
@@ -3570,7 +2919,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a96
+            targetSchema: &a89
               type: object
               name: UpdateComponentResponse
         - name: "480"
@@ -3611,27 +2960,6 @@ http:
         <code>DescribeComponentConfigurationRecommendation</code>. "
       id: UpdateComponentConfiguration
       parameters:
-        - name: "0"
-          aliasType: parameter
-          target: *a6
-        - name: "1"
-          aliasType: parameter
-          target: *a7
-        - name: "2"
-          aliasType: parameter
-          target: *a8
-        - name: "3"
-          aliasType: parameter
-          target: *a9
-        - name: "4"
-          aliasType: parameter
-          target: *a10
-        - name: "5"
-          aliasType: parameter
-          target: *a11
-        - name: "6"
-          aliasType: parameter
-          target: *a12
         - type: header
           name: X-Amz-Target
           expandParameterValues: false
@@ -3654,7 +2982,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a99
+            targetSchema: &a92
               type: object
               name: UpdateComponentConfigurationRequest
               properties:
@@ -3674,7 +3002,7 @@ http:
                     <code>DOT_NET_WORKER</code>, <code>DOT_NET_WEB</code>,
                     <code>DOT_NET_CORE</code>, <code>SQL_SERVER</code>, and
                     <code>DEFAULT</code>.
-                  schema: *a20
+                  schema: *a13
                 - name: ComponentConfiguration
                   description: The configuration settings of the component. The value is the
                     escaped JSON of the configuration. For more information
@@ -3686,7 +3014,7 @@ http:
                     complete format of the component configuration file, see <a
                     href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/component-config.html">Component
                     Configuration</a>.
-                  schema: *a21
+                  schema: *a14
               summary: UpdateComponentConfigurationRequest
       responses:
         - name: "200"
@@ -3696,7 +3024,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a98
+            targetSchema: &a91
               type: object
               name: UpdateComponentConfigurationResponse
         - name: "480"
@@ -3726,27 +3054,6 @@ http:
     - description: Adds a log pattern to a <code>LogPatternSet</code>.
       id: UpdateLogPattern
       parameters:
-        - name: "0"
-          aliasType: parameter
-          target: *a6
-        - name: "1"
-          aliasType: parameter
-          target: *a7
-        - name: "2"
-          aliasType: parameter
-          target: *a8
-        - name: "3"
-          aliasType: parameter
-          target: *a9
-        - name: "4"
-          aliasType: parameter
-          target: *a10
-        - name: "5"
-          aliasType: parameter
-          target: *a11
-        - name: "6"
-          aliasType: parameter
-          target: *a12
         - type: header
           name: X-Amz-Target
           expandParameterValues: false
@@ -3769,7 +3076,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a101
+            targetSchema: &a94
               type: object
               name: UpdateLogPatternRequest
               properties:
@@ -3780,17 +3087,17 @@ http:
                 - name: PatternSetName
                   description: The name of the log pattern set.
                   required: true
-                  schema: *a13
+                  schema: *a6
                 - name: PatternName
                   description: The name of the log pattern.
                   required: true
-                  schema: *a14
+                  schema: *a7
                 - name: Pattern
                   description: The log pattern.
-                  schema: *a15
+                  schema: *a8
                 - name: Rank
                   description: Rank of the log pattern.
-                  schema: *a16
+                  schema: *a9
               summary: UpdateLogPatternRequest
       responses:
         - name: "200"
@@ -3800,7 +3107,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a100
+            targetSchema: &a93
               type: object
               name: UpdateLogPatternResponse
               properties:
@@ -3809,7 +3116,7 @@ http:
                   schema: *a3
                 - name: LogPattern
                   description: The successfully created log pattern.
-                  schema: *a22
+                  schema: *a15
         - name: "480"
           description: ResourceInUseException
           mediaType: application/json
@@ -3843,13 +3150,48 @@ http:
             aliasType: schema
             targetSchema: *a5
   parameters:
-    - *a6
-    - *a7
-    - *a8
-    - *a9
-    - *a10
-    - *a11
-    - *a12
+    - type: header
+      name: X-Amz-Content-Sha256
+      expandParameterValues: false
+      renderStyle: simple
+      required: false
+      schema: *a1
+    - type: header
+      name: X-Amz-Date
+      expandParameterValues: false
+      renderStyle: simple
+      required: false
+      schema: *a1
+    - type: header
+      name: X-Amz-Algorithm
+      expandParameterValues: false
+      renderStyle: simple
+      required: false
+      schema: *a1
+    - type: header
+      name: X-Amz-Credential
+      expandParameterValues: false
+      renderStyle: simple
+      required: false
+      schema: *a1
+    - type: header
+      name: X-Amz-Security-Token
+      expandParameterValues: false
+      renderStyle: simple
+      required: false
+      schema: *a1
+    - type: header
+      name: X-Amz-Signature
+      expandParameterValues: false
+      renderStyle: simple
+      required: false
+      schema: *a1
+    - type: header
+      name: X-Amz-SignedHeaders
+      expandParameterValues: false
+      renderStyle: simple
+      required: false
+      schema: *a1
 metaData:
   name: Amazon CloudWatch Application Insights
   contacts:
@@ -3905,9 +3247,9 @@ schemas:
     - *a1
     - *a2
     - *a5
-    - *a16
-    - *a24
-    - *a41
+    - *a9
+    - *a17
+    - *a34
   constants:
     - type: constant
       name: anonymous<unknown>
@@ -3918,15 +3260,22 @@ schemas:
         aliasType: schema
         targetSchema: *a1
   enums:
-    - *a20
-    - *a42
+    - *a13
     - *a35
+    - *a28
+    - *a36
+    - *a37
+    - *a38
+    - *a39
+    - *a40
+  objects:
+    - *a41
+    - *a42
     - *a43
     - *a44
     - *a45
     - *a46
     - *a47
-  objects:
     - *a48
     - *a49
     - *a50
@@ -3974,43 +3323,36 @@ schemas:
     - *a92
     - *a93
     - *a94
+    - *a26
+    - *a10
     - *a95
+    - *a15
+    - *a24
     - *a96
+    - *a30
     - *a97
-    - *a98
-    - *a99
-    - *a100
-    - *a101
-    - *a33
-    - *a17
-    - *a102
-    - *a22
-    - *a31
-    - *a103
-    - *a37
-    - *a104
   aliases:
-    - *a39
-    - *a105
+    - *a32
+    - *a98
     - *a3
     - *a4
-    - *a106
-    - *a21
-    - *a107
-    - *a38
-    - *a19
-    - *a13
+    - *a99
     - *a14
-    - *a15
-    - *a23
-    - *a27
+    - *a100
+    - *a31
+    - *a12
+    - *a6
+    - *a7
+    - *a8
+    - *a16
+    - *a20
+    - *a101
+    - *a25
+    - *a102
+    - *a103
+    - *a104
+    - *a105
+    - *a106
+    - *a33
+    - *a107
     - *a108
-    - *a32
-    - *a109
-    - *a110
-    - *a111
-    - *a112
-    - *a113
-    - *a40
-    - *a114
-    - *a115

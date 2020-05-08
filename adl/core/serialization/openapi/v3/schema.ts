@@ -1,28 +1,11 @@
-import { items, length, values } from '@azure-tools/linq';
-import { IntegerFormat, NumberFormat, StringFormat, v3, vendorExtensions, XMSEnumValue } from '@azure-tools/openapi';
+import { items, iterable, length } from '@azure-tools/linq';
+import { IntegerFormat, NumberFormat, StringFormat, v3, XMSEnumValue } from '@azure-tools/openapi';
 import { anonymous, isUsed, nameOf, unusedMembers, use, using } from '@azure-tools/sourcemap';
-import { fail } from 'assert';
 import { Alias as A } from '../../../model/alias';
 import { Identity } from '../../../model/name';
 import { Alias, AndSchema, AnyOfSchema, ArraySchema, Constant, DictionarySchema, Enum, ExclusiveMaximumConstraint, ExclusiveMinimumConstraint, MaximumConstraint, MaximumElementsConstraint, MaximumPropertiesConstraint, MaxLengthConstraint, MinimumConstraint, MinimumElementsConstraint, MinimumPropertiesConstraint, MinLengthConstraint, MultipleOfConstraint, ObjectSchema, Property, RegularExpressionConstraint, Schema, ServerDefaultValue, UniqueElementsConstraint, XorSchema } from '../../../model/schema';
-import { isEnumSchema, isObjectSchema, isPrimitiveSchema, toArray } from '../common';
-import { Context, ItemsOf } from './serializer';
-
-export async function *processSchemas(value: ItemsOf<v3.Schema>, $: Context)  {
-  // handle extensions first
-  for (const { key } of vendorExtensions(value)) {
-    // switch block to handle specific vendor extension?
-    // unknown ones need to get attached to something.
-    switch (key) {
-      case 'x-whatever':
-        // do something with the extension
-        // make sure it gets deleted
-        delete value[key];
-        break;
-    }
-  }
-  yield *$.processDictionary(processSchema, value);
-}
+import { firstOrDefault, isEnumSchema, isObjectSchema, isPrimitiveSchema, toArray } from '../common';
+import { Context } from './serializer';
 
 /** Schema processing options */
 type Options = Partial<{
@@ -71,12 +54,11 @@ export async function *processInline(schema: v3.Schema | v3.SchemaReference | un
 }
 
 async function *getSchemas(schemas: Array<v3.Schema|v3.SchemaReference>|undefined, $: Context): AsyncGenerator<Schema>{
-  for( const each of values(use(schemas))) {
+  for(const each of iterable(use(schemas))) {
     for await( const schema of $.processInline(processSchema,each, {isAnonymous:true})) {
       yield schema instanceof A ? schema.target : schema;
     }
   }
-  
 }
 
 export async function *processAnyOf(schema: v3.Schema, $: Context, options?: Options): AsyncGenerator<Schema> {
@@ -152,9 +134,7 @@ export async function *processOneOf(schema: v3.Schema, $: Context, options?: Opt
   }
 
   const schemaName = options?.isAnonymous ? anonymous('oneOf') : nameOf(schema);
-
   const objectSchema = options?.justTargetType ? undefined : await (isObjectSchema(schema) ? await firstOrDefault(processObjectSchema(schema, $, { isAnonymous: true, justTargetType: true })) : undefined);
-
   const schemas = getSchemas(schema.oneOf, $);
 
   if (objectSchema) {
@@ -636,7 +616,7 @@ export async function *processObjectSchema(schema: v3.Schema, $: Context, option
   yield result;
   
   // process the properties
-  for (const { key: propertyName, value: property } of items(use(schema.properties))) {
+  for (const [propertyName, property] of items(use(schema.properties))) {
     // process schema/reference inline
     const propSchema = await firstOrDefault( processInline(property, $, { isAnonymous: true }))|| $.api.schemas.Any;
 
@@ -678,11 +658,6 @@ export async function *processObjectSchema(schema: v3.Schema, $: Context, option
 
 export async function *processFileSchema(schema: v3.Schema, $: Context): AsyncGenerator<Schema> {
   return yield $.api.schemas.File;
-}
-
-export async function firstOrDefault<T>(generator: AsyncGenerator<T>): Promise<T|undefined>  {
-  const result = await toArray(generator);
-  return result.length > 1 ? fail('Expecting only a single item' ): result[0];
 }
 
 export async function *processEnumSchema(schema: v3.Schema, $: Context): AsyncGenerator<Schema> {

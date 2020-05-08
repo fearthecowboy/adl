@@ -15,19 +15,19 @@ http:
   connections:
     - url: https://rest.ably.io
   headers:
-    - &a8
+    - &a7
       name: ErrorCode
       description: The error code.
-      schema: &a3
+      schema: &a5
         type: int64
         name: anonymous<unknown>
-    - &a9
+    - &a8
       name: ErrorMessage
       description: The error message.
       schema: &a1
         type: string
         name: anonymous<unknown>
-    - &a5
+    - &a3
       name: Link
       description: Links to related resources, in the format defined by [RFC
         5988](https://tools.ietf.org/html/rfc5988#section-5). This will
@@ -43,7 +43,7 @@ http:
             length: (<(.*)?>; rel=\"(first|current|last)?\",)*(<(.*)?>;
               rel=\"(first|current|last)?\")+
         targetSchema: *a1
-    - &a10
+    - &a9
       name: ServerId
       description: The ID for the server communicated with.
       schema: *a1
@@ -51,69 +51,6 @@ http:
     - description: Enumerate all active channels of the application
       id: getMetadataOfAllChannels
       parameters:
-        - name: "0"
-          aliasType: parameter
-          target: &a12
-            type: header
-            name: X-Ably-Version
-            description: The version of the API you wish to use.
-            expandParameterValues: false
-            renderStyle: simple
-            schema: *a1
-        - name: "1"
-          aliasType: parameter
-          target: &a13
-            type: query
-            name: format
-            description: The response format you would like
-            expandParameterValues: true
-            renderStyle: form
-            schema:
-              type: enum
-              name: schema
-              elementSchema: &a2
-                type: alias
-                name: anonymous<string>
-                aliasType: schema
-                targetSchema: *a1
-              sealed: true
-              values:
-                - type: constant
-                  name: anonymous<unknown>
-                  value: json
-                  valueSchema: *a2
-                - type: constant
-                  name: anonymous<unknown>
-                  value: jsonp
-                  valueSchema: *a2
-                - type: constant
-                  name: anonymous<unknown>
-                  value: msgpack
-                  valueSchema: *a2
-                - type: constant
-                  name: anonymous<unknown>
-                  value: html
-                  valueSchema: *a2
-        - type: query
-          name: limit
-          expandParameterValues: true
-          renderStyle: form
-          schema:
-            type: alias
-            name: anonymous<number>
-            aliasType: schema
-            defaults:
-              - type: server-default
-                name: anonymous<unknown>
-                value: 100
-            targetSchema: *a3
-        - type: query
-          name: prefix
-          description: Optionally limits the query to only those channels whose name
-            starts with the given prefix
-          expandParameterValues: true
-          renderStyle: form
-          schema: *a1
         - type: query
           name: by
           description: optionally specifies whether to return just channel names (by=id)
@@ -123,7 +60,7 @@ http:
           schema:
             type: enum
             name: schema
-            elementSchema: &a4
+            elementSchema: &a2
               type: alias
               name: anonymous<string>
               aliasType: schema
@@ -133,18 +70,18 @@ http:
               - type: constant
                 name: anonymous<unknown>
                 value: value
-                valueSchema: *a4
+                valueSchema: *a2
               - type: constant
                 name: anonymous<unknown>
                 value: id
-                valueSchema: *a4
+                valueSchema: *a2
       responses:
         - name: 2XX
           description: OK
           headers:
             - name: link
               aliasType: header
-              target: *a5
+              target: *a3
           mediaType: application/json
           schema:
             type: Xor
@@ -156,7 +93,7 @@ http:
                 targetSchema:
                   type: array
                   name: anonymous<unknown>
-                  elementSchema: &a7
+                  elementSchema: &a6
                     type: object
                     name: ChannelDetails
                     properties:
@@ -174,7 +111,7 @@ http:
                           region, this optionally identifies whether or not that
                           region is responsible for global coordination of the
                           channel.
-                        schema: &a6
+                        schema: &a4
                           type: boolean
                           name: anonymous<unknown>
                       - name: region
@@ -188,7 +125,7 @@ http:
                             region, this optionally identifies the region.
                           targetSchema: *a1
                       - name: status
-                        schema: &a41
+                        schema: &a37
                           type: object
                           name: ChannelStatus
                           description: A ChannelStatus instance.
@@ -200,9 +137,9 @@ http:
                                 indicates activity in that region, not global
                                 activity.
                               required: true
-                              schema: *a6
+                              schema: *a4
                             - name: occupancy
-                              schema: &a42
+                              schema: &a38
                                 type: object
                                 name: Occupancy
                                 description: An Occupancy instance indicating the occupancy of a channel. For
@@ -219,7 +156,7 @@ http:
                                       aliasType: schema
                                       description: The number of connections that are authorised to enter members into
                                         the presence channel.
-                                      targetSchema: *a3
+                                      targetSchema: *a5
                                   - name: presenceMembers
                                     description: The number of members currently entered into the presence channel.
                                     schema:
@@ -227,7 +164,7 @@ http:
                                       name: anonymous<number>
                                       aliasType: schema
                                       description: The number of members currently entered into the presence channel.
-                                      targetSchema: *a3
+                                      targetSchema: *a5
                                   - name: presenceSubscribers
                                     description: The number of connections that are authorised to subscribe to
                                       presence messages.
@@ -237,7 +174,7 @@ http:
                                       aliasType: schema
                                       description: The number of connections that are authorised to subscribe to
                                         presence messages.
-                                      targetSchema: *a3
+                                      targetSchema: *a5
                                   - name: publishers
                                     description: The number of connections attached to the channel that are
                                       authorised to publish.
@@ -247,7 +184,7 @@ http:
                                       aliasType: schema
                                       description: The number of connections attached to the channel that are
                                         authorised to publish.
-                                      targetSchema: *a3
+                                      targetSchema: *a5
                                   - name: subscribers
                                     description: The number of connections attached that are authorised to subscribe
                                       to messages.
@@ -257,7 +194,7 @@ http:
                                       aliasType: schema
                                       description: The number of connections attached that are authorised to subscribe
                                         to messages.
-                                      targetSchema: *a3
+                                      targetSchema: *a5
               - type: array
                 name: anonymous<unknown>
                 elementSchema: *a1
@@ -266,7 +203,7 @@ http:
           headers:
             - name: link
               aliasType: header
-              target: *a5
+              target: *a3
           mediaType: application/x-msgpack
           schema:
             type: Xor
@@ -278,7 +215,7 @@ http:
                 targetSchema:
                   type: array
                   name: anonymous<unknown>
-                  elementSchema: *a7
+                  elementSchema: *a6
               - type: array
                 name: anonymous<unknown>
                 elementSchema: *a1
@@ -287,30 +224,30 @@ http:
           headers:
             - name: link
               aliasType: header
-              target: *a5
+              target: *a3
           mediaType: text/html
           schema: *a1
         - name: default
           aliasType: response
-          target: &a14
+          target: &a11
             name: Error
             description: Error
             headers:
               - name: x-ably-errorcode
                 aliasType: header
-                target: *a8
+                target: *a7
               - name: x-ably-errormessage
                 aliasType: header
-                target: *a9
+                target: *a8
               - name: x-ably-serverid
                 aliasType: header
-                target: *a10
+                target: *a9
             mediaType: application/json
             schema:
               type: alias
               name: schema
               aliasType: schema
-              targetSchema: &a11
+              targetSchema: &a10
                 type: object
                 name: Error
                 description: Returned error from failed REST.
@@ -322,7 +259,7 @@ http:
                       name: anonymous<number>
                       aliasType: schema
                       description: Error code.
-                      targetSchema: *a3
+                      targetSchema: *a5
                   - name: href
                     description: Link to help with error.
                     schema:
@@ -354,61 +291,55 @@ http:
                       name: anonymous<number>
                       aliasType: schema
                       description: Status error code.
-                      targetSchema: *a3
+                      targetSchema: *a5
         - name: default
           aliasType: response
-          target: &a15
+          target: &a12
             name: Error
             description: Error
             headers:
               - name: x-ably-errorcode
                 aliasType: header
-                target: *a8
+                target: *a7
               - name: x-ably-errormessage
                 aliasType: header
-                target: *a9
+                target: *a8
               - name: x-ably-serverid
                 aliasType: header
-                target: *a10
+                target: *a9
             mediaType: application/x-msgpack
             schema:
               type: alias
               name: schema
               aliasType: schema
-              targetSchema: *a11
+              targetSchema: *a10
         - name: default
           aliasType: response
-          target: &a16
+          target: &a13
             name: Error
             description: Error
             headers:
               - name: x-ably-errorcode
                 aliasType: header
-                target: *a8
+                target: *a7
               - name: x-ably-errormessage
                 aliasType: header
-                target: *a9
+                target: *a8
               - name: x-ably-serverid
                 aliasType: header
-                target: *a10
+                target: *a9
             mediaType: text/html
             schema:
               type: alias
               name: schema
               aliasType: schema
-              targetSchema: *a11
+              targetSchema: *a10
       summary: Enumerate all active channels of the application
       tags:
         - Status
     - description: Get metadata of a channel
       id: getMetadataOfChannel
       parameters:
-        - name: "0"
-          aliasType: parameter
-          target: *a12
-        - name: "1"
-          aliasType: parameter
-          target: *a13
         - name: "0"
           aliasType: parameter
           target: &a17
@@ -426,80 +357,31 @@ http:
           headers:
             - name: x-ably-serverid
               aliasType: header
-              target: *a10
+              target: *a9
           mediaType: application/json
           schema:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: *a7
+            targetSchema: *a6
         - name: default
           aliasType: response
-          target: *a14
+          target: *a11
         - name: default
           aliasType: response
-          target: *a15
+          target: *a12
         - name: default
           aliasType: response
-          target: *a16
+          target: *a13
       summary: Get metadata of a channel
       tags:
         - Status
     - description: Get message history for a channel
       id: getMessagesByChannel
       parameters:
-        - name: "0"
-          aliasType: parameter
-          target: *a12
-        - name: "1"
-          aliasType: parameter
-          target: *a13
-        - name: "0"
-          aliasType: parameter
-          target: *a17
-        - name: "1"
-          aliasType: parameter
-          target: &a24
-            type: query
-            name: start
-            expandParameterValues: true
-            renderStyle: form
-            schema: *a1
-        - name: "2"
-          aliasType: parameter
-          target: &a25
-            type: query
-            name: limit
-            expandParameterValues: true
-            renderStyle: form
-            schema:
-              type: alias
-              name: anonymous<number>
-              aliasType: schema
-              defaults:
-                - type: server-default
-                  name: anonymous<unknown>
-                  value: "100"
-              targetSchema: *a3
-        - name: "3"
-          aliasType: parameter
-          target: &a26
-            type: query
-            name: end
-            expandParameterValues: true
-            renderStyle: form
-            schema:
-              type: alias
-              name: anonymous<string>
-              aliasType: schema
-              defaults:
-                - type: server-default
-                  name: anonymous<unknown>
-                  value: now
-              targetSchema: *a1
         - name: "4"
           aliasType: parameter
-          target: &a27
+          target: &a21
             type: query
             name: direction
             expandParameterValues: true
@@ -507,7 +389,7 @@ http:
             schema:
               type: enum
               name: schema
-              elementSchema: &a18
+              elementSchema: &a14
                 type: alias
                 name: anonymous<string>
                 aliasType: schema
@@ -521,21 +403,21 @@ http:
                 - type: constant
                   name: anonymous<unknown>
                   value: forwards
-                  valueSchema: *a18
+                  valueSchema: *a14
                 - type: constant
                   name: anonymous<unknown>
                   value: backwards
-                  valueSchema: *a18
+                  valueSchema: *a14
       responses:
         - name: 2XX
           description: OK
           headers:
             - name: link
               aliasType: header
-              target: *a5
+              target: *a3
             - name: x-ably-serverid
               aliasType: header
-              target: *a10
+              target: *a9
           mediaType: application/json
           schema:
             type: alias
@@ -544,7 +426,7 @@ http:
             targetSchema:
               type: array
               name: anonymous<unknown>
-              elementSchema: &a20
+              elementSchema: &a16
                 type: object
                 name: Message
                 description: Message object.
@@ -594,7 +476,7 @@ http:
                         transformations not applied to the data payload.
                       targetSchema: *a1
                   - name: extras
-                    schema: &a22
+                    schema: &a19
                       type: object
                       name: Extras
                       description: Extras object. Currently only allows for
@@ -602,7 +484,7 @@ http:
                         extra.
                       properties:
                         - name: push
-                          schema: &a37
+                          schema: &a33
                             type: object
                             name: Push
                             properties:
@@ -616,7 +498,7 @@ http:
                                     examples](https://www.ably.io/documentation/general/push/publish#payload-structure)
                                   properties:
                                     - name: notification
-                                      schema: &a19
+                                      schema: &a15
                                         type: object
                                         name: Notification
                                         properties:
@@ -682,9 +564,9 @@ http:
                                     examples](https://www.ably.io/documentation/general/push/publish#payload-structure)
                                   properties:
                                     - name: notification
-                                      schema: *a19
+                                      schema: *a15
                               - name: notification
-                                schema: *a19
+                                schema: *a15
                               - name: web
                                 description: Extends and overrides generic values when delivering via web. [See
                                   examples](https://www.ably.io/documentation/general/push/publish#payload-structure)
@@ -695,7 +577,7 @@ http:
                                     examples](https://www.ably.io/documentation/general/push/publish#payload-structure)
                                   properties:
                                     - name: notification
-                                      schema: *a19
+                                      schema: *a15
                   - name: id
                     description: A Unique ID that can be specified by the publisher for [idempotent
                       publishing](https://www.ably.io/documentation/rest/messages#idempotent).
@@ -725,16 +607,16 @@ http:
                       aliasType: schema
                       description: Timestamp when the message was received by the Ably, as
                         milliseconds since the epoch.
-                      targetSchema: *a3
+                      targetSchema: *a5
         - name: 2XX
           description: OK
           headers:
             - name: link
               aliasType: header
-              target: *a5
+              target: *a3
             - name: x-ably-serverid
               aliasType: header
-              target: *a10
+              target: *a9
           mediaType: application/x-msgpack
           schema:
             type: alias
@@ -743,16 +625,16 @@ http:
             targetSchema:
               type: array
               name: anonymous<unknown>
-              elementSchema: *a20
+              elementSchema: *a16
         - name: 2XX
           description: OK
           headers:
             - name: link
               aliasType: header
-              target: *a5
+              target: *a3
             - name: x-ably-serverid
               aliasType: header
-              target: *a10
+              target: *a9
           mediaType: text/html
           schema: *a1
         - name: default
@@ -760,25 +642,19 @@ http:
           headers:
             - name: x-ably-errorcode
               aliasType: header
-              target: *a8
+              target: *a7
             - name: x-ably-errormessage
               aliasType: header
-              target: *a9
+              target: *a8
             - name: x-ably-serverid
               aliasType: header
-              target: *a10
+              target: *a9
       summary: Get message history for a channel
       tags:
         - History
     - description: Publish a message to the specified channel
       id: publishMessagesToChannel
       parameters:
-        - name: "0"
-          aliasType: parameter
-          target: *a12
-        - name: "1"
-          aliasType: parameter
-          target: *a13
         - name: "0"
           aliasType: parameter
           target: *a17
@@ -789,28 +665,28 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: *a20
+            targetSchema: *a16
         - identity: anonymous<requestBody>
           mediaType: application/x-msgpack
           schema:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: *a20
+            targetSchema: *a16
         - identity: anonymous<requestBody>
           mediaType: application/x-www-form-urlencoded
           schema:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: *a20
+            targetSchema: *a16
       responses:
         - name: 2XX
           description: OK
           headers:
             - name: x-ably-serverid
               aliasType: header
-              target: *a10
+              target: *a9
           mediaType: application/json
           schema:
             type: object
@@ -825,7 +701,7 @@ http:
           headers:
             - name: x-ably-serverid
               aliasType: header
-              target: *a10
+              target: *a9
           mediaType: application/x-msgpack
           schema:
             type: object
@@ -840,7 +716,7 @@ http:
           headers:
             - name: x-ably-serverid
               aliasType: header
-              target: *a10
+              target: *a9
           mediaType: text/html
           schema:
             type: object
@@ -852,38 +728,19 @@ http:
                 schema: *a1
         - name: default
           aliasType: response
-          target: *a14
+          target: *a11
         - name: default
           aliasType: response
-          target: *a15
+          target: *a12
         - name: default
           aliasType: response
-          target: *a16
+          target: *a13
       summary: Publish a message to a channel
       tags:
         - Publishing
     - description: Get presence on a channel
       id: getPresenceOfChannel
       parameters:
-        - name: "0"
-          aliasType: parameter
-          target: *a12
-        - name: "1"
-          aliasType: parameter
-          target: *a13
-        - name: "0"
-          aliasType: parameter
-          target: *a17
-        - type: query
-          name: clientId
-          expandParameterValues: true
-          renderStyle: form
-          schema: *a1
-        - type: query
-          name: connectionId
-          expandParameterValues: true
-          renderStyle: form
-          schema: *a1
         - type: query
           name: limit
           expandParameterValues: true
@@ -896,17 +753,17 @@ http:
               - type: server-default
                 name: anonymous<unknown>
                 value: 100
-            targetSchema: *a3
+            targetSchema: *a5
       responses:
         - name: "200"
           description: OK
           headers:
             - name: link
               aliasType: header
-              target: *a5
+              target: *a3
             - name: x-ably-serverid
               aliasType: header
-              target: *a10
+              target: *a9
           mediaType: application/json
           schema:
             type: alias
@@ -915,7 +772,7 @@ http:
             targetSchema:
               type: array
               name: anonymous<unknown>
-              elementSchema: &a23
+              elementSchema: &a20
                 type: object
                 name: PresenceMessage
                 properties:
@@ -925,7 +782,7 @@ http:
                     schema:
                       type: enum
                       name: action
-                      elementSchema: &a21
+                      elementSchema: &a18
                         type: alias
                         name: anonymous<string>
                         aliasType: schema
@@ -936,23 +793,23 @@ http:
                         - type: constant
                           name: anonymous<unknown>
                           value: ABSENT
-                          valueSchema: *a21
+                          valueSchema: *a18
                         - type: constant
                           name: anonymous<unknown>
                           value: PRESENT
-                          valueSchema: *a21
+                          valueSchema: *a18
                         - type: constant
                           name: anonymous<unknown>
                           value: ENTER
-                          valueSchema: *a21
+                          valueSchema: *a18
                         - type: constant
                           name: anonymous<unknown>
                           value: LEAVE
-                          valueSchema: *a21
+                          valueSchema: *a18
                         - type: constant
                           name: anonymous<unknown>
                           value: UPDATE
-                          valueSchema: *a21
+                          valueSchema: *a18
                   - name: clientId
                     description: The client ID of the publisher of this presence update.
                     schema:
@@ -994,7 +851,7 @@ http:
                         transformations not applied to the data payload.
                       targetSchema: *a1
                   - name: extras
-                    schema: *a22
+                    schema: *a19
                   - name: id
                     description: Unique ID assigned by Ably to this presence update.
                     readonly: true
@@ -1014,16 +871,16 @@ http:
                       aliasType: schema
                       description: Timestamp when the presence update was received by Ably, as
                         milliseconds since the epoch.
-                      targetSchema: *a3
+                      targetSchema: *a5
         - name: "200"
           description: OK
           headers:
             - name: link
               aliasType: header
-              target: *a5
+              target: *a3
             - name: x-ably-serverid
               aliasType: header
-              target: *a10
+              target: *a9
           mediaType: application/x-msgpack
           schema:
             type: alias
@@ -1032,61 +889,43 @@ http:
             targetSchema:
               type: array
               name: anonymous<unknown>
-              elementSchema: *a23
+              elementSchema: *a20
         - name: "200"
           description: OK
           headers:
             - name: link
               aliasType: header
-              target: *a5
+              target: *a3
             - name: x-ably-serverid
               aliasType: header
-              target: *a10
+              target: *a9
           mediaType: text/html
           schema: *a1
         - name: default
           aliasType: response
-          target: *a14
+          target: *a11
         - name: default
           aliasType: response
-          target: *a15
+          target: *a12
         - name: default
           aliasType: response
-          target: *a16
+          target: *a13
       summary: Get presence of a channel
       tags:
         - Status
     - description: Get presence on a channel
       id: getPresenceHistoryOfChannel
       parameters:
-        - name: "0"
-          aliasType: parameter
-          target: *a12
-        - name: "1"
-          aliasType: parameter
-          target: *a13
-        - name: "0"
-          aliasType: parameter
-          target: *a17
-        - name: "1"
-          aliasType: parameter
-          target: *a24
-        - name: "2"
-          aliasType: parameter
-          target: *a25
-        - name: "3"
-          aliasType: parameter
-          target: *a26
         - name: "4"
           aliasType: parameter
-          target: *a27
+          target: *a21
       responses:
         - name: 2XX
           description: OK
           headers:
             - name: link
               aliasType: header
-              target: *a5
+              target: *a3
           mediaType: application/json
           schema:
             type: alias
@@ -1095,13 +934,13 @@ http:
             targetSchema:
               type: array
               name: anonymous<unknown>
-              elementSchema: *a23
+              elementSchema: *a20
         - name: 2XX
           description: OK
           headers:
             - name: link
               aliasType: header
-              target: *a5
+              target: *a3
           mediaType: application/x-msgpack
           schema:
             type: alias
@@ -1110,24 +949,24 @@ http:
             targetSchema:
               type: array
               name: anonymous<unknown>
-              elementSchema: *a23
+              elementSchema: *a20
         - name: 2XX
           description: OK
           headers:
             - name: link
               aliasType: header
-              target: *a5
+              target: *a3
           mediaType: text/html
           schema: *a1
         - name: default
           aliasType: response
-          target: *a14
+          target: *a11
         - name: default
           aliasType: response
-          target: *a15
+          target: *a12
         - name: default
           aliasType: response
-          target: *a16
+          target: *a13
       summary: Get presence history of a channel
       tags:
         - History
@@ -1144,13 +983,7 @@ http:
       parameters:
         - name: "0"
           aliasType: parameter
-          target: *a12
-        - name: "1"
-          aliasType: parameter
-          target: *a13
-        - name: "0"
-          aliasType: parameter
-          target: &a40
+          target: &a36
             type: path
             name: keyName
             description: The [key
@@ -1167,7 +1000,7 @@ http:
             type: Xor
             name: anonymous<oneOf>
             oneOf:
-              - &a29
+              - &a23
                 type: object
                 name: TokenRequest
                 properties:
@@ -1188,12 +1021,12 @@ http:
                         of capabilities associated with the key specified in
                         keyName.
                       attic:
-                        example: &a28
+                        example: &a22
                           channel1:
                             - publish
                             - subscribe
                     attic:
-                      example: *a28
+                      example: *a22
                   - name: clientId
                     description: The [client
                       ID](https://www.ably.io/documentation/core-features/authentication#identified-clients)
@@ -1242,12 +1075,12 @@ http:
                       name: anonymous<number>
                       aliasType: schema
                       description: Time of creation of the Ably TokenRequest.
-                      targetSchema: *a3
-              - &a43
+                      targetSchema: *a5
+              - &a39
                 type: object
                 name: SignedTokenRequest
                 extends:
-                  - *a29
+                  - *a23
                   - type: object
                     name: anonymous<object>
                     properties:
@@ -1280,7 +1113,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a30
+            targetSchema: &a24
               type: object
               name: TokenDetails
               properties:
@@ -1299,7 +1132,7 @@ http:
                     name: anonymous<number>
                     aliasType: schema
                     description: Timestamp of token expiration.
-                    targetSchema: *a3
+                    targetSchema: *a5
                 - name: issued
                   description: Timestamp of token creation.
                   schema:
@@ -1307,7 +1140,7 @@ http:
                     name: anonymous<number>
                     aliasType: schema
                     description: Timestamp of token creation.
-                    targetSchema: *a3
+                    targetSchema: *a5
                 - name: keyName
                   description: Name of the key used to create the token
                   schema:
@@ -1331,48 +1164,22 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: *a30
+            targetSchema: *a24
         - name: default
           aliasType: response
-          target: *a14
+          target: *a11
         - name: default
           aliasType: response
-          target: *a15
+          target: *a12
         - name: default
           aliasType: response
-          target: *a16
+          target: *a13
       summary: Request an access token
       tags:
         - Authentication
     - description: Get a list of push notification subscriptions to channels.
       id: getPushSubscriptionsOnChannels
       parameters:
-        - name: "0"
-          aliasType: parameter
-          target: *a12
-        - name: "1"
-          aliasType: parameter
-          target: *a13
-        - type: query
-          name: channel
-          description: Filter to restrict to subscriptions associated with that channel.
-          expandParameterValues: true
-          renderStyle: form
-          schema: *a1
-        - type: query
-          name: deviceId
-          description: Optional filter to restrict to devices associated with that
-            deviceId. Cannot be used with clientId.
-          expandParameterValues: true
-          renderStyle: form
-          schema: *a1
-        - type: query
-          name: clientId
-          description: Optional filter to restrict to devices associated with that
-            clientId. Cannot be used with deviceId.
-          expandParameterValues: true
-          renderStyle: form
-          schema: *a1
         - type: query
           name: limit
           description: The maximum number of records to return.
@@ -1390,7 +1197,7 @@ http:
               - type: server-default
                 name: anonymous<unknown>
                 value: 100
-            targetSchema: *a3
+            targetSchema: *a5
       responses:
         - name: 2XX
           description: OK
@@ -1399,7 +1206,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: &a35
+            targetSchema: &a31
               type: object
               name: DeviceDetails
               properties:
@@ -1424,7 +1231,7 @@ http:
                   schema:
                     type: enum
                     name: formFactor
-                    elementSchema: &a31
+                    elementSchema: &a25
                       type: alias
                       name: anonymous<string>
                       aliasType: schema
@@ -1435,31 +1242,31 @@ http:
                       - type: constant
                         name: anonymous<unknown>
                         value: phone
-                        valueSchema: *a31
+                        valueSchema: *a25
                       - type: constant
                         name: anonymous<unknown>
                         value: tablet
-                        valueSchema: *a31
+                        valueSchema: *a25
                       - type: constant
                         name: anonymous<unknown>
                         value: desktop
-                        valueSchema: *a31
+                        valueSchema: *a25
                       - type: constant
                         name: anonymous<unknown>
                         value: tv
-                        valueSchema: *a31
+                        valueSchema: *a25
                       - type: constant
                         name: anonymous<unknown>
                         value: watch
-                        valueSchema: *a31
+                        valueSchema: *a25
                       - type: constant
                         name: anonymous<unknown>
                         value: car
-                        valueSchema: *a31
+                        valueSchema: *a25
                       - type: constant
                         name: anonymous<unknown>
                         value: embedded
-                        valueSchema: *a31
+                        valueSchema: *a25
                 - name: id
                   description: Unique identifier for the device generated by the device itself.
                   schema:
@@ -1485,7 +1292,7 @@ http:
                   schema:
                     type: enum
                     name: platform
-                    elementSchema: &a32
+                    elementSchema: &a26
                       type: alias
                       name: anonymous<string>
                       aliasType: schema
@@ -1496,13 +1303,13 @@ http:
                       - type: constant
                         name: anonymous<unknown>
                         value: ios
-                        valueSchema: *a32
+                        valueSchema: *a26
                       - type: constant
                         name: anonymous<unknown>
                         value: android
-                        valueSchema: *a32
+                        valueSchema: *a26
                 - name: push.recipient
-                  schema: &a38
+                  schema: &a34
                     type: object
                     name: Recipient
                     description: Push recipient details for a device.
@@ -1546,7 +1353,7 @@ http:
                         schema:
                           type: enum
                           name: transportType
-                          elementSchema: &a33
+                          elementSchema: &a27
                             type: alias
                             name: anonymous<string>
                             aliasType: schema
@@ -1557,22 +1364,22 @@ http:
                             - type: constant
                               name: anonymous<unknown>
                               value: apns
-                              valueSchema: *a33
+                              valueSchema: *a27
                             - type: constant
                               name: anonymous<unknown>
                               value: fcm
-                              valueSchema: *a33
+                              valueSchema: *a27
                             - type: constant
                               name: anonymous<unknown>
                               value: gcm
-                              valueSchema: *a33
+                              valueSchema: *a27
                 - name: push.state
                   description: the current state of the push device.
                   readonly: true
                   schema:
                     type: enum
                     name: push.state
-                    elementSchema: &a34
+                    elementSchema: &a28
                       type: alias
                       name: anonymous<string>
                       aliasType: schema
@@ -1583,24 +1390,24 @@ http:
                       - type: constant
                         name: anonymous<unknown>
                         value: Active
-                        valueSchema: *a34
+                        valueSchema: *a28
                       - type: constant
                         name: anonymous<unknown>
                         value: Failing
-                        valueSchema: *a34
+                        valueSchema: *a28
                       - type: constant
                         name: anonymous<unknown>
                         value: Failed
-                        valueSchema: *a34
+                        valueSchema: *a28
         - name: default
           aliasType: response
-          target: *a14
+          target: *a11
         - name: default
           aliasType: response
-          target: *a15
+          target: *a12
         - name: default
           aliasType: response
-          target: *a16
+          target: *a13
       summary: List channel subscriptions
       tags:
         - Push
@@ -1608,12 +1415,40 @@ http:
         client ID to receive push notifications from messages sent to a channel.
       id: subscribePushDeviceToChannel
       parameters:
-        - name: "0"
-          aliasType: parameter
-          target: *a12
         - name: "1"
           aliasType: parameter
-          target: *a13
+          target: &a30
+            type: query
+            name: format
+            description: The response format you would like
+            expandParameterValues: true
+            renderStyle: form
+            schema:
+              type: enum
+              name: schema
+              elementSchema: &a29
+                type: alias
+                name: anonymous<string>
+                aliasType: schema
+                targetSchema: *a1
+              sealed: true
+              values:
+                - type: constant
+                  name: anonymous<unknown>
+                  value: json
+                  valueSchema: *a29
+                - type: constant
+                  name: anonymous<unknown>
+                  value: jsonp
+                  valueSchema: *a29
+                - type: constant
+                  name: anonymous<unknown>
+                  value: msgpack
+                  valueSchema: *a29
+                - type: constant
+                  name: anonymous<unknown>
+                  value: html
+                  valueSchema: *a29
       requests:
         - identity: anonymous<requestBody>
           mediaType: application/json
@@ -1764,37 +1599,19 @@ http:
           description: OK
         - name: default
           aliasType: response
-          target: *a14
+          target: *a11
         - name: default
           aliasType: response
-          target: *a15
+          target: *a12
         - name: default
           aliasType: response
-          target: *a16
+          target: *a13
       summary: Subscribe a device to a channel
       tags:
         - Push
     - description: Delete a device details object.
       id: deletePushDeviceDetails
       parameters:
-        - name: "0"
-          aliasType: parameter
-          target: *a12
-        - name: "1"
-          aliasType: parameter
-          target: *a13
-        - type: query
-          name: channel
-          description: Filter to restrict to subscriptions associated with that channel.
-          expandParameterValues: true
-          renderStyle: form
-          schema: *a1
-        - type: query
-          name: deviceId
-          description: Must be set when clientId is empty, cannot be used with clientId.
-          expandParameterValues: true
-          renderStyle: form
-          schema: *a1
         - type: query
           name: clientId
           description: Must be set when deviceId is empty, cannot be used with deviceId.
@@ -1806,25 +1623,22 @@ http:
           description: OK
         - name: default
           aliasType: response
-          target: *a14
+          target: *a11
         - name: default
           aliasType: response
-          target: *a15
+          target: *a12
         - name: default
           aliasType: response
-          target: *a16
+          target: *a13
       summary: Delete a registered device's update token
       tags:
         - Push
     - description: Returns a paginated response of channel names.
       id: getChannelsWithPushSubscribers
       parameters:
-        - name: "0"
-          aliasType: parameter
-          target: *a12
         - name: "1"
           aliasType: parameter
-          target: *a13
+          target: *a30
       responses:
         - name: 2XX
           description: OK
@@ -1849,37 +1663,19 @@ http:
             elementSchema: *a1
         - name: default
           aliasType: response
-          target: *a14
+          target: *a11
         - name: default
           aliasType: response
-          target: *a15
+          target: *a12
         - name: default
           aliasType: response
-          target: *a16
+          target: *a13
       summary: List all channels with at least one subscribed device
       tags:
         - Push
     - description: List of device details of devices registed for push notifications.
       id: getRegisteredPushDevices
       parameters:
-        - name: "0"
-          aliasType: parameter
-          target: *a12
-        - name: "1"
-          aliasType: parameter
-          target: *a13
-        - type: query
-          name: deviceId
-          description: Optional filter to restrict to devices associated with that deviceId.
-          expandParameterValues: true
-          renderStyle: form
-          schema: *a1
-        - type: query
-          name: clientId
-          description: Optional filter to restrict to devices associated with that clientId.
-          expandParameterValues: true
-          renderStyle: form
-          schema: *a1
         - type: query
           name: limit
           description: The maximum number of records to return.
@@ -1897,7 +1693,7 @@ http:
               - type: server-default
                 name: anonymous<unknown>
                 value: 100
-            targetSchema: *a3
+            targetSchema: *a5
       responses:
         - name: 2XX
           description: OK
@@ -1906,7 +1702,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: *a35
+            targetSchema: *a31
         - name: 2XX
           description: OK
           mediaType: application/x-msgpack
@@ -1914,7 +1710,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: *a35
+            targetSchema: *a31
         - name: 2XX
           description: OK
           mediaType: text/html
@@ -1922,16 +1718,16 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: *a35
+            targetSchema: *a31
         - name: default
           aliasType: response
-          target: *a14
+          target: *a11
         - name: default
           aliasType: response
-          target: *a15
+          target: *a12
         - name: default
           aliasType: response
-          target: *a16
+          target: *a13
       summary: List devices registered for receiving push notifications
       tags:
         - Push
@@ -1939,12 +1735,9 @@ http:
         deliver push notifications to it. Requires "push-admin" capability.
       id: registerPushDevice
       parameters:
-        - name: "0"
-          aliasType: parameter
-          target: *a12
         - name: "1"
           aliasType: parameter
-          target: *a13
+          target: *a30
       requests:
         - identity: anonymous<requestBody>
           mediaType: application/json
@@ -1952,14 +1745,14 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: *a35
+            targetSchema: *a31
         - identity: anonymous<requestBody>
           mediaType: application/x-msgpack
           schema:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: *a35
+            targetSchema: *a31
       responses:
         - name: 2XX
           description: OK
@@ -1968,7 +1761,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: *a35
+            targetSchema: *a31
         - name: 2XX
           description: OK
           mediaType: application/x-msgpack
@@ -1976,7 +1769,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: *a35
+            targetSchema: *a31
         - name: 2XX
           description: OK
           mediaType: text/html
@@ -1984,16 +1777,16 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: *a35
+            targetSchema: *a31
         - name: default
           aliasType: response
-          target: *a14
+          target: *a11
         - name: default
           aliasType: response
-          target: *a15
+          target: *a12
         - name: default
           aliasType: response
-          target: *a16
+          target: *a13
       summary: Register a device for receiving push notifications
       tags:
         - Push
@@ -2001,19 +1794,6 @@ http:
         notifications through channels will also be deleted.
       id: unregisterAllPushDevices
       parameters:
-        - name: "0"
-          aliasType: parameter
-          target: *a12
-        - name: "1"
-          aliasType: parameter
-          target: *a13
-        - type: query
-          name: deviceId
-          description: Optional filter to restrict to devices associated with that
-            deviceId. Cannot be used with clientId.
-          expandParameterValues: true
-          renderStyle: form
-          schema: *a1
         - type: query
           name: clientId
           description: Optional filter to restrict to devices associated with that
@@ -2026,13 +1806,13 @@ http:
           description: OK
         - name: default
           aliasType: response
-          target: *a14
+          target: *a11
         - name: default
           aliasType: response
-          target: *a15
+          target: *a12
         - name: default
           aliasType: response
-          target: *a16
+          target: *a13
       summary: Unregister matching devices for push notifications
       tags:
         - Push
@@ -2041,13 +1821,7 @@ http:
       parameters:
         - name: "0"
           aliasType: parameter
-          target: *a12
-        - name: "1"
-          aliasType: parameter
-          target: *a13
-        - name: "0"
-          aliasType: parameter
-          target: &a36
+          target: &a32
             type: path
             name: device_id
             description: Device's ID.
@@ -2063,7 +1837,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: *a35
+            targetSchema: *a31
         - name: 2XX
           description: OK
           mediaType: application/x-msgpack
@@ -2071,7 +1845,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: *a35
+            targetSchema: *a31
         - name: 2XX
           description: OK
           mediaType: text/html
@@ -2079,16 +1853,16 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: *a35
+            targetSchema: *a31
         - name: default
           aliasType: response
-          target: *a14
+          target: *a11
         - name: default
           aliasType: response
-          target: *a15
+          target: *a12
         - name: default
           aliasType: response
-          target: *a16
+          target: *a13
       summary: Get a device registration
       tags:
         - Push
@@ -2099,13 +1873,7 @@ http:
       parameters:
         - name: "0"
           aliasType: parameter
-          target: *a12
-        - name: "1"
-          aliasType: parameter
-          target: *a13
-        - name: "0"
-          aliasType: parameter
-          target: *a36
+          target: *a32
       requests:
         - identity: anonymous<requestBody>
           mediaType: application/json
@@ -2113,21 +1881,21 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: *a35
+            targetSchema: *a31
         - identity: anonymous<requestBody>
           mediaType: application/x-msgpack
           schema:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: *a35
+            targetSchema: *a31
         - identity: anonymous<requestBody>
           mediaType: application/x-www-form-urlencoded
           schema:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: *a35
+            targetSchema: *a31
       responses:
         - name: 2XX
           description: OK
@@ -2136,7 +1904,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: *a35
+            targetSchema: *a31
         - name: 2XX
           description: OK
           mediaType: application/x-msgpack
@@ -2144,7 +1912,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: *a35
+            targetSchema: *a31
         - name: 2XX
           description: OK
           mediaType: text/html
@@ -2152,16 +1920,16 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: *a35
+            targetSchema: *a31
         - name: default
           aliasType: response
-          target: *a14
+          target: *a11
         - name: default
           aliasType: response
-          target: *a15
+          target: *a12
         - name: default
           aliasType: response
-          target: *a16
+          target: *a13
       summary: Update a device registration
       tags:
         - Push
@@ -2171,25 +1939,19 @@ http:
       parameters:
         - name: "0"
           aliasType: parameter
-          target: *a12
-        - name: "1"
-          aliasType: parameter
-          target: *a13
-        - name: "0"
-          aliasType: parameter
-          target: *a36
+          target: *a32
       responses:
         - name: 2XX
           description: OK
         - name: default
           aliasType: response
-          target: *a14
+          target: *a11
         - name: default
           aliasType: response
-          target: *a15
+          target: *a12
         - name: default
           aliasType: response
-          target: *a16
+          target: *a13
       summary: Unregister a single device for push notifications
       tags:
         - Push
@@ -2199,13 +1961,7 @@ http:
       parameters:
         - name: "0"
           aliasType: parameter
-          target: *a12
-        - name: "1"
-          aliasType: parameter
-          target: *a13
-        - name: "0"
-          aliasType: parameter
-          target: *a36
+          target: *a32
       requests:
         - identity: anonymous<requestBody>
           mediaType: application/json
@@ -2213,21 +1969,21 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: *a35
+            targetSchema: *a31
         - identity: anonymous<requestBody>
           mediaType: application/x-msgpack
           schema:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: *a35
+            targetSchema: *a31
         - identity: anonymous<requestBody>
           mediaType: application/x-www-form-urlencoded
           schema:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: *a35
+            targetSchema: *a31
       responses:
         - name: 2XX
           description: OK
@@ -2236,7 +1992,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: *a35
+            targetSchema: *a31
         - name: 2XX
           description: OK
           mediaType: application/x-msgpack
@@ -2244,7 +2000,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: *a35
+            targetSchema: *a31
         - name: 2XX
           description: OK
           mediaType: text/html
@@ -2252,16 +2008,16 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: *a35
+            targetSchema: *a31
         - name: default
           aliasType: response
-          target: *a14
+          target: *a11
         - name: default
           aliasType: response
-          target: *a15
+          target: *a12
         - name: default
           aliasType: response
-          target: *a16
+          target: *a13
       summary: Update a device registration
       tags:
         - Push
@@ -2270,13 +2026,7 @@ http:
       parameters:
         - name: "0"
           aliasType: parameter
-          target: *a12
-        - name: "1"
-          aliasType: parameter
-          target: *a13
-        - name: "0"
-          aliasType: parameter
-          target: *a36
+          target: *a32
       responses:
         - name: 2XX
           description: OK
@@ -2285,7 +2035,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: *a35
+            targetSchema: *a31
         - name: 2XX
           description: OK
           mediaType: application/x-msgpack
@@ -2293,7 +2043,7 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: *a35
+            targetSchema: *a31
         - name: 2XX
           description: OK
           mediaType: text/html
@@ -2301,16 +2051,16 @@ http:
             type: alias
             name: schema
             aliasType: schema
-            targetSchema: *a35
+            targetSchema: *a31
         - name: default
           aliasType: response
-          target: *a14
+          target: *a11
         - name: default
           aliasType: response
-          target: *a15
+          target: *a12
         - name: default
           aliasType: response
-          target: *a16
+          target: *a13
       summary: Reset a registered device's update token
       tags:
         - Push
@@ -2318,12 +2068,9 @@ http:
         single device or set of devices identified by their client identifier.
       id: publishPushNotificationToDevices
       parameters:
-        - name: "0"
-          aliasType: parameter
-          target: *a12
         - name: "1"
           aliasType: parameter
-          target: *a13
+          target: *a30
       requests:
         - identity: anonymous<requestBody>
           mediaType: application/json
@@ -2332,10 +2079,10 @@ http:
             name: anonymous<object>
             properties:
               - name: push
-                schema: *a37
+                schema: *a33
               - name: recipient
                 required: true
-                schema: *a38
+                schema: *a34
         - identity: anonymous<requestBody>
           mediaType: application/x-msgpack
           schema:
@@ -2343,10 +2090,10 @@ http:
             name: anonymous<object>
             properties:
               - name: push
-                schema: *a37
+                schema: *a33
               - name: recipient
                 required: true
-                schema: *a38
+                schema: *a34
         - identity: anonymous<requestBody>
           mediaType: application/x-www-form-urlencoded
           schema:
@@ -2354,22 +2101,22 @@ http:
             name: anonymous<object>
             properties:
               - name: push
-                schema: *a37
+                schema: *a33
               - name: recipient
                 required: true
-                schema: *a38
+                schema: *a34
       responses:
         - name: 2XX
           description: OK
         - name: default
           aliasType: response
-          target: *a14
+          target: *a11
         - name: default
           aliasType: response
-          target: *a15
+          target: *a12
         - name: default
           aliasType: response
-          target: *a16
+          target: *a13
       summary: Publish a push notification to device(s)
       tags:
         - Push
@@ -2379,24 +2126,6 @@ http:
         used to track usage against account quotas.
       id: getStats
       parameters:
-        - name: "0"
-          aliasType: parameter
-          target: *a12
-        - name: "1"
-          aliasType: parameter
-          target: *a13
-        - name: "0"
-          aliasType: parameter
-          target: *a24
-        - name: "1"
-          aliasType: parameter
-          target: *a25
-        - name: "2"
-          aliasType: parameter
-          target: *a26
-        - name: "3"
-          aliasType: parameter
-          target: *a27
         - type: query
           name: unit
           description: Specifies the unit of aggregation in the returned results.
@@ -2405,7 +2134,7 @@ http:
           schema:
             type: enum
             name: schema
-            elementSchema: &a39
+            elementSchema: &a35
               type: alias
               name: anonymous<string>
               aliasType: schema
@@ -2419,19 +2148,19 @@ http:
               - type: constant
                 name: anonymous<unknown>
                 value: minute
-                valueSchema: *a39
+                valueSchema: *a35
               - type: constant
                 name: anonymous<unknown>
                 value: hour
-                valueSchema: *a39
+                valueSchema: *a35
               - type: constant
                 name: anonymous<unknown>
                 value: day
-                valueSchema: *a39
+                valueSchema: *a35
               - type: constant
                 name: anonymous<unknown>
                 value: month
-                valueSchema: *a39
+                valueSchema: *a35
       responses:
         - name: 2XX
           description: OK
@@ -2441,25 +2170,22 @@ http:
             name: anonymous<object>
         - name: default
           aliasType: response
-          target: *a14
+          target: *a11
         - name: default
           aliasType: response
-          target: *a15
+          target: *a12
         - name: default
           aliasType: response
-          target: *a16
+          target: *a13
       summary: Retrieve usage statistics for an application
       tags:
         - Stats
     - description: This returns the service time in milliseconds since the epoch.
       id: getTime
       parameters:
-        - name: "0"
-          aliasType: parameter
-          target: *a12
         - name: "1"
           aliasType: parameter
-          target: *a13
+          target: *a30
       responses:
         - name: 2XX
           description: OK
@@ -2467,27 +2193,27 @@ http:
           schema:
             type: array
             name: anonymous<unknown>
-            elementSchema: *a3
+            elementSchema: *a5
         - name: 2XX
           description: OK
           mediaType: application/x-msgpack
           schema:
             type: array
             name: anonymous<unknown>
-            elementSchema: *a3
+            elementSchema: *a5
         - name: 2XX
           description: OK
           mediaType: text/html
           schema: *a1
         - name: default
           aliasType: response
-          target: *a14
+          target: *a11
         - name: default
           aliasType: response
-          target: *a15
+          target: *a12
         - name: default
           aliasType: response
-          target: *a16
+          target: *a13
       summary: Get the service time
       tags:
         - Stats
@@ -2495,18 +2221,51 @@ http:
         security: []
   parameters:
     - *a17
+    - *a32
+    - *a21
+    - type: query
+      name: end
+      expandParameterValues: true
+      renderStyle: form
+      schema:
+        type: alias
+        name: anonymous<string>
+        aliasType: schema
+        defaults:
+          - type: server-default
+            name: anonymous<unknown>
+            value: now
+        targetSchema: *a1
+    - type: query
+      name: limit
+      expandParameterValues: true
+      renderStyle: form
+      schema:
+        type: alias
+        name: anonymous<number>
+        aliasType: schema
+        defaults:
+          - type: server-default
+            name: anonymous<unknown>
+            value: "100"
+        targetSchema: *a5
+    - type: query
+      name: start
+      expandParameterValues: true
+      renderStyle: form
+      schema: *a1
     - *a36
-    - *a27
-    - *a26
-    - *a25
-    - *a24
-    - *a40
-    - *a13
-    - *a12
+    - *a30
+    - type: header
+      name: X-Ably-Version
+      description: The version of the API you wish to use.
+      expandParameterValues: false
+      renderStyle: simple
+      schema: *a1
   responses:
-    - *a14
-    - *a15
-    - *a16
+    - *a11
+    - *a12
+    - *a13
 metaData:
   name: Ably
   contacts:
@@ -2534,20 +2293,20 @@ metaData:
 schemas:
   primitives:
     - *a1
-    - *a6
-    - *a3
+    - *a4
+    - *a5
   objects:
-    - *a7
-    - *a41
-    - *a35
-    - *a11
-    - *a22
-    - *a20
-    - *a19
-    - *a42
-    - *a23
+    - *a6
     - *a37
+    - *a31
+    - *a10
+    - *a19
+    - *a16
+    - *a15
     - *a38
-    - *a43
-    - *a30
-    - *a29
+    - *a20
+    - *a33
+    - *a34
+    - *a39
+    - *a24
+    - *a23

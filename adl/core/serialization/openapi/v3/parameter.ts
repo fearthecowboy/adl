@@ -1,7 +1,8 @@
 import { v3 } from '@azure-tools/openapi';
 import { use, valueOf } from '@azure-tools/sourcemap';
 import { CookieParameter, HeaderParameter, PathParameter, QueryParameter, RenderStyle } from '../../../model/http/parameter';
-import { firstOrDefault, processInline } from './schema';
+import { firstOrDefault } from '../common';
+import { processInline } from './schema';
 import { Context } from './serializer';
 
 export async function *parameter(parameter: v3.Parameter, $: Context, options?: { isAnonymous?: boolean }) {

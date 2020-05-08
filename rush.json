@@ -81,6 +81,12 @@
       "shouldPublish": true
     },
     {
+      "packageName": "@azure-tools/linq",
+      "projectFolder": "adl/linq",
+      "reviewCategory": "production",
+      "shouldPublish": true
+    },
+    {
       "packageName": "visitor-generator",
       "projectFolder": "adl/visitor",
       "reviewCategory": "production",

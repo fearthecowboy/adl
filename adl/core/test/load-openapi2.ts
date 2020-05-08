@@ -24,7 +24,7 @@ async function checkAttic(api: ApiModel, errors: Errors, atticOutput: string) {
     // verify that the attic does not have things we expect to be done
 
     errors.check(() => equal(attic.swagger, undefined, 'Should not have an swagger node left in attic'));
-    //errors.check(() => equal(attic.info, undefined, 'Should not have an info section left in attic'));
+    errors.check(() => equal(attic.info, undefined, 'Should not have an info section left in attic'));
     //errors.check(() => equal(attic.tags, undefined, 'Should not have a tags section left in attic'));
     //errors.check(() => equal(attic.externalDocs, undefined, 'Should not have an externalDocs section left in attic'));
 

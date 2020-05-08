@@ -13,7 +13,7 @@ export * from './uri';
 export * from './vendor-extensions';
 export * from './xml';
 
-import { items, values } from '@azure-tools/linq';
+import { items } from '@azure-tools/linq';
 import { Dictionary } from './dictionary';
 import { JsonReference } from './json-reference';
 import { VendorExtensions } from './vendor-extensions';
@@ -32,17 +32,6 @@ export function isVendorExtension(key: string | number | symbol): boolean {
   return key.toString().startsWith('x-') && !key.toString().startsWith('x-ms');
 }
 
-export function unzip<T>(value: Dictionary<T | JsonReference<T>>) {
-  const [extensions, remaining] = items(value).bifurcate(each => isVendorExtension(each.key));
-  const [refs, vals] = values(remaining).bifurcate(each => isReference(each.value));
-
-  return {
-    extensions: <Array<{ key: string; value: any }>>extensions,
-    references: <Array<{ key: string; value: JsonReference<T> }>><unknown>refs,
-    values: <Array<{ key: string; value: T }>><unknown>vals,
-  };
-}
-
 export function vendorExtensions(instance: VendorExtensions|any) {
-  return items(<Dictionary<any>>instance).where(each => isVendorExtension(each.key));
+  return items(<Dictionary<any>>instance).where(each => isVendorExtension(each[0]));
 }

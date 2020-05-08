@@ -126,7 +126,7 @@ function authorizationCodeFlow(flow?: v3.AuthorizationCodeOAuthFlow) {
 }
 
 function addScopes(flow: OAuth2Flow, scopes: v3.Dictionary<string>) {
-  for (const { key: name, value: description } of items(scopes)) {
+  for (const [ name, description] of items(scopes)) {
     flow.scopes.push(new OAuth2Scope(name, description));
   }
 }

@@ -46,6 +46,14 @@ describe('Load Single OAI3 files', () => {
   const outputRoot = `${scenarios}/single/output`;
   const files = values(readdirSync(inputRoot)).where(each => statSync(`${inputRoot}/${each}`).isFile()).toArray();
 
+  before(() => {
+    console.log('before');
+  });
+
+  after(()=>{
+    console.log('done');
+  });
+
   for (const file of files) {
     it(`Processes '${file}'`, async () => {
       console.log('\n');

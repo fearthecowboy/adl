@@ -7,7 +7,7 @@ import { Context } from './serializer';
 export async function *processServer(server: v3.Server, $: Context): AsyncGenerator<Connection> {
   const connection = new Connection(server.url, { description: server.description });
 
-  for (const { key: name, value } of items(use(server.variables))) {
+  for (const [ name, value] of items(use(server.variables))) {
     const variable = new ConnectionVariable(name, {
       description: value.description,
       defaultValue: value.default,

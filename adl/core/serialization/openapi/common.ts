@@ -17,6 +17,18 @@ export async function consume<T>(g: AsyncGenerator<T>) {
   }
 }
 
+export async function firstOrDefault<T>(generator: AsyncGenerator<T>): Promise<T | undefined> {
+  let result: T | undefined;
+  for await (const each of generator) {
+    if (result === undefined) {
+      result = each;
+      continue;
+    }
+    throw new Error('Expecting only a single item');
+  }
+  return result;
+}
+
 export function isObjectSchema(schema: v3.Schema) {
   return schema.type == common.JsonType.Object ||
     length(schema.properties) > 0 ||
@@ -51,8 +63,9 @@ export function isEnumSchema(schema: v3.Schema) {
 
 
 export function addExtensionsToAttic<T extends Element>(element: T, input: any) {
-  for (const { key, value } of vendorExtensions(input)) {
+  for (const [ key, value] of vendorExtensions(input)) {
     element.addToAttic(key, use(value, true));
   }
   return element;
 }
+

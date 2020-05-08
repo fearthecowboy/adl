@@ -1,3 +1,21 @@
 http: {}
-metaData: {}
+metaData:
+  name: GitHub
+  description: >
+    Powerful collaboration, code review, and code management for open source and
+    private projects.
+  termsOfService: https://help.github.com/articles/github-terms-of-service/#b-api-terms
+  attic:
+    x-apisguru-categories:
+      - collaboration
+      - developer_tools
+    x-logo:
+      url: https://twitter.com/github/profile_image?size=original
+    x-origin:
+      - format: swagger
+        url: https://raw.githubusercontent.com/APIs-guru/unofficial_openapi_specs/master/github.com/v3/swagger.yaml
+        version: "2.0"
+    x-providerName: github.com
+    x-unofficialSpec: true
+    x-preferred: false
 schemas: {}

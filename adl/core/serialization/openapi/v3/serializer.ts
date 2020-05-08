@@ -3,11 +3,10 @@ import { use } from '@azure-tools/sourcemap';
 import { ApiModel } from '../../../model/api-model';
 import { Host } from '../../../support/file-system';
 import { Context as Ctx, Visitor } from '../../../support/visitor';
-import { consume } from '../common';
+import { consume, firstOrDefault } from '../common';
+import { processExternalDocs, processInfo, processTag } from '../common/info';
 import { processComponents } from './components';
-import { processExternalDocs, processInfo, processTag } from './info';
 import { path } from './path';
-import { firstOrDefault } from './schema';
 import { processServer } from './server';
 
 /** takes an openapi3 model, converts it into a ADL model, and returns that */
@@ -32,7 +31,7 @@ async function processRoot(oai3: v3.Model, $: Context) {
 
   const extensions = vendorExtensions(oai3);
 
-  for (const { key } of extensions) {
+  for (const [ key ] of extensions) {
     switch (key) {
       case 'x-ms-metadata':
 

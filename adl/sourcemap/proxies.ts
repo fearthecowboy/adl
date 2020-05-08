@@ -44,7 +44,7 @@ export function use<T>(value: T, recursive = false): T {
     (<any>value)[SpecialProperties.IsUsed] = true;
 
     if (recursive && typeof valueOf(value) === 'object') {
-      for (const each of values(<any>value)) {
+      for (const each of Object.values(value)) {
         use(each, true);
       }
     }
@@ -58,7 +58,7 @@ export function unusedMembers<T>(value: T) {
     return [];
   }
 
-  return items(<any>value).where((each) => !isUsed(each.value)).select(each => each.key).toArray();
+  return items(<any>value).where((each) => !isUsed(each[1])).select(each => each[0]).toArray();
 }
 
 export function isProxy<T>(value: T) {
@@ -271,7 +271,6 @@ export class TrackedSource<T extends Object, instanceType> {
     }
 
     const value = (<any>this.instance)[property];
-    const location = [...this.origin.path, property];
     if (value === undefined || value === null) {
       return value;
     }
@@ -296,13 +295,13 @@ export class TrackedSource<T extends Object, instanceType> {
         // so that the object is consistent
         const tc = <any>(this.trackedChildren = this.trackedChildren || {});
         if (!(property in tc)) {
-          tc[property] = TrackedSource.track(new Object(value), value, { ...this.origin, path: location }, this);
+          tc[property] = TrackedSource.track(new Object(value), value, { ...this.origin, path: [...this.origin.path, property] }, this);
         }
         return tc[property];
       }
 
       case 'object':
-        return TrackedSource.track(value, value, { ...this.origin, path: location }, this);
+        return TrackedSource.track(value, value, { ...this.origin, path: [...this.origin.path, property] }, this);
     }
     throw new Error('Should not get to here. ');
   }
@@ -353,7 +352,7 @@ export class TrackedTarget<T extends Object> {
       // we should recursively call onAdd on the children from here
       // since this might be the first time they meet their parents.
       if (typeof valueOf(this.instance) === 'object') {
-        for (const { key, value } of items(<any>this.proxy)) {
+        for (const [ key, value ] of items(<any>this.proxy)) {
           if (value === undefined || value === null) {
             continue;
           }
@@ -367,16 +366,13 @@ export class TrackedTarget<T extends Object> {
             // with the raw value (still call onAdd too.)
             (<any>this.instance)[key] = rawValue;
           }
-
-          const anyValue = <any>value;
-
           // make sure the original value is used
-          use(anyValue);
+          use(value);
 
-          if (typeof anyValue === 'object') {
+          if (typeof <any>value === 'object') {
             // value could be a TrackedSource or a TrackedTarget (or have $onAdd)
-            if (anyValue.$onAdd) {
-              anyValue.$onAdd(tracker, [...pathInTarget, key]);
+            if ((<any>value).$onAdd) {
+              (<any>value).$onAdd(tracker, [...pathInTarget, key]);
             }
           }
         }

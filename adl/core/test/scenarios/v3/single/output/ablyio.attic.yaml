@@ -1,1 +1,31 @@
-{}
+paths:
+  /channels:
+    get:
+      parameters:
+        - name: limit
+          schema:
+            default: 100
+        - name: prefix
+  "/channels/{channel_id}/presence":
+    get:
+      parameters:
+        - name: clientId
+        - name: connectionId
+  /push/channelSubscriptions:
+    delete:
+      parameters:
+        - name: channel
+        - name: deviceId
+    get:
+      parameters:
+        - name: channel
+        - name: deviceId
+        - name: clientId
+  /push/deviceRegistrations:
+    delete:
+      parameters:
+        - name: deviceId
+    get:
+      parameters:
+        - name: deviceId
+        - name: clientId

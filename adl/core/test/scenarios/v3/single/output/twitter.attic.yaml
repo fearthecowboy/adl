@@ -1,1 +1,54 @@
-{}
+paths:
+  /labs/2/tweets:
+    get:
+      parameters:
+        - explode: false
+          name: ids
+          schema:
+            maxItems: 100
+            minItems: 1
+  /labs/2/tweets/search:
+    get:
+      parameters:
+        - name: query
+          schema:
+            maxLength: 512
+            minLength: 1
+        - name: start_time
+        - name: end_time
+        - name: since_id
+        - name: until_id
+        - name: max_results
+          schema:
+            default: 10
+            maximum: 100
+            minimum: 10
+        - name: next_token
+  "/labs/2/tweets/{id}":
+    get:
+      parameters:
+        - name: id
+  /labs/2/users:
+    get:
+      parameters:
+        - explode: false
+          name: ids
+          schema:
+            maxItems: 100
+            minItems: 1
+  /labs/2/users/by:
+    get:
+      parameters:
+        - explode: false
+          name: usernames
+          schema:
+            maxItems: 100
+            minItems: 1
+  "/labs/2/users/by/username/{username}":
+    get:
+      parameters:
+        - name: username
+  "/labs/2/users/{id}":
+    get:
+      parameters:
+        - name: id

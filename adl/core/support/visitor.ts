@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/ban-types */
-import { items, keys, length, values } from '@azure-tools/linq';
+import { items, iterable, keys, length } from '@azure-tools/linq';
 import { common, Dictionary, Info, isReference, isVendorExtension, JsonReference } from '@azure-tools/openapi';
 import { anonymous, getSourceFile, isAnonymous, isUsed, nameOf, Path, refTo, TrackedSource, TrackedTarget, Tracker, use, using, valueOf } from '@azure-tools/sourcemap';
 import { fail } from 'assert';
@@ -25,7 +25,7 @@ export function is<T extends Object>(instance: any): instance is T {
     return false;
   }
 
-  for (const each of values(instance)) {
+  for (const each of iterable(instance)) {
     if (typeof each === 'object') {
       if (is(each)) {
         return true;
@@ -47,7 +47,7 @@ export function is<T extends Object>(instance: any): instance is T {
 export function isObjectClean(obj: any): boolean {
   if (obj && typeof obj === 'object') {
 
-    for (const each of values(obj)) {
+    for (const each of iterable(obj)) {
       if (each !== undefined && typeof each === 'object') {
         if (!isObjectClean(each)) {
           return false;
@@ -93,7 +93,7 @@ function addUnusedTo(target: any, source: any) {
     return;
   }
 
-  for (const { key, value } of items(<any>source)) {
+  for (const [ key, value ] of items(<any>source)) {
     if (value === undefined || value === null) {
       continue;
     }
@@ -157,7 +157,7 @@ export class Visitor<TSourceModel extends OAIModel> {
 
   async process<TOutput, TOptions extends Options = Options>(action: fnActionOnRoot<TSourceModel, TSourceModel, TOutput, TOptions>) {
 
-    for (const { value } of items(this.sourceFiles)) {
+    for (const value  of iterable(this.sourceFiles)) {
       const ctx = await value;
       const watch = new Stopwatch();
 
@@ -366,7 +366,7 @@ export class Context<TSourceModel extends OAIModel> {
   }
 
   async *processDictionary<TInput, TOutput extends Element, TOptions extends Options>(action: fnAction<TSourceModel, TInput, TOutput, TOptions>, dictionary: Dictionary<TInput | JsonReference<TInput>>|undefined, options?: TOptions ): AsyncGenerator<TOutput|Alias<TOutput>>{
-    for (const {key,value} of items(dictionary)) {
+    for (const [key,value] of items(dictionary)) {
       if( isVendorExtension(key)) {
         continue;
       } 

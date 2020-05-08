@@ -1,1 +1,31 @@
-{}
+paths:
+  /#X-Amz-Target=EC2WindowsBarleyService.ListApplications:
+    post:
+      parameters:
+        - name: MaxResults
+        - name: NextToken
+  /#X-Amz-Target=EC2WindowsBarleyService.ListComponents:
+    post:
+      parameters:
+        - name: MaxResults
+        - name: NextToken
+  /#X-Amz-Target=EC2WindowsBarleyService.ListConfigurationHistory:
+    post:
+      parameters:
+        - name: MaxResults
+        - name: NextToken
+  /#X-Amz-Target=EC2WindowsBarleyService.ListLogPatternSets:
+    post:
+      parameters:
+        - name: MaxResults
+        - name: NextToken
+  /#X-Amz-Target=EC2WindowsBarleyService.ListLogPatterns:
+    post:
+      parameters:
+        - name: MaxResults
+        - name: NextToken
+  /#X-Amz-Target=EC2WindowsBarleyService.ListProblems:
+    post:
+      parameters:
+        - name: MaxResults
+        - name: NextToken
