@@ -91,6 +91,12 @@
       "projectFolder": "adl/extension",
       "reviewCategory": "production",
       "shouldPublish": false
+    },
+    {
+      "packageName": "sample-plugin",
+      "projectFolder": "adl/sample-plugin",
+      "reviewCategory": "production",
+      "shouldPublish": false
     }
   ]
 }
