@@ -19,7 +19,7 @@ const scenarios = `${__dirname}/../../../test/scenarios/v2`;
 
 async function checkAttic(api: ApiModel, errors: Errors, atticOutput: string) {
   if (api.attic) {
-    const attic = <v2.Model>api.attic.valueOf();
+    const attic = <v2.Model>api.attic;
 
     // verify that the attic does not have things we expect to be done
     /*
@@ -32,7 +32,7 @@ async function checkAttic(api: ApiModel, errors: Errors, atticOutput: string) {
     errors.check(() => equal(attic.basePath, undefined, 'Should not have basePath left in attic'));
     errors.check(() => equal(attic.securityDefinitions, undefined, 'Should not have securityDefinitions section left in attic'));
 */
-    await writeFile(atticOutput, serialize(api.attic.valueOf()));
+    await writeFile(atticOutput, serialize(api.attic));
     delete api.attic;
   }
 }
@@ -65,7 +65,7 @@ describe('Load Single OAI2 files', () => {
 
       // reset timer
       stopwatch.time;
-      const content = serialize(api.valueOf());
+      const content = serialize(api);
       console.log(chalk.cyan(`      serialize: '${file}' ${formatDuration(stopwatch.time)} `));
       // write out yaml 
       
@@ -107,7 +107,7 @@ describe('Load Multiple OAI2 files', () => {
       await checkAttic(api, errors, atticOutput);
 
       const stopwatch = new Stopwatch();
-      const content = serialize(api.valueOf());
+      const content = serialize(api);
       console.log(chalk.cyan(`      serialize: '${folder}' ${formatDuration(stopwatch.time)} `));
       
       await writeFile(apiOutput, content);

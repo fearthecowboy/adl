@@ -1,6 +1,5 @@
 
 /**
- * @extensible
  * @description Status of an async operation.
  * @since 2019-12-01
  */

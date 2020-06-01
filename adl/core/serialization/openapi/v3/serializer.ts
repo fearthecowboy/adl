@@ -1,5 +1,4 @@
 import { Dictionary, JsonReference, v3, vendorExtensions } from '@azure-tools/openapi';
-import { use } from '@azure-tools/sourcemap';
 import { ApiModel } from '../../../model/api-model';
 import { Host } from '../../../support/file-system';
 import { Context as Ctx, Visitor } from '../../../support/visitor';
@@ -74,9 +73,6 @@ async function processRoot(oai3: v3.Model, $: Context) {
   for await (const operation of $.processDictionary(path, oai3['x-ms-paths'])) {
     $.api.http.operations.push(operation);
   }
-
-  // we don't need this.
-  use(oai3.openapi);
 
   return $.api;
 }

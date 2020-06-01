@@ -1,6 +1,6 @@
 import { values } from '@azure-tools/linq';
 import { v2 } from '@azure-tools/openapi';
-import { anonymous, nameOf, use } from '@azure-tools/sourcemap';
+import { anonymous, nameOf } from '@azure-tools/sourcemap';
 import { Request } from '../../../model/http/request';
 import { singleOrDefault } from '../common';
 import { processInline } from './schema';
@@ -14,8 +14,6 @@ export async function* requestBody(body: v2.BodyParameter, $: Context, options?:
   const operation = options?.operation;
   const consumes = operation?.consumes || $.sourceModel.consumes || [];
 
-  use(body.in);
-  
   for (const mediaType of values(consumes)) {
     const schema = await singleOrDefault(processInline(<v2.Schema>body.schema, $)) || $.api.schemas.Any;
     const request = new Request(bodyName, mediaType, schema, {

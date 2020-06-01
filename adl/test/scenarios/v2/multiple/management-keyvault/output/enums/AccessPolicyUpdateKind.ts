@@ -1,6 +1,5 @@
 
 /**
- * @extensible
  * @description Name of the operation
  * @since 2019-09-01
  */

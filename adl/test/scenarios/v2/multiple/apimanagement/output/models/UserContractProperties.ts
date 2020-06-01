@@ -29,5 +29,5 @@ export interface UserContractProperties extends UserEntityBaseParameters {
      * @description Collection of groups user is part of.
      * @since 2019-12-01
      */
-    readonly groups: Array<GroupContractProperties> & ;
+    readonly groups: Array<GroupContractProperties>;
 }

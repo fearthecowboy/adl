@@ -8,7 +8,7 @@ export interface IssueCollection {
      * @description Issue values.
      * @since 2019-12-01
      */
-    readonly value: Array<IssueContract> & ;
+    readonly value: Array<IssueContract>;
     /**
      * @description Next page link if any.
      * @since 2019-12-01

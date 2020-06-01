@@ -1,4 +1,3 @@
-import { valueOf } from '@azure-tools/sourcemap';
 import { TypeDeclaration } from '../../support/typescript';
 import { Schema, TSSchema } from './schema';
 
@@ -12,7 +11,7 @@ export class Primitive extends Schema {
   }
 
   get typeDefinition(): string {
-    return <string>valueOf(this.kind);
+    return <string>this.kind;
   }
 }
 

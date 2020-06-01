@@ -1,8 +1,7 @@
-import { TargetMap } from '@azure-tools/sourcemap';
 import { InterfaceDeclaration, PropertySignature } from 'ts-morph';
 import { normalizeIdentifier } from '../../support/codegen';
 import { getTagValue, setTag } from '../../support/doc-tag';
-import { getPath, TypeDeclaration } from '../../support/typescript';
+import { TypeDeclaration } from '../../support/typescript';
 import { ApiModel } from '../api-model';
 import { Collection, CollectionImpl, Identity } from '../types';
 import { NamedElement, Schema, TSSchema } from './schema';
@@ -32,13 +31,6 @@ export interface PropInitializer extends Partial<Property> {
 }
 
 export class ObjectSchemaImpl extends TSSchema<InterfaceDeclaration> implements ObjectSchema {
-  get targetMap(): TargetMap {
-    return {
-      ...super.targetMap,
-      $: getPath(this.node)
-    };
-  }
-
   addParent(...parents: Array<TSSchema<TypeDeclaration>> ) {
     // ensure we have an import to the type
     // and add it to the list
@@ -97,11 +89,6 @@ export class ObjectSchemaImpl extends TSSchema<InterfaceDeclaration> implements 
 
     result.initialize(initializer);
 
-    result.track({
-      $: name,
-      type: schema,
-    });
-
     return result;
   }
 
@@ -124,10 +111,6 @@ export function createObjectSchema(api: ApiModel, identity: Identity, initialize
   }));
 
   result.initialize(initializer);
-  
-  result.track( {
-    $: identity, 
-  });
 
   return result;
 }

@@ -1,6 +1,6 @@
 import { items, length, values } from '@azure-tools/linq';
 import { IntegerFormat, NumberFormat, StringFormat, v2 } from '@azure-tools/openapi';
-import { anonymous, isUsed, nameOf, unusedMembers, use, using } from '@azure-tools/sourcemap';
+import { anonymous, nameOf, using } from '@azure-tools/sourcemap';
 import { Alias as GenericAlias } from '../../../model/alias';
 import { createAlias } from '../../../model/schema/alias';
 import { ExclusiveMaximumConstraint, ExclusiveMinimumConstraint, MaximumConstraint, MaximumElementsConstraint, MaximumPropertiesConstraint, MaxLengthConstraint, MinimumConstraint, MinimumElementsConstraint, MinimumPropertiesConstraint, MinLengthConstraint, MultipleOfConstraint, ReadOnlyModifier, RegularExpressionConstraint, UniqueElementsConstraint } from '../../../model/schema/constraint';
@@ -29,7 +29,7 @@ export async function* processInline(schema: v2.Schema | v2.SchemaReference | un
 }
 
 async function* getSchemas(schemas: Array<v2.Schema | v2.SchemaReference> | undefined, $: Context): AsyncGenerator<Schema> {
-  for (const each of values(use(schemas))) {
+  for (const each of values(schemas)) {
     for await (const schema of $.processInline(processSchema, each, { isAnonymous: true })) {
       yield schema instanceof GenericAlias ? schema.target : schema;
     }
@@ -43,9 +43,7 @@ export async function* processSillyRef(schema: v2.Schema, $: Context, options?: 
 }
 
 export async function* processSchema(schema: v2.Schema, $: Context, options?: { isAnonymous?: boolean }): AsyncGenerator<Schema> {
-  // mark this used once.
-  use(schema.type);
-
+  
   const impl = () => {
     // if enum or x-ms-enum is specified, process as enum
     if (isEnumSchema(schema)) {
@@ -58,16 +56,16 @@ export async function* processSchema(schema: v2.Schema, $: Context, options?: { 
       //  
       // or a back-door way to $ref 
       if (length(schema.allOf) === 1) {
-        if (!schema.properties) {
-          // no properties, but inheritance,
-          return processSillyRef(schema, $, options);
-        }
+        // if (!schema.properties) {
+        // no properties, but inheritance,
+        // return processSillyRef(schema, $, options);
+        // }
       }
       // process schemas with allOf as objects 
       return processObjectSchema(schema, $, options);
     }
 
-    switch (schema.type?.valueOf()) {
+    switch (schema.type) {
       case v2.JsonType.String:
         return processStringSchema(schema, $);
 
@@ -93,7 +91,7 @@ export async function* processSchema(schema: v2.Schema, $: Context, options?: { 
         // dig deeper to figure out what this should be.
 
         // first, let's see if we can tell by format:
-        switch (schema.format?.valueOf()) {
+        switch (schema.format) {
           // is it some kind of binary response?
           case StringFormat.Binary:
           case StringFormat.File:
@@ -126,7 +124,6 @@ export async function* processSchema(schema: v2.Schema, $: Context, options?: { 
   };
   for await (const result of impl()) {
     if (result && schema.example) {
-      use(schema.example, true);
       result.addToAttic('example', schema.example);
     }
     yield result;
@@ -134,8 +131,7 @@ export async function* processSchema(schema: v2.Schema, $: Context, options?: { 
 }
 
 export async function* processStringSchema(schema: v2.Schema, $: Context): AsyncGenerator<Schema> {
-  use(schema.format);
-  switch (schema.format?.valueOf()) {
+  switch (schema.format) {
     case StringFormat.Base64Url:
     case StringFormat.Byte:
     case StringFormat.Binary:
@@ -177,30 +173,30 @@ export async function* processStringSchema(schema: v2.Schema, $: Context): Async
 
   // we're going to treat it as a standard string schema
   // if this is just a plain string with no adornments, just return the common string instance. 
-  if (length(unusedMembers(schema)) === 0) {
+  if (!(schema.default !== undefined || schema.readOnly !== undefined || schema.minLength !== undefined || schema.maxLength !== undefined || schema.pattern !== undefined)) {
     return yield $.api.schemas.String;
   }
-
+  
   // otherwise, we have to get the standard string and make an alias for it with the adornments. 
   const alias = createAlias($.api,anonymous('string'), $.api.schemas.String, commonProperties(schema));
 
-  if (schema.default) {
+  if (schema.default !== undefined) {
     alias.defaults.push(new ServerDefaultValue(schema.default));
   }
 
-  if (schema.readOnly) {
+  if (schema.readOnly !== undefined) {
     alias.constraints.push(new ReadOnlyModifier());
   }
 
-  if (schema.maxLength) {
+  if (schema.maxLength !== undefined) {
     alias.constraints.push(new MaxLengthConstraint(schema.maxLength));
   }
 
-  if (schema.minLength) {
+  if (schema.minLength !== undefined) {
     alias.constraints.push(new MinLengthConstraint(schema.minLength));
   }
 
-  if (schema.pattern) {
+  if (schema.pattern !== undefined) {
     alias.constraints.push(new RegularExpressionConstraint(schema.pattern));
   }
 
@@ -217,11 +213,9 @@ export async function* processIntegerSchema(schema: v2.Schema, $: Context): Asyn
     return;
   }
 
-  const format = use(schema.format);
-
   let result: Schema;
 
-  switch (format?.valueOf()) {
+  switch (schema.format) {
     case IntegerFormat.Int32:
       result = $.api.schemas.Int32;
       break;
@@ -237,14 +231,13 @@ export async function* processIntegerSchema(schema: v2.Schema, $: Context): Asyn
 
 
     default:
-      throw new Error(`Unexpected integer format: ${format}`);
+      throw new Error(`Unexpected integer format: ${schema.format}`);
   }
 
   yield constrainNumericSchema(schema, $, result);
 }
 
 export async function* processNumberSchema(schema: v2.Schema, $: Context): AsyncGenerator<Schema> {
-  const format = use(schema.format);
 
   if ($.forbiddenProperties(schema, ...stringProperties, ...objectProperties, ...arrayProperties)) {
     return;
@@ -252,7 +245,7 @@ export async function* processNumberSchema(schema: v2.Schema, $: Context): Async
 
   let result: Schema;
 
-  switch (format?.valueOf()) {
+  switch (schema.format) {
     case NumberFormat.Float:
       result = $.api.schemas.Float;
       break;
@@ -263,7 +256,7 @@ export async function* processNumberSchema(schema: v2.Schema, $: Context): Async
       break;
 
     default:
-      throw new Error(`Unexpected number format: ${format}`);
+      throw new Error(`Unexpected number format: ${schema.format}`);
   }
 
   yield constrainNumericSchema(schema, $, result);
@@ -271,7 +264,7 @@ export async function* processNumberSchema(schema: v2.Schema, $: Context): Async
 
 function constrainNumericSchema(schema: v2.Schema, $: Context, target: Schema): Schema {
   // if this is just a number with no adornments, just return the common instance
-  if (length(unusedMembers(schema)) === 0) {
+  if (!(schema.default !== undefined || schema.exclusiveMaximum !== undefined || schema.exclusiveMinimum !== undefined || schema.minimum !== undefined || schema.maximum !== undefined || schema.multipleOf)) {
     return target;
   }
 
@@ -282,21 +275,21 @@ function constrainNumericSchema(schema: v2.Schema, $: Context, target: Schema): 
     alias.defaults.push(new ServerDefaultValue(schema.default));
   }
 
-  if (schema.minimum) {
+  if (schema.minimum !== undefined ) {
     if (schema.exclusiveMinimum) {
       alias.constraints.push(new ExclusiveMinimumConstraint(schema.minimum));
     } else {
       alias.constraints.push(new MinimumConstraint(schema.minimum));
     }
   }
-  if (schema.maximum) {
+  if (schema.maximum !== undefined ) {
     if (schema.exclusiveMaximum) {
       alias.constraints.push(new ExclusiveMaximumConstraint(schema.maximum));
     } else { 
       alias.constraints.push(new MaximumConstraint(schema.maximum));
     }
   }
-  if (schema.multipleOf) {
+  if (schema.multipleOf !== undefined ) {
     alias.constraints.push(new MultipleOfConstraint(schema.multipleOf));
   }
 
@@ -321,7 +314,7 @@ export async function* processArraySchema(schema: v2.Schema, $: Context, options
 
   const result = new ArraySchema(elementSchema);
 
-  if (length(unusedMembers(schema)) === 0) {
+  if (!(schema.default !== undefined || schema.maxItems !== undefined || schema.minItems !== undefined || schema.uniqueItems !== undefined)) {
     return yield result;
   }
 
@@ -332,7 +325,6 @@ export async function* processArraySchema(schema: v2.Schema, $: Context, options
 
   if (schema.default) {
     alias.defaults.push(new ServerDefaultValue(schema.default));
-    use(schema.default, true); // default can be more than a primitive value
   }
 
   if (schema.readOnly) {
@@ -436,7 +428,7 @@ export async function* processObjectSchema(schema: v2.Schema, $: Context, option
   yield result;
 
   // process the properties
-  for (const [propertyName, property] of items(use(schema.properties))) {
+  for (const [propertyName, property] of items(schema.properties)) {
     // process schema/reference inline
     const propSchema = await singleOrDefault(processInline(property, $, { isAnonymous: true })) || $.api.schemas.Any;
 
@@ -462,14 +454,6 @@ export async function* processObjectSchema(schema: v2.Schema, $: Context, option
     $.addVersionInfo(p, property);
     // result.properties.push(p);
     //result.properties.add(p);
-  }
-  use(schema.required);
-
-  if (!isUsed(schema.required)) {
-    for (const each of unusedMembers(schema.required)) {
-      $.error(`Schema '${nameOf(schema)}' has required for property named '${(<any>schema.required)[each]}' `, schema);
-    }
-    throw new Error('fatal error');
   }
 
   if (schema.additionalProperties) {

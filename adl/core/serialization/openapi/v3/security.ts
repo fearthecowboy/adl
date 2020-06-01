@@ -1,6 +1,6 @@
 import { items } from '@azure-tools/linq';
 import { JsonReference, v3 } from '@azure-tools/openapi';
-import { getSourceFile, nameOf, use, valueOf } from '@azure-tools/sourcemap';
+import { getSourceFile, nameOf } from '@azure-tools/sourcemap';
 import { ApiKeyAuthentication, Authentication, AuthenticationReference, AuthenticationRequirement, AuthorizationCodeOAuth2Flow, ClientCredentialsOAuth2Flow, HttpAuthentication, ImplicitOAuth2Flow, OAuth2Authentication, OAuth2Flow, OAuth2Flows, OAuth2Scope, OpenIdConnectAuthentication, ParameterLocation, PasswordOAuth2Flow } from '../../../model/http/protocol';
 import { addExtensionsToAttic, single } from '../common';
 import { Context } from './serializer';
@@ -16,8 +16,8 @@ export async function* authenticationRequirement(securityRequirement: v3.Securit
 
     const auth = await single($.processInline(authentication, ref));
     const authRef = new AuthenticationReference(auth);
-    for (const scope of use(scopes)) {
-      authRef.scopes.push(use(scope));
+    for (const scope of scopes) {
+      authRef.scopes.push(scope);
     }
 
     result.authentications.push(authRef);
@@ -27,7 +27,7 @@ export async function* authenticationRequirement(securityRequirement: v3.Securit
 }
 
 export async function* authentication(scheme: v3.SecurityScheme, $: Context): AsyncGenerator<Authentication> {
-  switch (valueOf(use(scheme.type))) {
+  switch ((<any>scheme).type) {
     case v3.SecurityType.ApiKey:
       return yield *apiKeyAuthentication(<v3.ApiKeySecurityScheme>scheme, $);
 
@@ -47,7 +47,7 @@ export async function* authentication(scheme: v3.SecurityScheme, $: Context): As
 function *apiKeyAuthentication(scheme: v3.ApiKeySecurityScheme, $: Context) {
   let location: ParameterLocation;
 
-  switch (valueOf(use(scheme.in))) {
+  switch (scheme.in) {
     case v3.ParameterLocation.Cookie:
       location = ParameterLocation.Cookie;
       break;

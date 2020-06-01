@@ -76,5 +76,5 @@ export interface VaultProperties {
      * @description List of private endpoint connections associated with the key vault.
      * @since 2019-09-01
      */
-    readonly privateEndpointConnections: Array<PrivateEndpointConnectionItem> & ;
+    readonly privateEndpointConnections: Array<PrivateEndpointConnectionItem>;
 }

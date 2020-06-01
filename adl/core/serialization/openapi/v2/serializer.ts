@@ -1,7 +1,6 @@
 import { items } from '@azure-tools/linq';
 import { Dictionary, isReference, JsonReference, v2, vendorExtensions } from '@azure-tools/openapi';
 import { isVendorExtension, ParameterLocation } from '@azure-tools/openapi/dist/v2';
-import { use } from '@azure-tools/sourcemap';
 import { Alias as GenericAlias } from '../../../model/alias';
 import { ApiModel } from '../../../model/api-model';
 import { Alias, createAlias } from '../../../model/schema/alias';
@@ -106,7 +105,7 @@ async function processRoot(oai2: v2.Model, $: Context) {
       continue;
     }
 
-    throw new Error('Should not get here.');
+    throw new Error(`Should not get here. '${schema.name}' is of type ${Object.getPrototypeOf(schema).name}`);
   }
 
 
@@ -138,11 +137,6 @@ async function processRoot(oai2: v2.Model, $: Context) {
   for await (const operation of $.processDictionary(path, oai2['x-ms-paths'])) {
     $.api.http.operations.push(operation);
   }
-
-  // we don't need this.
-  use(oai2.swagger);
-  use(oai2.consumes, true);
-  use(oai2.produces, true);
 
   return $.api;
 }

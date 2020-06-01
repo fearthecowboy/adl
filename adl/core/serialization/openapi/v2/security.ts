@@ -1,6 +1,6 @@
 import { items } from '@azure-tools/linq';
 import { JsonReference, v2 } from '@azure-tools/openapi';
-import { getSourceFile, nameOf, use, valueOf } from '@azure-tools/sourcemap';
+import { getSourceFile, nameOf } from '@azure-tools/sourcemap';
 import { ApiKeyAuthentication, AuthenticationReference, AuthenticationRequirement, AuthorizationCodeOAuth2Flow, ClientCredentialsOAuth2Flow, HttpAuthentication, ImplicitOAuth2Flow, OAuth2Authentication, OAuth2Flow, OAuth2Flows, OAuth2Scope, ParameterLocation, PasswordOAuth2Flow } from '../../../model/http/protocol';
 import { addExtensionsToAttic, single } from '../common';
 import { Context } from './serializer';
@@ -16,8 +16,8 @@ export async function* authenticationRequirement(securityRequirement: v2.Securit
 
     const auth = await single($.processInline(authentication, ref));
     const authRef = new AuthenticationReference(auth);
-    for (const scope of use(scopes)) {
-      authRef.scopes.push(use(scope));
+    for (const scope of scopes) {
+      authRef.scopes.push(scope);
     }
 
     result.authentications.push(authRef);
@@ -27,7 +27,7 @@ export async function* authenticationRequirement(securityRequirement: v2.Securit
 }
 
 export async function* authentication(scheme: v2.SecurityScheme, $: Context) {
-  switch (valueOf(use(scheme.type))) {
+  switch ((<any>scheme).type) {
     case 'apiKey':
       return yield *apiKeyAuthentication(<v2.ApiKeySecurityScheme>scheme, $);
     case 'basic':
@@ -42,7 +42,7 @@ export async function* authentication(scheme: v2.SecurityScheme, $: Context) {
 function *apiKeyAuthentication(scheme: v2.ApiKeySecurityScheme, $: Context) {
   let location: ParameterLocation;
 
-  switch (valueOf(use(scheme.in))) {
+  switch (scheme.in) {
     case 'header':
       location = ParameterLocation.Header;
       break;
@@ -69,7 +69,7 @@ function *oauth2Authentication(scheme: v2.OAuthSecurityBase, $: Context) {
   let flow: OAuth2Flow;
   const flows = new OAuth2Flows();
 
-  switch (valueOf(use(scheme.flow))) {
+  switch (scheme.flow) {
     case 'password': {
       const password = <v2.OAuth2PasswordSecurityScheme>scheme;
       flow = flows.password = new PasswordOAuth2Flow(password.tokenUrl);
@@ -95,7 +95,7 @@ function *oauth2Authentication(scheme: v2.OAuthSecurityBase, $: Context) {
       return;
   }
 
-  for (const [ name, description] of items(use(scheme.scopes))) {
+  for (const [ name, description] of items(scheme.scopes)) {
     flow.scopes.push(new OAuth2Scope(name, description));
   }
 

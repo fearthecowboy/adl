@@ -1,5 +1,4 @@
 import { Dictionary, items } from '@azure-tools/linq';
-import { TrackedTarget, use } from '@azure-tools/sourcemap';
 import { Node } from 'ts-morph';
 import { setTag } from '../support/doc-tag';
 import { getPath, project } from '../support/typescript';
@@ -16,34 +15,28 @@ export class Initializer {
   initialize<T>(initializer?: Partial<T>) {
     const isBackedByTS = 'node' in this;
 
-    if (isBackedByTS) {
-      // autotrack
-      (<any>this).track(initializer);
-    }
-
     for (const [key, value] of items(initializer)) {
       // copy the true value of the items to the object
       // (use the proxy)
         
-      const proxy = isBackedByTS ? <any>this : (<any>TrackedTarget.track(this));
-      
+      const rawThis = <any>this;
 
       if (value !== undefined) {
-        const rawValue = (<any>value).valueOf();
+        const rawValue = (<any>value);
         
-        const targetProperty = proxy[key];
+        const targetProperty = rawThis[key];
         if (targetProperty && targetProperty.push ) {
           if (rawValue[Symbol.iterator]) {
             // copy elements to target
             for (const each of rawValue) {
-              proxy[key].push(each);
+              rawThis[key].push(each);
             }
             continue;
           }
           throw new Error(`Initializer for object with array member '${key}', must be initialized with something that can be iterated.`);
         }
         // just copy the value across.
-        proxy[key] = (<any>value);
+        rawThis[key] = (<any>value);
       }
     }
     return this;
@@ -65,10 +58,9 @@ export class Element extends Initializer {
   }
 
   addToAttic(name: string, value: any) {
-    use(value, true);
     if (value) {
       this.attic = this.attic || {};
-      this.attic[name] = value.valueOf();
+      this.attic[name] = value;
     }
     return this;
   }
@@ -111,9 +103,8 @@ export class TSElement<TNode extends Node> extends Initializer implements Elemen
   }
 
   addToAttic(name: string, value: any): this {
-    use(value, true);
     if (value) {
-      this.attic[name] = value.valueOf();
+      this.attic[name] = value;
     }
     return this;
   }
@@ -129,27 +120,6 @@ export class TSElement<TNode extends Node> extends Initializer implements Elemen
     if (info.deprecated ) {
       setTag(this.node, 'deprecated', info.deprecated);
     }
-  }
-
-
-  /**
-   * targetMap is a function that gives back a dictionary of members to Path (how to find the member in the ts project)
-   * @param childMap a childmap that should be copied on top of any defintions that this class has
-   * 
-   * @notes - every child class of this class should override {@link targetMap}
-   */
-  get targetMap(): Dictionary<any> {
-    return {
-    };
-  }
-
-  /**
-   * 
-   * @param sourceMap 
-   */
-  track(sourceMap: Dictionary<any>) {
-    this.project.track(this.targetMap, sourceMap);
-    return this;
   }
 
 

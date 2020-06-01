@@ -1,4 +1,3 @@
-import { valueOf } from '@azure-tools/sourcemap';
 import { fail } from 'assert';
 import { JSDoc, JSDocTag, Node } from 'ts-morph';
 
@@ -73,7 +72,6 @@ export function removeTag(target: Node | JSDocs | JSDoc, tagName: string ) {
 
 export function setTag( target: Node | JSDoc| JSDocs, tagName: string,text?: string|boolean ) {
   removeTag(target, tagName);
-  text = valueOf(text);
   switch( text ) {
     case undefined:
     case false:

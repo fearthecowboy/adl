@@ -39,5 +39,5 @@ export interface OperationResultContract {
      * @description This property if only provided as part of the TenantConfiguration_Validate operation. It contains the log the entities which will be updated/created/deleted as part of the TenantConfiguration_Deploy operation.
      * @since 2019-12-01
      */
-    readonly actionLog: Array<OperationResultLogItemContract> & ;
+    readonly actionLog: Array<OperationResultLogItemContract>;
 }

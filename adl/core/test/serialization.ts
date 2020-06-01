@@ -1,5 +1,5 @@
 import { linq } from '@azure-tools/linq';
-import { isAnonymous, valueOf } from '@azure-tools/sourcemap';
+import { isAnonymous } from '@azure-tools/sourcemap';
 import { AST, CST, Document } from 'yaml';
 import { Schema, YAMLMap } from 'yaml/types';
 import { parseMap } from 'yaml/util';
@@ -64,8 +64,8 @@ export const elementTag = <Schema.CustomTag>{
     v !== undefined && 
     v !== null && 
     typeof v === 'object' && 
-    !Array.isArray(valueOf(v)) && 
-    (v instanceof ApiModel || v instanceof Element || valueOf(v).added),
+    !Array.isArray(v) && 
+    (v instanceof ApiModel || v instanceof Element || v.added),
   default: true,
   tag: 'tag:yaml.org,2002:map',
   resolve: (doc: Document, cst: CST.Node): AST.Node => {

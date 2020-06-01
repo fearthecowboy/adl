@@ -1,5 +1,4 @@
 import { v3 } from '@azure-tools/openapi';
-import { use, valueOf } from '@azure-tools/sourcemap';
 import { CookieParameter, HeaderParameter, PathParameter, QueryParameter, RenderStyle } from '../../../model/http/parameter';
 import { singleOrDefault } from '../common';
 import { processInline } from './schema';
@@ -7,7 +6,7 @@ import { Context } from './serializer';
 
 export async function* parameter(parameter: v3.Parameter, $: Context, options?: { isAnonymous?: boolean }) {
 
-  switch (valueOf(use(parameter.in))) {
+  switch (parameter.in) {
     case v3.ParameterLocation.Path:
       return yield* processPathParameter(<v3.PathParameter>parameter, $, options);
 

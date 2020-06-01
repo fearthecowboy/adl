@@ -1,5 +1,4 @@
 import { tree } from './tree';
-import { tree } from './tree';
 /**
  * @since v3
  */

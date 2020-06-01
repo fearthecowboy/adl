@@ -97,7 +97,8 @@ export function isUsed<T>(value: T): boolean {
     return true;
   }
   // ask the proxy if the isUsed is set.
-  return (<any>value)[SpecialProperties.IsUsed] === true;
+  /// return (<any>value)[SpecialProperties.IsUsed] === true;
+  return true;
 }
 
 export function getSourceFile(value: any): SourceFile | undefined {
@@ -271,7 +272,8 @@ export class TrackedSource<T extends Object, instanceType> {
     }
     
     const value = (<any>this.instance)[property];
-    if (value === undefined || value === null) {
+    // if (value === undefined || value === null) {
+    if( typeof value !== 'object') {
       return value;
     }
     switch (typeof value) {

@@ -1,9 +1,7 @@
-import { Dictionary } from '@azure-tools/linq';
-import { isAnonymous, valueOf } from '@azure-tools/sourcemap';
+import { isAnonymous } from '@azure-tools/sourcemap';
 import { EnumDeclaration, EnumMember } from 'ts-morph';
 import { literal, normalizeIdentifier } from '../../support/codegen';
 import { appendTag, getFirstDoc, hasTag, setTag } from '../../support/doc-tag';
-import { getPath } from '../../support/typescript';
 import { ApiModel } from '../api-model';
 import { TSElement } from '../element';
 import { Collection, CollectionImpl, Identity } from '../types';
@@ -21,14 +19,6 @@ export interface EnumValue {
 }
 
 class EnumValueImpl extends TSElement<EnumMember> implements EnumValue {
-  get targetMap() {
-    return {
-      ...super.targetMap,
-      $: getPath(this.node),
-      value: getPath(this.node, 'getValue')
-    };
-  }
-
   constructor(node: EnumMember) {
     super(node);
   }
@@ -45,18 +35,11 @@ class EnumValueImpl extends TSElement<EnumMember> implements EnumValue {
     return getFirstDoc(this.node).getDescription();
   }
   set description(value: string | undefined) {
-    getFirstDoc(this.node).setDescription(valueOf(value) || '\n');
+    getFirstDoc(this.node).setDescription(value || '\n');
   }
 }
 
 class EnumImpl extends TSSchema<EnumDeclaration> implements Enum {
-  get targetMap(): Dictionary<any> {
-    return {
-      ...super.targetMap,
-      $: getPath(this.node),
-    };
-  }
-
   get extensible() {
     return hasTag(this.node, 'extensible');
   }
@@ -77,8 +60,8 @@ class EnumImpl extends TSSchema<EnumDeclaration> implements Enum {
   readonly values: Collection<EnumValue>;
 
   private addValue(value: EnumValue) {
-    const name = valueOf(value.name) ?? value.value.toString();
-    let val = valueOf(value.value);
+    const name = value.name ?? value.value.toString();
+    let val = value.value;
     
     if (typeof val !== 'string' && typeof val !== 'number') {
       // TODO: how would we represent enum of non-string, non-number?
@@ -91,15 +74,12 @@ class EnumImpl extends TSSchema<EnumDeclaration> implements Enum {
     });
     const result = new EnumValueImpl(member);
     result.description = value.description;
-    result.track({
-      $: name,
-      value: val
-    });
+    
     return result;
   }
 
   private removeValue(value: EnumValue) {
-    const name = valueOf(value.name) ?? value.value.toString();
+    const name = value.name ?? value.value.toString();
     this.node.getMember(name)?.remove();
   }
 
@@ -146,9 +126,6 @@ export function createEnum(api: ApiModel, identity: Identity, values: Array<Enum
   }
 
   result.initialize(initializer);
-  result.track({
-    $: name
-  });
-
+ 
   return result;
 }

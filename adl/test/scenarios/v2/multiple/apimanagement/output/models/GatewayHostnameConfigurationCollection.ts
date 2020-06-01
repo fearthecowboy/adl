@@ -8,7 +8,7 @@ export interface GatewayHostnameConfigurationCollection {
      * @description Page values.
      * @since 2019-12-01
      */
-    readonly value: Array<GatewayHostnameConfigurationContract> & ;
+    readonly value: Array<GatewayHostnameConfigurationContract>;
     /**
      * @description Next page link if any.
      * @since 2019-12-01

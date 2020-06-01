@@ -1,5 +1,5 @@
 import { v2, v3, XMSEnumValue } from '@azure-tools/openapi';
-import { anonymous, nameOf, use } from '@azure-tools/sourcemap';
+import { anonymous, nameOf } from '@azure-tools/sourcemap';
 import { createAlias } from '../../../model/schema/alias';
 import { NullableModifier, ReadOnlyModifier } from '../../../model/schema/constraint';
 import { ServerDefaultValue } from '../../../model/schema/default';
@@ -93,7 +93,6 @@ export async function* processUriSchema<T extends OAIModel>(schema: v3.Schema|v2
   if ($.forbiddenProperties(schema, ...<any>notPrimitiveProperties)) {
     return;
   }
-  use(schema.example);
 
   return yield addAliasWithDefault(schema, $.api.schemas.Uri, $);
 }
@@ -136,7 +135,6 @@ export function addAliasWithDefault<T extends OAIModel>(schema: v3.Schema | v2.S
     if (schema.default) {
       alias.defaults.push(new ServerDefaultValue(schema.default));
     }
-    use(schema.default, true);
 
     if ((<any>schema).readOnly) {
       alias.constraints.push(new ReadOnlyModifier());
@@ -160,11 +158,11 @@ export async function* processAnySchema<T extends OAIModel>(schema: v3.Schema|v2
 }
 
 export async function* processEnumSchema<T extends OAIModel>(schema: v3.Schema | v2.Schema, $: Context<T>, options?: Options): AsyncGenerator<Schema> {
-  const schemaEnum = use(schema.enum, true) ?? [];
-  const xmsEnum = use(schema['x-ms-enum']) ?? {};
-  const values: Array<XMSEnumValue> = use(xmsEnum.values, true) ?? schemaEnum.map(value => ({ value }));
-  const name = use(xmsEnum.name) ?? (options?.isAnonymous ? anonymous('enum') : nameOf(schema));
-  const extensible = use(xmsEnum.modelAsString);
+  const schemaEnum = schema.enum || [];
+  const xmsEnum = schema['x-ms-enum'] || {};
+  const values: Array<XMSEnumValue> = xmsEnum.values|| schemaEnum.map(value => ({ value }));
+  const name = xmsEnum.name || (options?.isAnonymous ? anonymous('enum') : nameOf(schema));
+  const extensible = xmsEnum.modelAsString;
 
   yield createEnum($.api, name, values, { 
     extensible, 

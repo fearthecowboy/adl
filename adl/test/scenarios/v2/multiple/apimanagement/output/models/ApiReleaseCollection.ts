@@ -8,7 +8,7 @@ export interface ApiReleaseCollection {
      * @description Page values.
      * @since 2019-12-01
      */
-    readonly value: Array<ApiReleaseContract> & ;
+    readonly value: Array<ApiReleaseContract>;
     /**
      * @description Next page link if any.
      * @since 2019-12-01

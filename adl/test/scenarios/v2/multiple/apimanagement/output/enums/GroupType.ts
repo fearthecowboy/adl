@@ -1,6 +1,5 @@
 
 /**
- * @extensible
  * @description Group type.
  * @todo temporary-reuse-marker
  * @todo temporary-reuse-marker
