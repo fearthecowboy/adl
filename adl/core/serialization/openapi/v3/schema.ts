@@ -521,7 +521,6 @@ export async function* processObjectSchema(schema: v3.Schema, $: Context, option
     });
     p.addToAttic('example', (<any>property).example);
     $.addVersionInfo(p, property);
-    result.properties.push(p);
   }
 
   if (schema.additionalProperties) {

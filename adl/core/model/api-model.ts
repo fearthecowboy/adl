@@ -2,7 +2,7 @@ import { exists, isFile, mkdir, rmdir, writeFile } from '@azure-tools/async-io';
 import { Dictionary } from '@azure-tools/linq';
 import { isAnonymous, Path, valueOf } from '@azure-tools/sourcemap';
 import { dirname, join } from 'path';
-import { EnumDeclaration, IndentationText, NewLineKind, Node, Project, QuoteKind, SourceFile } from 'ts-morph';
+import { EnumDeclaration, IndentationText, InterfaceDeclaration, NewLineKind, Node, Project, QuoteKind, SourceFile } from 'ts-morph';
 import { getNode, referenceTo } from '../support/typescript';
 import { Attic } from './element';
 import { SerializationResult } from './format';
@@ -135,6 +135,19 @@ export class ApiModel {
 
     for (const file of this.project.getSourceFiles()) {
       const result = file.getEnum(name);
+      if (result) {
+        return referenceTo(result);
+      }
+    }
+    return undefined;
+  }
+
+  getGroup(name: string) {
+    name = valueOf(name);
+    let result: InterfaceDeclaration;
+
+    for (const file of this.project.getSourceFiles()) {
+      const result = file.getInterface(name);
       if (result) {
         return referenceTo(result);
       }

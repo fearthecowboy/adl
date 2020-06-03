@@ -27,5 +27,10 @@ export function stringLiteral(value: string) {
 }
 
 export function normalizeName(value: string ) {
+  if (/^[^a-zA-Z]/.test(value)) {
+    // \w matches digits, but we can't lead with a digit
+    value = `_${value}`;
+  }
+
   return value.replace(/[^\w]+/g, '_');
 }

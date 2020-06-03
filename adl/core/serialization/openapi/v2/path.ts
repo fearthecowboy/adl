@@ -2,10 +2,11 @@ import { length, values } from '@azure-tools/linq';
 import { common, isReference, v2 } from '@azure-tools/openapi';
 import { JsonReference, ParameterLocation } from '@azure-tools/openapi/dist/v2';
 import { anonymous, nameOf } from '@azure-tools/sourcemap';
-import { Operation } from '../../../model/http/operation';
+import { createOperation, Method, Operation, Path } from '../../../model/http/operation';
 import { Request } from '../../../model/http/request';
 import { addExtensionsToAttic, push } from '../common';
 import { processExternalDocs } from '../common/info';
+import { getGroupAndName } from '../common/path';
 import { requestBody } from './body-parameter';
 import { parameter } from './parameter';
 import { response } from './response';
@@ -15,19 +16,27 @@ export async function* path(pathItem: v2.PathItem, $: Context, options?: { isAno
   const path = nameOf(pathItem);
   for (const method of values(common.HttpMethod)) {
     if (method in pathItem) {
-      yield* operation(path, pathItem[<common.HttpMethod>method], pathItem, $);
+      yield* operation({method: <Method><unknown>method, path}, pathItem[<common.HttpMethod>method], pathItem, $);
     }
   }
   addExtensionsToAttic($.api.http, pathItem);
 }
 
-export async function* operation(path: string, operation: v2.Operation, shared: v2.PathItem, $: Context): AsyncGenerator<Operation> {
-  const result = new Operation({
-    description: operation.description ,
-    summary: operation.summary,
-    id: operation.operationId,
-    tags: [...operation.tags || []]
-  });
+export async function* operation(path: Path, operation: v2.Operation, shared: v2.PathItem, $: Context): AsyncGenerator<Operation> {
+  const [group, name] = getGroupAndName(operation, path.path);
+
+  const result = createOperation(
+    $.api,
+    path,
+    group,
+    name, {
+      description: operation.description,
+      summary: operation.summary,
+    });
+
+  if (operation.tags) {
+    result.tags.push(...operation.tags);
+  }
 
   // push to the attic for now
   result.addToAttic('security', operation.security);

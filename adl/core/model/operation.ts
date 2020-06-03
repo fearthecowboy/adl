@@ -1,9 +1,9 @@
 import { Alias } from './alias';
 import { Element } from './element';
 import { Schema } from './schema/schema';
+import { ReadOnlyCollection } from './types';
 
-export class Operation extends Element {
-
+export interface Operation extends Element {
   /** A short summary of what the operation does. */
   summary?: string;
 
@@ -11,23 +11,13 @@ export class Operation extends Element {
   description?: string;
 
   /** parameters common to all the requests(overloads) for this operation */
-  parameters = new Array<Parameter|Alias<Parameter>>();
+  readonly parameters: ReadOnlyCollection<Parameter | Alias<Parameter>>;
 
   /** possible requests that can be made for this operation (ie, overloads)  */
-  requests = new Array<Request>();
-  
+  readonly requests: ReadOnlyCollection<Request | Alias<Request>>;
+
   /** possible outputs from this operation */
-  responses = new Array<Response | Alias<Response>>();
-
-
-  /**
-   * 
-   * @param initializer the object initializer for this operation
-   */
-  constructor(initializer?: Partial<Operation>) {
-    super();
-    this.initialize(initializer);
-  }
+  readonly responses: ReadOnlyCollection<Response | Alias<Response>>;
 }
 
 export class Response extends Element {
@@ -61,12 +51,7 @@ export class Parameter extends Element {
    */
   required?: boolean;
 
-  /**
-   * 
-   * @param name the name of the parameter
-   * @param initializer object initializer for this constructor
-   */
-  constructor(public name: string, initializer?: Partial<Parameter>) {
+  constructor(public name: string, public schema: Schema, initializer?: Partial<Parameter>) {
     super();
     this.initialize(initializer);
   }

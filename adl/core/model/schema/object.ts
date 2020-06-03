@@ -3,15 +3,15 @@ import { normalizeIdentifier } from '../../support/codegen';
 import { getTagValue, setTag } from '../../support/doc-tag';
 import { TypeDeclaration } from '../../support/typescript';
 import { ApiModel } from '../api-model';
-import { Collection, CollectionImpl, Identity } from '../types';
+import { Collection, CollectionImpl, Identity, ReadOnlyCollection, ReadOnlyCollectionImpl } from '../types';
 import { NamedElement, Schema, TSSchema } from './schema';
 
 export interface ObjectSchema extends Schema {
   /** schemas that this object extends */
   readonly parents: Collection<TSSchema<TypeDeclaration>>;
   
-  /** the collection of properties that are in this object */
-  readonly properties: Collection<Property>;
+  /** the collection of properties that are in this object< */
+  readonly properties: ReadOnlyCollection<Property>;
   
   /**  maximum number of properties permitted */
   maxProperties?: number;
@@ -50,6 +50,7 @@ export class ObjectSchemaImpl extends TSSchema<InterfaceDeclaration> implements 
       // this.node.removeExtends(base);
       //  break;
       // }
+      throw new Error('remove not implemented');
     }
 
   }
@@ -65,11 +66,11 @@ export class ObjectSchemaImpl extends TSSchema<InterfaceDeclaration> implements 
   constructor(node: InterfaceDeclaration) {
     super('object', node);
     this.parents = new CollectionImpl(this, this.addParent, this.removeParent, this.getParents);
-    this.properties = new CollectionImpl(this, undefined, undefined,this.getProperties );
+    this.properties = new ReadOnlyCollectionImpl(this, this.getProperties);
   }
    
   parents: Collection<TSSchema<TypeDeclaration>>;
-  properties: Collection<Property>;
+  properties: ReadOnlyCollection<Property>;
  
   maxProperties?: number;
   minProperties?: number;

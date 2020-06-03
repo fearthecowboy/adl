@@ -25,11 +25,22 @@ export enum RenderStyle {
   DeepObject = 'deepObject'
 }
 
-export class Parameter extends base.Parameter {
-  /** 
- * the styling to use when rendering the parameter into the HTTP request
- */
-  renderStyle?: RenderStyle;
+export enum ParameterType {
+  Path = 'path',
+  Query = 'query',
+  FormData = 'formData',
+  Cookie = 'cookie',
+  Header = 'header'
+}
+
+export type Parameter = PathParameter | QueryParameter | FormDataParameter | CookieParameter | HeaderParameter;
+
+export abstract class ParameterBase extends base.Parameter {
+  readonly abstract type: ParameterType;
+  /**
+   * the styling to use when rendering the parameter into the HTTP request
+   */
+  readonly renderStyle?: RenderStyle;
 
   /** 
    * the desired generated location when generating code.
@@ -37,19 +48,18 @@ export class Parameter extends base.Parameter {
   generatedLocation?: 'client'|'method';
   
   /**
-   * 
-   * @param type sub-type of the parameter 
    * @param name the name of this parameter
    * @param schema the type for the parameter
    * @param initializer an object initializer
    */
-  constructor(public type: string, name: string, public schema: Schema, initializer?: Partial<Parameter>) {
-    super(name);
+  constructor(name: string, public schema: Schema, initializer?: Partial<ParameterBase>) {
+    super(name, schema);
     this.initialize(initializer);
   }
 }
 
-export class PathParameter extends Parameter {
+export class PathParameter extends ParameterBase {
+  readonly type = ParameterType.Path;
 
   /** 
    * the styling to use when rendering the parameter into the HTTP request
@@ -64,12 +74,14 @@ export class PathParameter extends Parameter {
      * @param initializer an object initializer
      */
   constructor(name: string, schema: Schema, public expandParameterValues: boolean, initializer?: Partial<PathParameter>) {
-    super('path', name, schema);
+    super(name, schema);
     this.initialize(initializer);
   }
 }
 
-export class QueryParameter extends Parameter {
+export class QueryParameter extends ParameterBase {
+  readonly type = ParameterType.Query;
+
   /** 
   * the styling to use when rendering the parameter into the HTTP request
   */
@@ -94,15 +106,15 @@ export class QueryParameter extends Parameter {
     * @param initializer an object initializer
     */
   constructor(name: string, schema: Schema, public expandParameterValues: boolean, initializer?: Partial<QueryParameter>) {
-    super('query', name, schema, {
+    super(name, schema, {
       renderStyle: RenderStyle.Simple
     });
     this.initialize(initializer);
   }
 }
 
-
-export class FormDataParameter extends Parameter {
+export class FormDataParameter extends ParameterBase  {
+  readonly type = ParameterType.FormData;
   /** 
   * the styling to use when rendering the parameter into the HTTP request
   */
@@ -119,14 +131,15 @@ export class FormDataParameter extends Parameter {
     * @param initializer an object initializer
     */
   constructor(name: string, schema: Schema, public expandParameterValues: boolean, initializer?: Partial<QueryParameter>) {
-    super('formdata', name, schema, {
+    super(name, schema, {
       renderStyle: RenderStyle.Simple
     });
     this.initialize(initializer);
   }
 }
 
-export class CookieParameter extends Parameter {
+export class CookieParameter extends ParameterBase {
+  readonly type = ParameterType.Cookie;
   /**
      * 
      * @param name the name of this parameter
@@ -135,14 +148,16 @@ export class CookieParameter extends Parameter {
      * @param initializer an object initializer
      */
   constructor(name: string, schema: Schema, public expandParameterValues: boolean, initializer?: Partial<PathParameter>) {
-    super('cookie', name, schema, {
+    super(name, schema, {
       renderStyle: RenderStyle.Simple
     });
     this.initialize(initializer);
   }
 }
 
-export class HeaderParameter extends Parameter {
+export class HeaderParameter extends ParameterBase {
+  readonly type = ParameterType.Header;
+
   /** 
   * the styling to use when rendering the parameter into the HTTP request
   */
@@ -156,7 +171,7 @@ export class HeaderParameter extends Parameter {
      * @param initializer an object initializer
      */
   constructor(name: string, schema: Schema, public expandParameterValues: boolean, initializer?: Partial<HeaderParameter>) {
-    super('header', name, schema);
+    super(name, schema);
     this.initialize(initializer);
   }
 }

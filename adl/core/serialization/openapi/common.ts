@@ -1,6 +1,7 @@
 import { length } from '@azure-tools/linq';
 import { common, StringFormat, v2, v3, vendorExtensions } from '@azure-tools/openapi';
 import { Element } from '../../model/element';
+import { Collection } from '../../model/types';
 
 export async function toArray<T>(g: AsyncGenerator<T>) {
   const result = new Array<T>();
@@ -10,7 +11,7 @@ export async function toArray<T>(g: AsyncGenerator<T>) {
   return result;
 }
 
-export async function push<T>(destination: Array<T>, g: AsyncGenerator<T>) {
+export async function push<T>(destination: Array<T> | Collection<T>, g: AsyncGenerator<T>) {
   for await (const each of g) {
     destination.push(each);
   }
