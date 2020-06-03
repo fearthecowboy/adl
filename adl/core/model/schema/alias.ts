@@ -11,11 +11,11 @@ export class Alias extends TSSchema<TypeAliasDeclaration> {
   aliasType = 'schema';
   constraints: Collection<Constraint>;
   defaults: Collection<Default>;
-  
+
   addConstraint(...constraint: Array<Constraint>) {
     //todo
-    this.node.setType(`${this.node.getTypeNode()?.getText()} & ${constraint.map( c => c.typeDefinition ).join('&')}` );
-    
+    this.node.setType(`${this.node.getTypeNode()?.getText()} & ${constraint.map(c => c.typeDefinition).join('&')}`);
+
   }
   removeConstraint(constraint: Constraint) {
     //todo
@@ -36,7 +36,7 @@ export class Alias extends TSSchema<TypeAliasDeclaration> {
 
   constructor(node: TypeAliasDeclaration) {
     super('alias', node);
-    this.constraints = new CollectionImpl(this,this.addConstraint, this.removeConstraint, this.getConstraints );
+    this.constraints = new CollectionImpl(this, this.addConstraint, this.removeConstraint, this.getConstraints);
     this.defaults = new CollectionImpl(this, this.addDefault, this.removeDefault, this.getDefault);
   }
 
@@ -51,9 +51,9 @@ export class Alias extends TSSchema<TypeAliasDeclaration> {
     if (this.isInline) {
       // we need to pull thru the declarations that this alias has. 
       // brute force!
-      return <any> this.node.getSourceFile().getImportDeclarations().map( decl => {
-        const names = decl.getNamedImports().map( each => each.getName());
-        const types = decl.getModuleSpecifierSourceFile()?.getDescendants().filter( (each: any) => each.getName && names.indexOf(each.getName()) > -1 ) || []; 
+      return <any>this.node.getSourceFile().getImportDeclarations().map(decl => {
+        const names = decl.getNamedImports().map(each => each.getName());
+        const types = decl.getModuleSpecifierSourceFile()?.getDescendants().filter((each: any) => each.getName && names.indexOf(each.getName()) > -1) || [];
         return types;
       }).flat();
     }

@@ -1,5 +1,9 @@
 /** Interface for manipulating an API Description */
 import { ApiModel } from './model/api-model';
+export { deserializeOpenAPI2 } from './serialization/openapi/v2/serializer';
+export { deserializeOpenAPI3 } from './serialization/openapi/v3/serializer';
+export { Host } from './support/file-system';
+
 
 /** load an API from a set of source files or folders */
 async function loadApi(...inputs: Array<string>): Promise<ApiModel> {

@@ -18,14 +18,14 @@ export class Initializer {
     for (const [key, value] of items(initializer)) {
       // copy the true value of the items to the object
       // (use the proxy)
-        
+
       const rawThis = <any>this;
 
       if (value !== undefined) {
         const rawValue = (<any>value);
-        
+
         const targetProperty = rawThis[key];
-        if (targetProperty && targetProperty.push ) {
+        if (targetProperty && targetProperty.push) {
           if (rawValue[Symbol.iterator]) {
             // copy elements to target
             for (const each of rawValue) {
@@ -70,31 +70,31 @@ export class Element extends Initializer {
     this.internalData[key] = internalData;
   }
 
-  addVersionInfo(info: VersionInfo) { 
+  addVersionInfo(info: VersionInfo) {
     this.versionInfo.push(info);
   }
 }
 
-export class TSElement<TNode extends Node> extends Initializer implements Element  {
+export class TSElement<TNode extends Node> extends Initializer implements Element {
   constructor(public node: TNode, initializer?: Partial<TSElement<TNode>>) {
     super();
     this.initialize(initializer);
   }
 
   get internalData() {
-    const pv =  this.project.getPrivateData(getPath(this.node));
-    if(!pv.internalData) {
+    const pv = this.project.getPrivateData(getPath(this.node));
+    if (!pv.internalData) {
       pv.internalData = {};
     }
     return pv.internalData;
   }
-  
+
   get versionInfo(): Array<VersionInfo> {
     // get versions back from doctags.
     return [];
   }
-  
-  get attic(): Attic  {
+
+  get attic(): Attic {
     const pv = this.project.getPrivateData(getPath(this.node));
     if (!pv.attic) {
       pv.attic = {};
@@ -108,16 +108,16 @@ export class TSElement<TNode extends Node> extends Initializer implements Elemen
     }
     return this;
   }
-  
+
   addInternalData(key: string, internalData: InternalData): void {
     this.internalData[key] = internalData;
   }
 
   addVersionInfo(info: VersionInfo) {
-    if(info.added) {
-      setTag(this.node, 'since', info.added);
+    if (info.added) {
+      // setTag(this.node, 'since', info.added);
     }
-    if (info.deprecated ) {
+    if (info.deprecated) {
       setTag(this.node, 'deprecated', info.deprecated);
     }
   }

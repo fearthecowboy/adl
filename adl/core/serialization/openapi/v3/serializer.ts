@@ -22,12 +22,12 @@ export type Context = Ctx<v3.Model>;
 export type ItemsOf<T> = Dictionary<T | JsonReference<T>>;
 
 export async function deserializeOpenAPI3(host: Host, ...inputs: Array<string>) {
-  const output = await new Visitor<v3.Model>(new ApiModel(), host, 'oai3', ...inputs).process(processRoot);
+  const output = await new Visitor<v3.Model>(new ApiModel(), host, 'oai3', ...inputs).process();
 
   return output;
 }
 
-async function processRoot(oai3: v3.Model, $: Context) {
+export async function processOpenApi3(oai3: v3.Model, $: Context) {
 
   const extensions = vendorExtensions(oai3);
 

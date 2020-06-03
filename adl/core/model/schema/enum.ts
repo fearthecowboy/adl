@@ -2,6 +2,7 @@ import { isAnonymous } from '@azure-tools/sourcemap';
 import { EnumDeclaration, EnumMember } from 'ts-morph';
 import { literal, normalizeIdentifier } from '../../support/codegen';
 import { appendTag, getFirstDoc, hasTag, setTag } from '../../support/doc-tag';
+import { TypeDeclaration } from '../../support/typescript';
 import { ApiModel } from '../api-model';
 import { TSElement } from '../element';
 import { Collection, CollectionImpl, Identity } from '../types';
@@ -44,9 +45,9 @@ class EnumImpl extends TSSchema<EnumDeclaration> implements Enum {
     return hasTag(this.node, 'extensible');
   }
   set extensible(value: boolean) {
-    if( value) {
+    if (value) {
       setTag(this.node, 'extensible', '');
-    } 
+    }
   }
 
   /* get isInline() {
@@ -62,19 +63,19 @@ class EnumImpl extends TSSchema<EnumDeclaration> implements Enum {
   private addValue(value: EnumValue) {
     const name = value.name ?? value.value.toString();
     let val = value.value;
-    
+
     if (typeof val !== 'string' && typeof val !== 'number') {
       // TODO: how would we represent enum of non-string, non-number?
       val = `/* ${typeof val} */${val}`;
     }
-    
+
     const member = this.node.addMember({
       name: normalizeIdentifier(name),
       value: val
     });
     const result = new EnumValueImpl(member);
     result.description = value.description;
-    
+
     return result;
   }
 
@@ -86,13 +87,18 @@ class EnumImpl extends TSSchema<EnumDeclaration> implements Enum {
   private getValues(): Array<EnumValue> {
     return this.node.getMembers().map<EnumValue>(each => new EnumValueImpl(each));
   }
-  
+
   get typeDefinition() {
     if (this.isInline) {
-      return this.values.get().map(v => literal(v.value)).join(' | ');
+      const values = this.values.get().map(v => literal(v.value)).join(' | ');
+      return this.extensible ? `${values} | string` : values;
     }
 
-    return <string>this.name;
+    return this.extensible ? `${<string>this.name} | string` : <string>this.name;
+  }
+
+  get requiredTypeDeclarations(): Array<TypeDeclaration> {
+    return [this.node];
   }
 
   constructor(node: EnumDeclaration, private anonymous: boolean) {
@@ -126,6 +132,6 @@ export function createEnum(api: ApiModel, identity: Identity, values: Array<Enum
   }
 
   result.initialize(initializer);
- 
+
   return result;
 }

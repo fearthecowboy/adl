@@ -110,6 +110,7 @@ export class ApiModel {
 
         await writeFile(filename, each.print().
           //replace(/\*\/\s*\/\*\*\s*/g, '').
+          replace(/& ;/g,';').
           replace(/^(\s*\/\*)/g, '\n$1')
         );
       }))).length;

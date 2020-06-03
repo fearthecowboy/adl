@@ -8,6 +8,8 @@ import { parse } from 'yaml';
 import { Alias } from '../model/alias';
 import { ApiModel } from '../model/api-model';
 import { Element } from '../model/element';
+import { processOpenApi2 } from '../serialization/openapi/v2/serializer';
+import { processOpenApi3 } from '../serialization/openapi/v3/serializer';
 import { Host } from './file-system';
 import { Stopwatch } from './stopwatch';
 
@@ -52,6 +54,10 @@ class RefMap {
   }
 }
 
+export async function importModel<T extends OAIModel>(host: Host, ...inputs: Array<string>) {
+  return await new Visitor<T>(new ApiModel(), host, 'unknown', ...inputs).process();
+}
+
 export class Visitor<TSourceModel extends OAIModel> {
   key = '';
   sourceFiles = new Map<string, Promise<Context<TSourceModel>>>();
@@ -60,7 +66,7 @@ export class Visitor<TSourceModel extends OAIModel> {
   constructor(
     public api: ApiModel,
     public host: Host,
-    public inputType: 'oai3' | 'oai2',
+    public inputType: 'oai3' | 'oai2' | 'unknown',
     ...sourceFiles: Array<string>) {
     // the source files are going to be YAML/JSON files for this 
     // so we can speed up the process and grab them all and hold onto them
@@ -77,15 +83,43 @@ export class Visitor<TSourceModel extends OAIModel> {
     const model = parse(content);
     this.host.parsed(sourceFile, watch.time);
 
+    if( model.openapi ) {
+      if(this.inputType === 'oai2' ) {
+        throw new Error('It is not possible to load files from both OpenAPI2 and OpenAPI3 sources in a single operation.');
+      } 
+      this.inputType = 'oai3';
+    }
+    if (model.swagger) {
+      if (this.inputType === 'oai3') {
+        throw new Error('It is not possible to load files from both OpenAPI2 and OpenAPI3 sources in a single operation.');
+      }
+      this.inputType = 'oai2';
+    }
+    
+    if( this.inputType === 'unknown' )  {
+      throw new Error('Unable to identify input model type');
+    }
+
     const sourceModel = TrackedSource.track(<TSourceModel>model, model, { sourceFile: { filename: sourceFile }, path: [] });
 
     return new Context(sourceModel, sourceFile, this);
   }
 
-  async process<TOutput, TOptions extends Options = Options>(action: fnActionOnRoot<TSourceModel, TSourceModel, TOutput, TOptions>) {
+  async process<TOutput, TOptions extends Options = Options>() {
+    let action!: fnActionOnRoot<TSourceModel, TSourceModel, TOutput, TOptions >;
+
     for (const value of values(this.sourceFiles)) {
       const ctx = await value;
       const watch = new Stopwatch();
+      
+      switch( this.inputType) {
+        case 'oai2':
+          action = <any>processOpenApi2;
+          break;
+        case 'oai3':
+          action = <any>processOpenApi3;
+          break;
+      }
 
       await action(<NonNullable<TSourceModel>>ctx.sourceModel, ctx);
       this.host.processed(ctx.sourceFile, watch.time);
