@@ -1,0 +1,567 @@
+---
+"$schema": https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json
+name: Api Description Language
+
+variables:
+  startOfIdentifier: (?<![_$[:alnum:]])(?:(?<=\.\.\.)|(?<!\.))
+  endOfIdentifier: (?![_$[:alnum:]])(?:(?=\.\.\.)|(?!\.))
+  identifierPattern: '[_$[:alpha:]][_$[:alnum:]]*'
+  propertyAccessPreIdentifier: \??\.\s*
+  quotedStrings: (\'([^\'\\]|\\.)*\')|(\"([^\"\\]|\\.)*\")|(\`([^\`\\]|\\.)*\`)
+  hexNumber: \b(?<!\$)0(?:x|X)[0-9a-fA-F][0-9a-fA-F_]*(n)?\b(?!\$)
+  binaryNumber: \b(?<!\$)0(?:b|B)[01][01_]*(n)?\b(?!\$)
+  decimalNumber: |-
+    (?<!\$)(?:
+      (?:\b[0-9][0-9_]*(\.)[0-9][0-9_]*[eE][+-]?[0-9][0-9_]*(n)?\b)| # 1.1E+3
+      (?:\b[0-9][0-9_]*(\.)[eE][+-]?[0-9][0-9_]*(n)?\b)|             # 1.E+3
+      (?:\B(\.)[0-9][0-9_]*[eE][+-]?[0-9][0-9_]*(n)?\b)|             # .1E+3
+      (?:\b[0-9][0-9_]*[eE][+-]?[0-9][0-9_]*(n)?\b)|                 # 1E+3
+      (?:\b[0-9][0-9_]*(\.)[0-9][0-9_]*(n)?\b)|                      # 1.1
+      (?:\b[0-9][0-9_]*(\.)(n)?\B)|                                  # 1.
+      (?:\B(\.)[0-9][0-9_]*(n)?\b)|                                  # .1
+      (?:\b[0-9][0-9_]*(n)?\b(?!\.))                                 # 1
+    )(?!\$)
+  anyNumber: ({{hexNumber}})|({{binaryNumber}})|({{decimalNumber}})
+  constructsAndModifiers: '(?:model|constraint|annotation|enum|import|interface|alias)\b'
+  endOfStatement: ';|(?:^\s*{{constructsAndModifiers}})'
+  matchingParenthesis: (\(([^\(\)]|(\([^\(\)]*\)))*\))
+  matchingBraces: (\{([^\{\}]|(\{[^\{\}]*\}))*\})
+  matchingBrackets: (\[([^\[\]]|(\[[^\[\]]*\]))*\])
+  inlineComment: \/\*([^\*]|(\*[^\/]))*\*\/
+  # Identifier start | matching braces | matching parenthesis | matching square brackets
+  typeParamersStart: ([_$[:alpha:]]|{{matchingBraces}}|{{matchingParenthesis}}|{{matchingBrackets}})
+  typeParameters: (<\s*{{typeParamersStart}}([^=<>]|=[^<]|\<\s*{{typeParamersStart}}([^=<>]|=[^<]|\<\s*{{typeParamersStart}}([^=<>]|=[^<])*\>)*\>)*>\s*)
+  # Identifier start | matching braces | matching parenthesis | matching square brackets | matching strings
+  typeArgumentsStart: (((keyof|infer|awaited|typeof|readonly)\s+)|(({{identifierPattern}}|{{matchingBraces}}|{{matchingParenthesis}}|{{matchingBrackets}}|{{quotedStrings}})(?=\s*([\<\>\,\.\[]|=>|&(?!&)|\|(?!\|)))))
+  typeArguments: '<\s*{{typeArgumentsStart}}({{typeArgumentsInnerExpressionPart}}|\<\s*{{typeArgumentsStart}}(({{typeArgumentsInnerExpressionPart}}|\<\s*{{typeArgumentsStart}}({{typeArgumentsInnerExpressionPart}})*(?<!=)\>))*(?<!=)\>)*(?<!=)>'
+  possiblyMultilineTypeArgument: (<\s*[\{\[\(]\s*$)
+  functionCallLookup: \s*(?:(\?\.\s*)|(\!))?(({{typeArguments}}\s*)?\()
+  functionCallNamedTarget: (({{identifierPattern}})(\s*{{propertyAccessPreIdentifier}}({{propertyIdentifier}}))*)|({{propertyAccessPreIdentifier}}{{propertyIdentifier}})
+  functionCallTarget: (({{functionCallNamedTarget}})|(?<=[\)]))
+  possiblyMultilineCallWithTypeArguments: \s*(?:(\?\.\s*)|(\!))?{{possiblyMultilineTypeArgument}}
+  possiblyType: \s*([^<>\(\)\{\}]|\<([^<>]|\<[^<>]+\>)+\>|\([^\(\)]+\)|\{[^\{\}]+\})+
+  startString: (?=\"|\'|\`)
+
+  import: \b(import)\b
+  as: \b(as)\b
+  identifier: '\b({{identifierPattern}})\b'
+  scopedIdentifier: '({{identifierPattern}})\s*(:)\s*({{identifierPattern}})'
+  model: \b(model)\b
+  interface: \b(interface)\b
+  annotation: \b(annotation)\b
+  constraint: \b(constraint)\b
+  enum: \b(enum)\b
+
+
+patterns:
+- include: '#statements'
+
+repository:
+  statements:
+    patterns:
+    - include: '#comment'
+    - include: '#import-declaration'
+    - include: '#model-declaration'
+    - include: '#interface-declaration'
+    - include: '#annotation-usage'
+    - include: '#annotation-declaration'
+    - begin: (?=\(([^\(\)]|(\([^\(\)]*\)))*\))\(
+      
+      end: \)
+      patterns:
+        - include: "#punctuation-comma"
+        - include: "#comment"
+        - match: ${identifier}
+          name: variable.parameter
+
+
+  comment:
+    patterns:
+    - name: comment.block.documentation
+      begin: /\*\*(?!/)
+      beginCaptures:
+        '0': { name: punctuation.definition.comment }
+      end: \*/
+      endCaptures:
+        '0': { name: punctuation.definition.comment }
+      # patterns:
+      # - include: '#docblock'
+    - name: comment.block
+      begin: (/\*)(?:\s*((@)internal)(?=\s|(\*/)))?
+      beginCaptures:
+        '1': { name: punctuation.definition.comment }
+        '2': { name: storage.type.internaldeclaration }
+        '3': { name: punctuation.decorator.internaldeclaration }
+      end: \*/
+      endCaptures:
+        '0': { name: punctuation.definition.comment }
+    - begin: (^[ \t]+)?((//)(?:\s*((@)internal)(?=\s|$))?)
+      beginCaptures:
+        '1': { name: punctuation.whitespace.comment.leading }
+        '2': { name: comment.line.double-slash }
+        '3': { name: punctuation.definition.comment }
+        '4': { name: storage.type.internaldeclaration }
+        '5': { name: punctuation.decorator.internaldeclaration }
+      end: (?=$)
+      contentName: comment.line.double-slash
+
+  single-line-comment-consuming-line-ending:
+    begin: (^[ \t]+)?((//)(?:\s*((@)internal)(?=\s|$))?)
+    beginCaptures:
+      '1': { name: punctuation.whitespace.comment.leading }
+      '2': { name: comment.line.double-slash }
+      '3': { name: punctuation.definition.comment }
+      '4': { name: storage.type.internaldeclaration }
+      '5': { name: punctuation.decorator.internaldeclaration }
+    end: (?=^)
+    contentName: comment.line.double-slash    
+
+  model-declaration: 
+    patterns: 
+    - begin: ${model}
+      beginCaptures: { '1': { name: storage.type.class }}
+      name: meta.foo
+
+      end: (?<=;|\})
+      patterns:
+      - begin: (\{)
+        name: meta.foo2
+        beginCaptures: { '1': { name: punctuation.definition.block } }
+
+        end: (?:\})
+        endCaptures: { '1': { name: punctuation.definition.block } }
+        patterns: # inside the braces
+          - include: "#comment"
+          - include: "#propertyDeclaration"
+          
+
+      - include: "#punctuation-colon"
+      - include: "#punctuation-comma"
+      - include: "#comment"
+      - match: ${scopedIdentifier}
+        captures: 
+          '1': { name: entity.name.type.namespace } 
+          '2': { name: punctuation.separator.colon } 
+          '3': { name: entity.name.type.class } 
+      - match: ${identifier}
+        captures: 
+          '1': { name: entity.name.type.class } 
+
+  interface-declaration: 
+    patterns: 
+    - begin: ${interface}
+      beginCaptures: { '1': { name: storage.type.interface }}
+      name: meta.interface
+
+      end: (?<=;|\})
+      patterns:
+      - begin: (\{)
+        name: meta.interface2
+        beginCaptures: { '1': { name: punctuation.definition.block } }
+
+        end: (?:\})
+        endCaptures: { '1': { name: punctuation.definition.block } }
+        patterns: # inside the braces
+          - include: '#annotation-usage'
+          - include: "#comment"
+          - include: "#methodDeclaration"
+
+      - include: "#punctuation-colon"
+      - include: "#punctuation-comma"
+      - include: "#comment"
+      - match: ${scopedIdentifier}
+        captures: 
+          '1': { name: entity.name.type.namespace } 
+          '2': { name: punctuation.separator.colon } 
+          '3': { name: entity.name.type.class } 
+      - match: ${identifier}
+        captures: 
+          '1': { name: entity.name.type.class } 
+
+  annotation-declaration:
+    begin: "${annotation}|${constraint}"
+    beginCaptures: 
+       '1': { name: storage.type.function }
+       '2': { name: storage.type.function }
+    name: meta.annotation
+
+    end: (?<=;|\})
+    patterns:
+    - begin: (\{)
+      name: meta.interface2
+      beginCaptures: { '1': { name: punctuation.definition.block } }
+
+      end: (?:\})
+      endCaptures: { '1': { name: punctuation.definition.block } }
+      patterns: # inside the braces
+        - include: '#annotation-usage'
+        - include: "#comment"
+        - include: "#methodDeclaration"
+
+    - include: "#punctuation-comma"
+    - include: "#comment"
+    - include: "#methodDeclaration"    
+    - match: ${identifier}
+      captures: 
+        '1': { name: entity.name.function  }
+
+  annotation-usage: 
+    patterns:
+      - begin: "(@)(${scopedIdentifier}|${identifier})"
+        beginCaptures: 
+          '1': { name: punctuation.separator }
+          '2': { name: entity.name.function } 
+          '3': { name: punctuation.separator.colon }
+          '4': { name: entity.name.function } 
+        
+        end: ${startOfIdentifier}
+        
+        patterns:
+          - include: "#annotationParameters"
+          - include: "#punctuation-comma"
+          - include: "#comment"
+          - include: "#string"
+          - include: "#numeric-literal"
+          - match: ${scopedIdentifier}
+            captures: 
+              '1': { name: entity.name.type.namespace } 
+              '2': { name: punctuation.separator.colon } 
+              '3': { name: entity.name.type.class } 
+          - match: ${identifier}
+            captures: 
+              '1': { name: entity.name.type.class }
+      - begin: "(\\[)(${scopedIdentifier}|${identifier})"
+        beginCaptures: 
+          '1': { name: punctuation.separator.bracket }
+          '2': { name: entity.name.function } 
+          '3': { name: punctuation.separator.colon }
+          '4': { name: entity.name.function } 
+        
+        end: "(\\])"
+        endCaptures: { '1': {name: punctuation.separator.bracket} }
+        patterns:
+          - include: "#punctuation-comma"
+          - include: "#comment"
+          - include: "#string"
+          - include: "#numeric-literal"
+          - match: ${scopedIdentifier}
+            captures: 
+              '1': { name: entity.name.type.namespace } 
+              '2': { name: punctuation.separator.colon } 
+              '3': { name: entity.name.type.class } 
+          - match: ${identifier}
+            captures: 
+              '1': { name: entity.name.type.class }           
+
+  import-declaration:
+    patterns:
+  
+    - name: meta.import.statement
+      begin: ${import}
+      end: \s*(?=;|$|^)
+      beginCaptures:
+        '1': { name: keyword.control.import  }
+
+      patterns:
+      - name: meta.import.target
+        patterns:
+        - begin: (\{)
+          beginCaptures: 
+            '1': { name: punctuation.definition.block } 
+
+          end: (\})
+          endCaptures: 
+            '1': { name: punctuation.definition.block } 
+
+          patterns:
+            - match: ${identifier}
+              captures: 
+                '1': { name: entity.name.function } 
+
+            - include: "#punctuation-comma"
+            - include: "#comment"
+
+        - match: ${as}
+          captures:
+            '1': { name: keyword.control.import }
+
+        - match: ${identifier}
+          captures: 
+            '1': { name: entity.name.type.module }
+       
+        - include: '#comment'
+      - include: '#comment'
+
+  punctuation-comma:
+    name: punctuation.separator.comma
+    match: ','
+
+  punctuation-colon:
+    name: punctuation.separator.colon
+    match: ':'
+
+  strings:
+    name: string.quoted.double.adl
+    begin: "\""
+    end: "\""
+    patterns:
+    - name: constant.character.escape.adl
+      match: "\\\\."
+
+  #strings and template strings
+  string:
+    patterns:
+    - include: '#qstring-single'
+    - include: '#qstring-double'
+    - include: '#template'
+
+  qstring-double:
+    name: string.quoted.double
+    begin: '"'
+    beginCaptures:
+      '0': { name: punctuation.definition.string.begin }
+    end: '(")|((?:[^\\\n])$)'
+    endCaptures:
+      '1': { name: punctuation.definition.string.end }
+      '2': { name: invalid.illegal.newline }
+    patterns:
+    - include: '#string-character-escape'
+
+  qstring-single:
+    name: string.quoted.single
+    begin: "'"
+    beginCaptures:
+      '0': { name: punctuation.definition.string.begin }
+    end: (\')|((?:[^\\\n])$)
+    endCaptures:
+      '1': { name: punctuation.definition.string.end }
+      '2': { name: invalid.illegal.newline }
+    patterns:
+    - include: '#string-character-escape'
+
+  string-character-escape:
+    name: constant.character.escape
+    match: \\(x[0-9A-Fa-f]{2}|u[0-9A-Fa-f]{4}|u\{[0-9A-Fa-f]+\}|[0-2][0-7]{0,2}|3[0-6][0-7]?|37[0-7]?|[4-7][0-7]?|.|$)
+
+  template:
+    patterns:
+    - name: string.template
+      begin: (?=(({{identifierPattern}}\s*{{propertyAccessPreIdentifier}})*|({{propertyAccessPreIdentifier}})?)({{identifierPattern}})({{typeArguments}}\s*)?`)
+      end: (?=`)
+      patterns:
+      - begin: (?=(({{identifierPattern}}\s*{{propertyAccessPreIdentifier}})*|({{propertyAccessPreIdentifier}})?)({{identifierPattern}}))
+        end: (?=({{typeArguments}}\s*)?`)
+        patterns:
+        - include: '#support-function-call-identifiers'
+        - name: entity.name.function.tagged-template
+          match: ({{identifierPattern}})
+      - include: '#type-arguments'
+    - name: string.template
+      begin: ({{identifierPattern}})\s*(?=({{typeArguments}}\s*)`)
+      beginCaptures:
+        '1': { name: entity.name.function.tagged-template }
+      end: (?=`)
+      patterns:
+      - include: '#type-arguments'
+    - name: string.template
+      begin: '({{identifierPattern}})?(`)'
+      beginCaptures:
+        '1': { name: entity.name.function.tagged-template }
+        '2': { name: punctuation.definition.string.template.begin }
+      end: '`'
+      endCaptures:
+        '0': { name: punctuation.definition.string.template.end}
+      patterns:
+       - include: '#template-substitution-element'
+       - include: '#string-character-escape'
+
+  template-substitution-element:
+    name: meta.template.expression
+    begin: \$\{
+    beginCaptures:
+      '0': { name: punctuation.definition.template-expression.begin }
+    end: \}
+    endCaptures:
+      '0': { name: punctuation.definition.template-expression.end }
+    patterns:
+      - include: '#expression'
+    contentName: meta.embedded.line
+
+  numeric-literal:
+    patterns:
+    - name: constant.numeric.hex
+      match: '{{hexNumber}}'
+      captures:
+        '1': { name: storage.type.numeric.bigint }
+    - name: constant.numeric.binary
+      match: '{{binaryNumber}}'
+      captures:
+        '1': { name: storage.type.numeric.bigint }
+    - match: |-
+        (?x)
+        {{decimalNumber}}
+      captures:
+        '0': {name: constant.numeric.decimal}
+        '1': {name: meta.delimiter.decimal.period}
+        '2': { name: storage.type.numeric.bigint }
+        '3': {name: meta.delimiter.decimal.period}
+        '4': { name: storage.type.numeric.bigint }
+        '5': {name: meta.delimiter.decimal.period}
+        '6': { name: storage.type.numeric.bigint }
+        '7': { name: storage.type.numeric.bigint }
+        '8': {name: meta.delimiter.decimal.period}
+        '9': { name: storage.type.numeric.bigint }
+        '10': {name: meta.delimiter.decimal.period}
+        '11': { name: storage.type.numeric.bigint }
+        '12': {name: meta.delimiter.decimal.period}
+        '13': { name: storage.type.numeric.bigint }
+        '14': { name: storage.type.numeric.bigint }
+  boolean-literal:
+    patterns:
+    - name: constant.language.boolean.true
+      match: '{{startOfIdentifier}}true{{endOfIdentifier}}'
+    - name: constant.language.boolean.false
+      match: '{{startOfIdentifier}}false{{endOfIdentifier}}'
+
+  null-literal:
+    name: constant.language.null
+    match: '{{startOfIdentifier}}null{{endOfIdentifier}}'
+
+  this-literal:
+    name: variable.language.this
+    match: '{{startOfIdentifier}}this\b(?!\$)'
+
+  super-literal:
+    name: variable.language.super
+    match: '{{startOfIdentifier}}super\b(?!\$)'
+
+  undefined-literal:
+    name: constant.language.undefined
+    match: '{{startOfIdentifier}}undefined{{endOfIdentifier}}'
+
+  numericConstant-literal:
+    patterns:
+    - name: constant.language.nan
+      match: '{{startOfIdentifier}}NaN{{endOfIdentifier}}'
+    - name: constant.language.infinity
+      match: '{{startOfIdentifier}}Infinity{{endOfIdentifier}}'
+
+  methodDeclaration:
+    patterns:
+      - begin: ${identifier}
+        beginCaptures: { '1': {name: entity.name.function }}
+        end: ;
+        
+        patterns: 
+          - include: "#comment"
+          - include: "#parametersDeclaration"
+
+      - begin: ${quotedStrings}
+        beginCaptures: 
+          '1': {name: entity.name.function}
+          '2': {name: entity.name.function}
+          '3': {name: entity.name.function}
+        end: ;
+
+        patterns: 
+          - include: "#comment"
+          - include: "#parametersDeclaration"
+
+  annotationParameters: 
+    begin: \(
+    beginCaptures: { '1': { name: punctuation.definition.block } }
+    name: meta.inAnoParams
+
+    end: "\\)"
+    endCaptures: { '1': { name: punctuation.definition.block } }
+    patterns: # inside the parens
+      - include: "#comment"
+      - include: "#annotationParam"
+
+  annotationParam: 
+    patterns:
+    - include: "#punctuation-comma"
+    - include: "#comment"
+    - include: "#string"
+    - include: "#numeric-literal"
+    - match: ${scopedIdentifier}
+      captures: 
+        '1': { name: entity.name.type.namespace } 
+        '2': { name: punctuation.separator.colon } 
+        '3': { name: entity.name.type.class } 
+    - match: ${identifier}
+      captures: 
+        '1': { name: entity.name.type.class }
+
+  parametersDeclaration: 
+    begin: \(
+    beginCaptures: { '1': { name: punctuation.definition.block } }
+    name: meta.inParams
+
+    end: "\\)"
+    endCaptures: { '1': { name: punctuation.definition.block } }
+    patterns: # inside the braces
+      - include: "#comment"
+      - include: "#paramDeclaration"
+    
+  paramDeclaration:
+    patterns:
+      - begin: ${identifier}
+        beginCaptures: { '1': {name: variable}}
+        end: (?=\)|,)
+        
+        patterns: 
+          - include: "#comment"
+          - include: '#annotation-usage'
+          - include: "#typeUsage"
+
+
+      - begin: ${quotedStrings}
+        beginCaptures: 
+          '1': {name: variable}
+          '2': {name: variable}
+          '3': {name: variable}
+        end: (?=\)|,)
+
+        patterns:
+          - include: "#comment"
+          - include: '#annotation-usage'
+          - include: "#typeUsage"
+
+  propertyDeclaration:
+    patterns:
+      - begin: ${identifier}
+        beginCaptures: { '1': {name: variable}}
+        end: ;
+        
+        patterns: 
+          - include: "#comment"
+          - include: '#annotation-usage'
+          - include: "#typeUsage"
+
+
+      - begin: ${quotedStrings}
+        beginCaptures: 
+          '1': {name: variable}
+          '2': {name: variable}
+          '3': {name: variable}
+        end: ;
+
+        patterns:
+          - include: "#comment"
+          - include: '#annotation-usage'
+          - include: "#typeUsage"
+            
+  typeUsage: 
+    patterns:
+      - match: ${scopedIdentifier}
+        captures: 
+          '1': { name: entity.name.type.namespace } 
+          '2': { name: punctuation.separator.colon } 
+          '3': { name: entity.name.type } 
+      - match: ${identifier}
+        captures: 
+          '1': { name: entity.name.type } 
+
+
+scopeName: source.adl

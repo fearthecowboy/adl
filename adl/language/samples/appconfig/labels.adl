@@ -1,0 +1,26 @@
+
+@resource('/labels')
+interface LabelsResource(
+  ... ServiceParams,
+  ... SyncTokenHeader
+) {
+
+  @doc("Gets a list of labels.")
+  @operationId("GetLabels")
+  list(
+    ... AcceptDatetimeHeader,
+
+    @query name?: string,
+    @query after?: string,
+  ): Ok<SyncTokenHeader & LabelPage> | Error;
+
+  @doc("Requests the headers and status of the given resource.")
+  @operationId("CheckLabels")
+  listHead(
+    ... AcceptDatetimeHeader,
+
+    @query name?: string,
+    @query after?: string,
+    @query $Select?: LabelField[],
+  ): Ok<SyncTokenHeader> | Error;
+}

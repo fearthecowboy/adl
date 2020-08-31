@@ -3,7 +3,6 @@
     "alwaysStrict": true,
     "forceConsistentCasingInFileNames": true,
     "module": "commonjs",
-    "noEmitOnError": true,
     "noImplicitAny": true,
     "noImplicitReturns": true,
     "noImplicitThis": true,

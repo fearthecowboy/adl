@@ -1,0 +1,17 @@
+@resource('/locks')
+interface LocksResource(
+  ... ServiceParams,
+  ... SyncTokenHeader
+) {
+  read(
+    @path key: string,
+    @query label: string,
+    ... ETagHeaders,
+  ): Ok<SyncTokenHeader & KeyValue> | Error;
+
+  delete(
+    @path key: string,
+    @query label: string,
+    ... ETagHeaders,
+  ): Ok<SyncTokenHeader & KeyValue> | Error;
+}

@@ -136,11 +136,14 @@ export function isModelInterface(declaration: InterfaceDeclaration) {
 
 export class Files {
   readonly api: ApiModel;
-  readonly files!: Array<ExtendedSourceFile>;
+  #files!: Array<ExtendedSourceFile>;
+  public get files(): Array<ExtendedSourceFile> {
+    return this.#files;
+  }
 
   protected constructor(api?: ApiModel, sourceFiles?: Array<ExtendedSourceFile>) {
     if (api) {
-      this.files = sourceFiles || api.files;
+      this.#files = sourceFiles || api.files;
     }
     this.api = api || (this instanceof ApiModel ? this : fail('requires api model in constructor'));
 

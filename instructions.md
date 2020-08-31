@@ -1,7 +1,7 @@
 # Build Instructions
 
 Prerequisites: 
-1. [Node.js](https://nodejs.org/en/download/) (>=10.13.0 <15.0.0)
+1. [Node.js](https://nodejs.org/en/download/) (>=14.0.0 <15.0.0)
 
 2. [Rush](https://rushjs.io/pages/intro/welcome/) 
 

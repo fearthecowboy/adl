@@ -18,8 +18,7 @@ export function exportFromPlugin(container: string, location: string, result: an
     // and added to the map
     if (name.endsWith('.js')) {
       try {
-        // eslint-disable-next-line @typescript-eslint/no-var-requires
-        const mod = require.cache[fullPath] ? require.cache[fullPath].exports : require(fullPath);
+        const mod = require.cache[fullPath]?.exports ?? require(fullPath);
 
         if (mod.default) {
           // files with a default export are added to the tree.

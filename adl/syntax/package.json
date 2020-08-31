@@ -1,0 +1,47 @@
+{
+  "name": "adl-syntax",
+  "displayName": "adl-syntax",
+  "description": "ADL Syntax Highlighting",
+  "publisher": "me",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.47.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "contributes": {
+    "languages": [
+      {
+        "id": "adl",
+        "aliases": [
+          "Api Description Language",
+          "adl"
+        ],
+        "extensions": [
+          ".adl"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "adl",
+        "scopeName": "source.adl",
+        "path": "./adl.tmLanguage"
+      }
+    ]
+  },
+  "scripts": {
+    "build": "npm run build:grammar",
+    "build:grammar": "tsc -b build -v && node build/build.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "js-yaml": "^3.14.0",
+    "@types/js-yaml": "latest",
+    "@types/node": "latest",
+    "plist": "^3.0.1"
+  }
+}

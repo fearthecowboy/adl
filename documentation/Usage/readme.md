@@ -4,7 +4,7 @@
 
 The following tools are needed to use the ADL CLI and the VSCode extension
 
-  - NodeJS 12+ (NodeJS 14+ has better perf, but 12 should do)
+  - NodeJS 14+
   - VSCode 
 
 ## Installing ADL tools, and the vscode extension

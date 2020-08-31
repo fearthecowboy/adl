@@ -1,19 +1,20 @@
 import { strictEqual } from 'assert';
 import { readFile } from 'fs/promises';
-import { describe, it } from 'mocha';
-import { Kind, Position, Scanner } from '../scanner';
+import { URL } from 'url';
+import { format } from '../compiler/messages.js';
+import { Kind, Position, Scanner } from '../compiler/scanner.js';
 
-type TokenEntry = [Kind, string?, 'error'?, Position?];
+type TokenEntry = [Kind, string?, Position?];
 
 function tokens(text: string): Array<TokenEntry> {
   const scanner = new Scanner(text);
   const result: Array<TokenEntry> = [];
   do {
     const token = scanner.scan();
+    strictEqual(token, scanner.token);
     result.push([
       scanner.token,
       scanner.value,
-      scanner.state,
       scanner.positionFromOffset(scanner.offset)
     ]);
   } while (!scanner.eof);
@@ -88,9 +89,75 @@ describe('scanner', () => {
       [Kind.CloseParen]
     ]);
   });
-  /** verifies that this compiled js file parses tokens that are the same as the input.  */
+
+  it('does not scan greater-than-equals as one operator', () => {
+    const all = tokens('x>=y');
+    verify(all, [
+      [Kind.Identifier],
+      [Kind.GreaterThan],
+      [Kind.Equals],
+      [Kind.Identifier]
+    ]);
+  });
+
+  it('rescans >=', () => {
+    const scanner = new Scanner('x>=y');
+    scanner.scan();
+    strictEqual(scanner.scan(), Kind.GreaterThan);
+    strictEqual(scanner.rescanGreaterThan(), Kind.GreaterThanEquals);
+  });
+
+  it('rescans >>=', () => {
+    const scanner = new Scanner('x>>=');
+    scanner.scan();
+    strictEqual(scanner.scan(), Kind.GreaterThan);
+    strictEqual(scanner.rescanGreaterThan(), Kind.GreaterThanGreaterThanEquals);
+  });
+
+  it('rescans >>', () => {
+    const scanner = new Scanner('x>>y');
+    scanner.scan();
+    strictEqual(scanner.scan(), Kind.GreaterThan);
+    strictEqual(scanner.rescanGreaterThan(), Kind.GreaterThanGreaterThan);
+  });
+
+  function scanString(text: string, expectedValue: string) {
+    const scanner = new Scanner(text);
+    scanner.onError = (msg, params) => { throw new Error(format(msg.text, ...params)); };
+    strictEqual(scanner.scan(), Kind.StringLiteral);
+    strictEqual(scanner.token, Kind.StringLiteral);
+    strictEqual(scanner.value, text);
+    strictEqual(scanner.stringValue, expectedValue);
+  }
+
+  it('scans strings single-line strings with escape sequences', () => {
+    scanString(
+      '"Hello world \\r\\n \\t \\\' \\" \\` \\\\ !"',
+      'Hello world \r\n \t \' " ` \\ !');
+  });
+
+  it('scans multi-line strings', () => {
+    scanString(
+      '`More\r\nthan\r\none\r\nline`',
+      'More\nthan\none\nline');
+  });
+
+  it('scans triple-quoted strings', () => {
+    scanString(
+      `"""   
+      This is a triple-quoted string
+
+  
+      
+      And this is another line
+      """`,
+      // NOTE: sloppy blank line formatting and trailing whitespace after open
+      //       quotes above is deliberately tolerated.
+      'This is a triple-quoted string\n\n\n\nAnd this is another line');
+  });
+
   it('parses this file', async () => {
-    const text = await readFile(__filename, 'utf-8');
+    const text = await readFile(new URL(import.meta.url), 'utf-8');
     const all = tokens(text);
   });
 });

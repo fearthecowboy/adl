@@ -1,0 +1,82 @@
+model ETagHeader {
+  @header eTag: string;
+}
+
+model ETagHeaders {
+  @header ifMatch: string;
+  @header ifNoneMatch: string;
+}
+
+model LastModifiedHeader {
+  @header lastModified: date;
+}
+
+model AcceptDatetimeHeader {
+  @header acceptDatetime: date;
+}
+
+model Ok<T> {
+  @header statusCode: 200;
+  ... T;
+}
+
+model SyncTokenHeader {
+  @doc "Used to guarantee real-time consistency between requests."
+  @header syncToken?: string;
+}
+
+model ServiceParams {
+  @query apiVersion: string;
+}
+
+@doc "Azure App Configuration error object."
+model Error {
+  @doc "The type of the error"
+  type: string;
+
+  @doc "A brief summary of the error."
+  title: string;
+
+  @doc "The name of the parameter that resulted in the error."
+  name: string;
+
+  @doc "A detailed description of the error."
+  detail: string;
+
+  @doc "The HTTP status code that the error maps to." 
+  statusCode: int32;
+}
+
+model Page<T> {
+  items: T[];
+  nextLink: string;
+}
+
+model KeyValuePage = Page<KeyValue>;
+model KeyPage = Page<Key>;
+
+model Label {
+  name: string;
+}
+model LabelPage = Page<Label>;
+
+
+model KeyValueHeaders =
+    SyncTokenHeader
+  & LastModifiedHeader
+  & ETagHeader;
+
+model KeyValue = Key & Value;
+
+model Key {
+  key: string;
+}
+
+model Value {
+  label?: string;
+  tags: Map<string, string>;
+  locked: boolean;
+}
+
+model KeyField = "key" | "label" | "content_type" | "value" | "last_modified" | "tags" ;
+model LabelField = "name";

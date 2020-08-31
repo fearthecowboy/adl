@@ -24,8 +24,7 @@ rules:
     - 'error'
     - overrides:
         this: 
-          before: false 
-  
+          before: false
   "@typescript-eslint/no-non-null-assertion": 'off'
   "@typescript-eslint/no-use-before-define" : 'off'
   "@typescript-eslint/no-this-alias" : 'off'
@@ -40,10 +39,9 @@ rules:
   "@typescript-eslint/no-angle-bracket-type-assertion" : 'off'
   "@typescript-eslint/no-floating-promises": 'error'
   "require-atomic-updates" : 'off'
-  '@typescript-eslint/consistent-type-assertions' : 
+  "@typescript-eslint/consistent-type-assertions" :
     - error
     - assertionStyle: 'angle-bracket'
-    
   "@typescript-eslint/array-type":
   - error
   - default: generic

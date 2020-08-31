@@ -1,0 +1,31 @@
+
+@resource('/revisions')
+interface RevisionsResource(
+  ... ServiceParams,
+  ... SyncTokenHeader
+) {
+
+  @doc "Gets a list of revisions."
+  @operationId "GetRevisions"
+  list(
+    ... AcceptDatetimeHeader,
+
+    @doc "Used to select what fields are present in the returned resource(s)."
+    @query $Select?: KeyField[],
+
+    @doc "A filter used to match labels"
+    @query label: string,
+
+    @doc "A filter used to match keys."
+    @query key: string,
+  ): Ok<SyncTokenHeader & Page<KeyValue>> | Error;
+
+  @doc "Requests the headers and status of the given resource."
+  @operationId "CheckRevisions"
+  listHead(
+    ... AcceptDatetimeHeader,
+
+    @query name: string,
+    @query after: string,
+  ): Ok<SyncTokenHeader> | Error;
+}
