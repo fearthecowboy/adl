@@ -1,5 +1,4 @@
-import { isInline, Rule } from '@azure-tools/adl.core';
-import { ExtendedSourceFile } from '@azure-tools/adl.core/dist/model/api-model';
+import { ExtendedSourceFile, isInline, Rule } from '@azure-tools/adl.core';
 
 export default <Rule>{
   activation: 'edit',
@@ -15,7 +14,7 @@ export default <Rule>{
     const type = property.type;
     if (isInline(type)) {
       return {
-        message: 'The type of this property is inlined.',
+        message: `The type of the property '${property.name}' is inlined.`,
         suggestions: [
           {
 

@@ -1,5 +1,5 @@
 export { Fix, LinterDiagnostic, Rule, RuleResult, RuleSeverity } from './linter/rule';
-export { ApiModel } from './model/api-model';
+export { ApiModel, ExtendedSourceFile } from './model/api-model';
 export { Method } from './model/http/operation';
 export { OperationGroup } from './model/operation';
 export { Protocol } from './model/project/protocol';

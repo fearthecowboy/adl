@@ -1,0 +1,13 @@
+# API Project/Metadata
+
+# load the sample rules
+use:
+  - ../../../../../plugins/azure
+
+override: 
+  # specifying metdata changes for a bunch of rules: 
+  azure/rules/.*:        # a regex to match the rule id (may match multiple rules)
+    activation: disabled
+
+  azure/rules/description-required:
+    activation: edit

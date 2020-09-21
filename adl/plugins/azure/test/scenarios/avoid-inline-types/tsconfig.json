@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "typeRoots": [
+      ".adl\\.extensions"
+    ],
+    "types": [
+      "@azure-tools/adl.rules.azure"
+    ],
+    "skipDefaultLibCheck": true
+  }
+}

@@ -12,7 +12,7 @@
     "build": "tsc -p .",
     "watch": "tsc -p . --watch",
     "prepare": "npm run build",
-    "test": "npm run build && echo - no tests yet mocha dist/test"
+    "test": "mocha dist/test --timeout 200000"
   },
   "repository": {
     "type": "git",
@@ -36,6 +36,8 @@
     "@azure-tools/linq": "~4.0.0",
     "@typescript-eslint/parser": "2.28.0",
     "eslint": "6.8.0",
-    "@azure-tools/adl.core": "~0.1.0"
+    "@azure-tools/adl.core": "~0.1.0",
+    "@types/mocha": "~7.0.2",
+    "@testdeck/mocha": "~0.1.0"
   }
 }

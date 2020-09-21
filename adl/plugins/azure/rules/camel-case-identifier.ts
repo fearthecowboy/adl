@@ -7,7 +7,6 @@ export default <Rule>{
     severity: 'warning',
     description: 'PLACEHOLDER',
     documentationUrl: 'PLACEHOLDER',
-
   },
   onParameter: (model, parameter) => checkCamelCaseIdentifier('parameter', parameter),
   onProperty: (model, property) => checkCamelCaseIdentifier('property', property),
