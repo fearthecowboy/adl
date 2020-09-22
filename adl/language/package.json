@@ -12,7 +12,7 @@
     "build": "tsc -p .",
     "watch": "tsc -p . --watch",
     "prepare": "npm run build",
-    "test": "mocha 'dist/test/**/*.js'"
+    "test-generation": "node dist/compiler/program.js appconfig && autorest --csharp --input-file:./samples/appconfig/swagger.json --output-folder:./samples/appconfig/generated"
   },
   "repository": {
     "type": "git",
@@ -30,6 +30,7 @@
   "homepage": "https://github.com/Azure/adl#readme",
   "readme": "https://github.com/Azure/adl/blob/master/readme.md",
   "devDependencies": {
+    "autorest": "*",
     "@types/mocha": "^7.0.2",
     "@types/node": "14.0.27",
     "@typescript-eslint/eslint-plugin": "2.28.0",

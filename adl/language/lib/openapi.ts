@@ -1,3 +1,5 @@
+import { writeFileSync } from 'fs';
+import { join } from 'path';
 import { Program } from '../compiler/program.js';
 import { ArrayType, InterfaceType, InterfaceTypeProperty as InterfacePropertyType, ModelType, ModelTypeProperty as ModelPropertyType, Type, UnionType } from '../compiler/types.js';
 import { getDoc } from './decorators.js';
@@ -57,7 +59,7 @@ function createOAPIEmitter(program: Program) {
     }
     emitReferences();
 
-    console.log(JSON.stringify(root, null, 4));
+    writeFileSync(join(program.rootDir, 'swagger.json'), JSON.stringify(root, null, 2));
   }
 
   function emitResource(resource: InterfaceType) {
@@ -156,6 +158,9 @@ function createOAPIEmitter(program: Program) {
     currentEndpoint = currentPath[verb];
     if (operationIds.has(prop)) {
       currentEndpoint.operationId = operationIds.get(prop);
+    } else {
+      // HACK: put in an operation id when there isn't one 
+      currentEndpoint.operationId = `operation_${Math.round(Math.random() * 1000000)}`;
     }
     currentEndpoint.summary = getDoc(prop);
     currentEndpoint.consumes = [];
@@ -313,11 +318,19 @@ function createOAPIEmitter(program: Program) {
       schema = getSchemaForType(param.type);
       if (param.type.kind == 'Array') {
         schema.items = getSchemaForType(param.type.elementType);
+        // HACK: collectionFormat should not be none
+        if (kind === 'query') {
+          if (!ph.collectionFormat) {
+            ph.collectionFormat = 'csv';
+          }
+        }
       }
       for (const property in schema) {
         ph[property] = schema[property];
       }
     }
+
+
 
     if (kind === 'body') {
       let contentType = 'application/json';

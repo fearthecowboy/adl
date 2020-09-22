@@ -20,6 +20,7 @@ export interface Program {
   typeCache: MultiKeyMap<Type>;
   literalTypes: Map<string | number | boolean, LiteralType>;
   checker?: ReturnType<typeof createChecker>;
+  rootDir: string;
   onBuild(cb: (program: Program) => void): void;
   executeInterfaceDecorators(type: InterfaceType): void;
   executeModelDecorators(type: ModelType): void;
@@ -48,6 +49,7 @@ export async function compile(rootDir: string) {
     onBuild(cb) {
       buildCbs.push(cb);
     },
+    rootDir,
   };
 
   await loadStandardLibrary(program);

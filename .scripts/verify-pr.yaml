@@ -16,6 +16,10 @@ steps:
     npm install -g npm 
     rc=$?; if [ $rc -ne 0 ]; then exit $rc ; fi
     
+    npm install -g autorest
+    rc=$?; if [ $rc -ne 0 ]; then exit $rc ; fi
+    autorest --reset 
+
     npx @microsoft/rush update 
     rc=$?; if [ $rc -ne 0 ]; then exit $rc ; fi
     
@@ -34,4 +38,8 @@ steps:
       exit 1
     fi
 
+    # make some swaggers.
+    cd adl/language
+    npm run test-generation
+    
   displayName: 'Rush install, build and test'
