@@ -41,5 +41,6 @@ steps:
     # make some swaggers.
     cd adl/language
     npm run test-generation
+    ls -tarl samples/appconfig
     
   displayName: 'Rush install, build and test'
