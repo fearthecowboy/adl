@@ -12,7 +12,7 @@ steps:
     versionSpec: '3.8'
     addToPath: true
     architecture: 'x64'
-    
+
 - task: NodeTool@0
   inputs:
     versionSpec: '14.x'
@@ -47,6 +47,6 @@ steps:
     # make some swaggers.
     cd adl/language
     npm run test-generation
-    ls -tarl samples/appconfig/generated
+    ls -tarlR samples/appconfig/generated
     
   displayName: 'Rush install, build and test'
