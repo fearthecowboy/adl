@@ -37,8 +37,29 @@ Required Decorators
 
 ## ARM Decorators
 ---
-resource
+  If done correctly, we proably only need a couple of resource patterns
 
+  |ResourceType|Implication|
+  |--|--|
+  |(abstract) `resource`| A resource in ARM. Requires (`id`,`name`,`type`, `properties` - optional `etag`) |
+  |`trackedResource`| Resource that's actually tracked by ARM (`location`, `tags`) | 
+  |`proxyResource`| Resource that's NOT tracked by ARM (`location`, `tags`) | 
+  
+  We're going to need:
+    - `namespace` (ie, `Microsoft.Compute`)
+    - `Name` (ie, `virtualMachine`)
+    - The inner `properties` type (ie, `VirtualMachineProperties`)
+    - options:
+      - subscription-level resource (ie, no resource group)
+      - accounting for additional (permitted) properties in resource declaration? (ie, kind, managedBy, identity, sku, plan are permitted in the resource object root, but are not present in all resources)
+  
+
+  |Signature|Applies To|Purpose|
+  |--|--|--|
+  |`trackedResource(namespace:string, resourceName: string,  resourcePropertyType: model)` | `interface` | declares that an interface represents an ARM Resource.|
+  |`subResource( resourceName: string,  resourcePropertyType: model)` | `interface` | declares that an interface represents an ARM sub Resource (nested in another resource.) the path will be relative to the parent.|
+
+  Still Needed: LRO variatons, Pageable variations, 
 
 ## Common Decorators
 ---
