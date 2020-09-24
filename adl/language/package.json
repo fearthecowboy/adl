@@ -13,7 +13,7 @@
     "watch": "tsc -p . --watch",
     "prepare": "npm run build",
     "test": "mocha 'dist/test/**/*.js'",
-    "test-generation": "node dist/compiler/program.js appconfig && autorest --csharp --input-file:./samples/appconfig/swagger.json --output-folder:./samples/appconfig/generated"
+    "test-generation": "node dist/compiler/program.js appconfig && autorest --python --input-file:./samples/appconfig/swagger.json --output-folder:./samples/appconfig/generated"
   },
   "repository": {
     "type": "git",
