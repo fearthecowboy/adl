@@ -1,3 +1,4 @@
+@doc "Success"
 model Ok<T> {
   @header statusCode: 200;
   ... T;
@@ -8,6 +9,7 @@ model Pet {
   tag?: string;
 }
 
+@doc "Error"
 model Error {
   code: int32;
   message: string;
@@ -19,6 +21,7 @@ model Toy {
   name: string;
 }
 
+@doc "Not modified"
 model NotModified<T> {
   @header statusCode: 304;
   ... T;

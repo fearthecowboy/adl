@@ -3,12 +3,14 @@ interface LocksResource(
   ... ServiceParams,
   ... SyncTokenHeader
 ) {
+  @operationId("GetLock")
   read(
     @path key: string,
     @query label: string,
     ... ETagHeaders,
   ): Ok<SyncTokenHeader & KeyValue> | Error;
 
+  @operationId("DeleteLock")
   delete(
     @path key: string,
     @query label: string,

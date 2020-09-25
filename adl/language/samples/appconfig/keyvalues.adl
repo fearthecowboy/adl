@@ -82,6 +82,7 @@ interface KeyValuesResource(
   ): Ok<KeyValueHeaders & KeyValue> | Error;
 
   @doc("Updates a key-value pair")
+  @operationId("UpdateKeyValue")
   createOrUpdate(
     ... ETagHeaders,
     ... KeyWithFilters,

@@ -15,6 +15,7 @@ model AcceptDatetimeHeader {
   @header acceptDatetime: date;
 }
 
+@doc "Success"
 model Ok<T> {
   @header statusCode: 200;
   ... T;
