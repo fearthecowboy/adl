@@ -1,0 +1,1023 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "(title)",
+    "version": "0000-00-00"
+  },
+  "schemes": [
+    "https"
+  ],
+  "paths": {
+    "/keys": {
+      "get": {
+        "operationId": "GetKeys",
+        "summary": "Gets a list of keys.",
+        "consumes": [],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/parameters/ServiceParams"
+          },
+          {
+            "$ref": "#/parameters/SyncTokenHeader"
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "after",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "$ref": "#/parameters/AcceptDatetimeHeader"
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/KeyPage"
+            },
+            "description": "Success",
+            "headers": {
+              "sync-token": {
+                "description": "Used to guarantee real-time consistency between requests.",
+                "type": "string"
+              }
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            },
+            "description": "Azure App Configuration error object."
+          }
+        }
+      }
+    },
+    "/keys/listHead": {
+      "get": {
+        "operationId": "CheckKeys",
+        "summary": "Requests the headers and status of the given resource.",
+        "consumes": [],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/parameters/ServiceParams"
+          },
+          {
+            "$ref": "#/parameters/SyncTokenHeader"
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "after",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "$ref": "#/parameters/AcceptDatetimeHeader"
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "type": "object",
+              "properties": {},
+              "x-adl-name": "{}"
+            },
+            "description": "Success",
+            "headers": {
+              "sync-token": {
+                "description": "Used to guarantee real-time consistency between requests.",
+                "type": "string"
+              }
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            },
+            "description": "Azure App Configuration error object."
+          }
+        }
+      }
+    },
+    "/kv": {
+      "get": {
+        "operationId": "whatever",
+        "consumes": [],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/parameters/ServiceParams"
+          },
+          {
+            "$ref": "#/parameters/SyncTokenHeader"
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/bytes"
+            },
+            "description": "Success"
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            },
+            "description": "Azure App Configuration error object."
+          }
+        }
+      }
+    },
+    "/kv/listHead": {
+      "get": {
+        "operationId": "CheckKeyValues",
+        "summary": "Gets a list of key-values.",
+        "consumes": [],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/parameters/ServiceParams"
+          },
+          {
+            "$ref": "#/parameters/SyncTokenHeader"
+          },
+          {
+            "name": "After",
+            "in": "query",
+            "required": true,
+            "description": "Instructs the server to return elements that appear after the element referred to by the specified token.",
+            "type": "string",
+            "format": "date"
+          },
+          {
+            "name": "$Select",
+            "in": "query",
+            "required": false,
+            "description": "Used to select what fields are present in the returned resource(s).",
+            "collectionFormat": "csv",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "key",
+                "label",
+                "content_type",
+                "value",
+                "last_modified",
+                "tags"
+              ]
+            }
+          },
+          {
+            "$ref": "#/parameters/AcceptDatetimeHeader"
+          },
+          {
+            "$ref": "#/parameters/KeyFilters.key"
+          },
+          {
+            "$ref": "#/parameters/KeyFilters.label"
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "type": "object",
+              "properties": {},
+              "x-adl-name": "{}"
+            },
+            "description": "Success",
+            "headers": {
+              "sync-token": {
+                "description": "Used to guarantee real-time consistency between requests.",
+                "type": "string"
+              }
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            },
+            "description": "Azure App Configuration error object."
+          }
+        }
+      }
+    },
+    "/kv/readHead/{key}": {
+      "get": {
+        "operationId": "CheckKeyValue",
+        "summary": "Requests the headers and status of the given resource.",
+        "consumes": [],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/parameters/ServiceParams"
+          },
+          {
+            "$ref": "#/parameters/SyncTokenHeader"
+          },
+          {
+            "$ref": "#/parameters/ETagHeaders.ifMatch"
+          },
+          {
+            "$ref": "#/parameters/ETagHeaders.ifNoneMatch"
+          },
+          {
+            "$ref": "#/parameters/AcceptDatetimeHeader"
+          },
+          {
+            "$ref": "#/parameters/KeyWithFilters.key"
+          },
+          {
+            "$ref": "#/parameters/KeyWithFilters.label"
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "type": "object",
+              "properties": {},
+              "x-adl-name": "{}"
+            },
+            "description": "Success",
+            "headers": {
+              "sync-token": {
+                "description": "Used to guarantee real-time consistency between requests.",
+                "type": "string"
+              },
+              "last-modified": {
+                "type": "string",
+                "format": "date"
+              }
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            },
+            "description": "Azure App Configuration error object."
+          }
+        }
+      }
+    },
+    "/kv/createOrUpdate/{key}": {
+      "get": {
+        "operationId": "UpdateKeyValue",
+        "summary": "Updates a key-value pair",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/parameters/ServiceParams"
+          },
+          {
+            "$ref": "#/parameters/SyncTokenHeader"
+          },
+          {
+            "name": "contentType",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "enum": [
+              "application/json-patch+json"
+            ]
+          },
+          {
+            "name": "jsonPatch",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "x-adl-name": "string[]"
+            }
+          },
+          {
+            "$ref": "#/parameters/ETagHeaders.ifMatch"
+          },
+          {
+            "$ref": "#/parameters/ETagHeaders.ifNoneMatch"
+          },
+          {
+            "$ref": "#/parameters/KeyWithFilters.key"
+          },
+          {
+            "$ref": "#/parameters/KeyWithFilters.label"
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/KeyValue"
+            },
+            "description": "Success",
+            "headers": {
+              "sync-token": {
+                "description": "Used to guarantee real-time consistency between requests.",
+                "type": "string"
+              },
+              "last-modified": {
+                "type": "string",
+                "format": "date"
+              },
+              "e-tag": {
+                "type": "string"
+              }
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            },
+            "description": "Azure App Configuration error object."
+          }
+        }
+      }
+    },
+    "/kv/{key}": {
+      "delete": {
+        "operationId": "DeleteKeyValue",
+        "summary": "Deletes a key-value.",
+        "consumes": [],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/parameters/ServiceParams"
+          },
+          {
+            "$ref": "#/parameters/SyncTokenHeader"
+          },
+          {
+            "name": "ifMatch",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "$ref": "#/parameters/KeyWithFilters.key"
+          },
+          {
+            "$ref": "#/parameters/KeyWithFilters.label"
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/KeyValue"
+            },
+            "description": "Success",
+            "headers": {
+              "sync-token": {
+                "description": "Used to guarantee real-time consistency between requests.",
+                "type": "string"
+              },
+              "last-modified": {
+                "type": "string",
+                "format": "date"
+              },
+              "e-tag": {
+                "type": "string"
+              }
+            }
+          },
+          "304": {
+            "schema": {
+              "type": "object",
+              "properties": {},
+              "x-adl-name": "{}"
+            },
+            "description": ""
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            },
+            "description": "Azure App Configuration error object."
+          }
+        }
+      }
+    },
+    "/labels": {
+      "get": {
+        "operationId": "GetLabels",
+        "summary": "Gets a list of labels.",
+        "consumes": [],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/parameters/ServiceParams"
+          },
+          {
+            "$ref": "#/parameters/SyncTokenHeader"
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "after",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "$ref": "#/parameters/AcceptDatetimeHeader"
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/LabelPage"
+            },
+            "description": "Success",
+            "headers": {
+              "sync-token": {
+                "description": "Used to guarantee real-time consistency between requests.",
+                "type": "string"
+              }
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            },
+            "description": "Azure App Configuration error object."
+          }
+        }
+      }
+    },
+    "/labels/listHead": {
+      "get": {
+        "operationId": "CheckLabels",
+        "summary": "Requests the headers and status of the given resource.",
+        "consumes": [],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/parameters/ServiceParams"
+          },
+          {
+            "$ref": "#/parameters/SyncTokenHeader"
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "after",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "$Select",
+            "in": "query",
+            "required": false,
+            "collectionFormat": "csv",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "name"
+              ]
+            }
+          },
+          {
+            "$ref": "#/parameters/AcceptDatetimeHeader"
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "type": "object",
+              "properties": {},
+              "x-adl-name": "{}"
+            },
+            "description": "Success",
+            "headers": {
+              "sync-token": {
+                "description": "Used to guarantee real-time consistency between requests.",
+                "type": "string"
+              }
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            },
+            "description": "Azure App Configuration error object."
+          }
+        }
+      }
+    },
+    "/locks/{key}": {
+      "get": {
+        "operationId": "GetLock",
+        "consumes": [],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/parameters/ServiceParams"
+          },
+          {
+            "$ref": "#/parameters/SyncTokenHeader"
+          },
+          {
+            "name": "key",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "label",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "$ref": "#/parameters/ETagHeaders.ifMatch"
+          },
+          {
+            "$ref": "#/parameters/ETagHeaders.ifNoneMatch"
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/KeyValue"
+            },
+            "description": "Success",
+            "headers": {
+              "sync-token": {
+                "description": "Used to guarantee real-time consistency between requests.",
+                "type": "string"
+              }
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            },
+            "description": "Azure App Configuration error object."
+          }
+        }
+      },
+      "delete": {
+        "operationId": "DeleteLock",
+        "consumes": [],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/parameters/ServiceParams"
+          },
+          {
+            "$ref": "#/parameters/SyncTokenHeader"
+          },
+          {
+            "name": "key",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "label",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "$ref": "#/parameters/ETagHeaders.ifMatch"
+          },
+          {
+            "$ref": "#/parameters/ETagHeaders.ifNoneMatch"
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/KeyValue"
+            },
+            "description": "Success",
+            "headers": {
+              "sync-token": {
+                "description": "Used to guarantee real-time consistency between requests.",
+                "type": "string"
+              }
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            },
+            "description": "Azure App Configuration error object."
+          }
+        }
+      }
+    },
+    "/revisions": {
+      "get": {
+        "operationId": "GetRevisions",
+        "summary": "Gets a list of revisions.",
+        "consumes": [],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/parameters/ServiceParams"
+          },
+          {
+            "$ref": "#/parameters/SyncTokenHeader"
+          },
+          {
+            "name": "$Select",
+            "in": "query",
+            "required": false,
+            "description": "Used to select what fields are present in the returned resource(s).",
+            "collectionFormat": "csv",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "key",
+                "label",
+                "content_type",
+                "value",
+                "last_modified",
+                "tags"
+              ]
+            }
+          },
+          {
+            "name": "label",
+            "in": "query",
+            "required": true,
+            "description": "A filter used to match labels",
+            "type": "string"
+          },
+          {
+            "name": "key",
+            "in": "query",
+            "required": true,
+            "description": "A filter used to match keys.",
+            "type": "string"
+          },
+          {
+            "$ref": "#/parameters/AcceptDatetimeHeader"
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "items": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/KeyValue"
+                  },
+                  "x-adl-name": "KeyValue[]"
+                },
+                "nextLink": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "items",
+                "nextLink"
+              ],
+              "x-adl-name": "Page<KeyValue>"
+            },
+            "description": "Success",
+            "headers": {
+              "sync-token": {
+                "description": "Used to guarantee real-time consistency between requests.",
+                "type": "string"
+              }
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            },
+            "description": "Azure App Configuration error object."
+          }
+        }
+      }
+    },
+    "/revisions/listHead": {
+      "get": {
+        "operationId": "CheckRevisions",
+        "summary": "Requests the headers and status of the given resource.",
+        "consumes": [],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/parameters/ServiceParams"
+          },
+          {
+            "$ref": "#/parameters/SyncTokenHeader"
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "after",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "$ref": "#/parameters/AcceptDatetimeHeader"
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "type": "object",
+              "properties": {},
+              "x-adl-name": "{}"
+            },
+            "description": "Success",
+            "headers": {
+              "sync-token": {
+                "description": "Used to guarantee real-time consistency between requests.",
+                "type": "string"
+              }
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            },
+            "description": "Azure App Configuration error object."
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "KeyPage": {
+      "type": "object",
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Key"
+          },
+          "x-adl-name": "Key[]"
+        },
+        "nextLink": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "items",
+        "nextLink"
+      ]
+    },
+    "Error": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "The type of the error"
+        },
+        "title": {
+          "type": "string",
+          "description": "A brief summary of the error."
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of the parameter that resulted in the error."
+        },
+        "detail": {
+          "type": "string",
+          "description": "A detailed description of the error."
+        },
+        "statusCode": {
+          "type": "integer",
+          "format": "int32",
+          "description": "The HTTP status code that the error maps to."
+        }
+      },
+      "description": "Azure App Configuration error object.",
+      "required": [
+        "type",
+        "title",
+        "name",
+        "detail",
+        "statusCode"
+      ]
+    },
+    "KeyValue": {
+      "type": "object",
+      "properties": {},
+      "allOf": [
+        {
+          "$ref": "#/definitions/Key"
+        },
+        {
+          "$ref": "#/definitions/Value"
+        }
+      ]
+    },
+    "bytes": {
+      "type": "object",
+      "properties": {
+        "thisthinghere": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "format": "byte"
+          },
+          "x-adl-name": "byte[]"
+        }
+      },
+      "required": [
+        "thisthinghere"
+      ]
+    },
+    "LabelPage": {
+      "type": "object",
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Label"
+          },
+          "x-adl-name": "Label[]"
+        },
+        "nextLink": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "items",
+        "nextLink"
+      ]
+    },
+    "Key": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "key"
+      ]
+    },
+    "Value": {
+      "type": "object",
+      "properties": {
+        "label": {
+          "type": "string"
+        },
+        "tags": {
+          "type": "object",
+          "properties": {
+            "k": {
+              "type": "string"
+            },
+            "v": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "k",
+            "v"
+          ],
+          "x-adl-name": "Map<string, string>"
+        },
+        "locked": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "tags",
+        "locked"
+      ]
+    },
+    "Label": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name"
+      ]
+    }
+  },
+  "parameters": {
+    "ServiceParams": {
+      "name": "apiVersion",
+      "in": "query",
+      "required": true,
+      "type": "string"
+    },
+    "SyncTokenHeader": {
+      "name": "syncToken",
+      "in": "header",
+      "required": false,
+      "description": "Used to guarantee real-time consistency between requests.",
+      "type": "string"
+    },
+    "AcceptDatetimeHeader": {
+      "name": "acceptDatetime",
+      "in": "header",
+      "required": true,
+      "type": "string",
+      "format": "date"
+    },
+    "KeyFilters.key": {
+      "name": "key",
+      "in": "query",
+      "required": false,
+      "description": "A filter for the name of the returned keys.",
+      "type": "string"
+    },
+    "KeyFilters.label": {
+      "name": "label",
+      "in": "query",
+      "required": false,
+      "description": "A filter used to match labels",
+      "type": "string"
+    },
+    "ETagHeaders.ifMatch": {
+      "name": "ifMatch",
+      "in": "header",
+      "required": true,
+      "type": "string"
+    },
+    "ETagHeaders.ifNoneMatch": {
+      "name": "ifNoneMatch",
+      "in": "header",
+      "required": true,
+      "type": "string"
+    },
+    "KeyWithFilters.key": {
+      "name": "key",
+      "in": "path",
+      "required": true,
+      "description": "A filter for the name of the returned keys.",
+      "type": "string"
+    },
+    "KeyWithFilters.label": {
+      "name": "label",
+      "in": "query",
+      "required": false,
+      "description": "A filter used to match labels",
+      "type": "string"
+    }
+  }
+}

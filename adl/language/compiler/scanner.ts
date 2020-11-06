@@ -1,5 +1,6 @@
-import { CharacterCodes, isBinaryDigit, isDigit, isHexDigit, isIdentifierPart, isIdentifierStart, isLineBreak, isWhiteSpaceSingleLine, sizeOf } from './character-codes.js';
-import { format, Message, messages } from './messages.js';
+import { Token } from '../api/Token';
+import { CharacterCodes, isBinaryDigit, isDigit, isHexDigit, isIdentifierPart, isIdentifierStart, isLineBreak, isWhiteSpaceSingleLine, sizeOf } from './character-codes';
+import { format, Message, messages } from './messages';
 
 // All conflict markers consist of the same character repeated seven times.  If it is
 // a <<<<<<< or >>>>>>> marker then it is also followed by a space.
@@ -51,6 +52,12 @@ export enum Kind {
   NumericLiteral,
   StringLiteral,
 
+  // Boolean Literals
+  BooleanLiteral,
+
+  TrueKeyword,
+  FalseKeyword,
+
   // Punctuation
   OpenBrace,
   CloseBrace,
@@ -64,8 +71,10 @@ export enum Kind {
   Comma,
   QuestionDot,
   LessThan,
+  OpenAngle = LessThan,
   LessThanSlash,
   GreaterThan,
+  CloseAngle = GreaterThan,
   LessThanEquals,
   GreaterThanEquals,
   EqualsEquals,
@@ -118,28 +127,62 @@ export enum Kind {
   Identifier,
 
   // Keywords
+  KeywordsStart = 1000,
+  FromKeyword,
   ImportKeyword,
   ModelKeyword,
   InterfaceKeyword,
   AliasKeyword,
-  TrueKeyword,
-  FalseKeyword
+  EnumKeyword,
+  ResponseKeyword,
+
+  KeywordsEnd,
+
+
+  // Tokens that can represent elements
+  Elements = 2000,
+  Model,
+  Enum,
+  EnumValue,
+  Import,
+  TypeAlias,
+  ParameterAlias,
+  ResponseAlias,
+  Interface,
+  Operation,
+  Annotation,
+  Documentation,
+  Trivia,
+  Preamble,
+  Property,
+  Parameter,
+  TemplateDeclaration,
+  TemplateParameters,
+  Parent,
+  Response,
+  ResponseExpression,
+  Result,
+  TypeExpression,
+  Union,
 }
 
 const keywords = new Map([
   ['import', Kind.ImportKeyword],
+  ['from', Kind.FromKeyword],
   ['model', Kind.ModelKeyword],
   ['interface', Kind.InterfaceKeyword],
+  ['enum', Kind.EnumKeyword],
+  ['response', Kind.ResponseKeyword],
   ['alias', Kind.AliasKeyword],
-  ['true', Kind.TrueKeyword],
-  ['false', Kind.FalseKeyword]
+  ['true', Kind.BooleanLiteral], // TrueKeyword
+  ['false', Kind.BooleanLiteral] // FalseKeyword
 ]);
 
 interface TokenLocation extends Position {
   offset: number;
 }
 
-export class Scanner {
+export class Scanner implements Token {
   #offset = 0;
   #line = 0;
   #column = 0;
@@ -165,10 +208,10 @@ export class Scanner {
   offset!: number;
 
   /** the token kind */
-  token!: Kind;
+  kind!: Kind;
 
   /** the text of the current token (when appropriate) */
-  value!: string;
+  text!: string;
 
   /** the string value of current string literal token (unquoted, unescaped) */
   stringValue!: string;
@@ -186,10 +229,14 @@ export class Scanner {
     this.#length = text.length;
     this.advance(0);
     this.markPosition();
+
+    // let's hide these, then we can clone this nicely.
+    Object.defineProperty(this, 'tabWidth', { enumerable: false });
+    Object.defineProperty(this, 'onError', { enumerable: false });
   }
 
   get eof() {
-    return this.#offset >= this.#length;
+    return this.#offset > (this.#length);
   }
 
   private advance(count?: number): number {
@@ -254,10 +301,10 @@ export class Scanner {
   private next(token: Kind, count = 1, value?: string) {
     const originalOffset = this.#offset;
     const offsetAdvancedBy = this.advance(count);
-    this.value = value || this.#text.substr(originalOffset, offsetAdvancedBy);
+    this.text = value || this.#text.substr(originalOffset, offsetAdvancedBy);
 
     this.#column += count;
-    return this.token = token;
+    return this.kind = token;
   }
 
   /** adds the current position to the token to the offset:position map */
@@ -267,14 +314,14 @@ export class Scanner {
 
   /** updates the position and marks the location  */
   private newLine(count = 1) {
-    this.value = this.#text.substr(this.#offset, count);
+    this.text = this.#text.substr(this.#offset, count);
     this.advance(count);
 
     this.#line++;
     this.#column = 0;
     this.markPosition(); // make sure the map has the new location
 
-    return this.token = Kind.NewLine;
+    return this.kind = Kind.NewLine;
   }
 
   /**
@@ -496,9 +543,16 @@ export class Scanner {
       }
     }
 
-    this.value = '';
-    return this.token = Kind.EndOfFile;
+    this.text = '';
+    return this.kind = Kind.EndOfFile;
   }
+
+  take() {
+    const result = { ...this };
+    this.scan();
+    return result;
+  }
+
   /**
    * When the current token is greaterThan, this will return any tokens with characters
    * after the greater than character. This has to be scanned separately because greater
@@ -507,7 +561,7 @@ export class Scanner {
    * tokens starting with `>` are allowed (i.e. when parsing binary expressions).
    */
   rescanGreaterThan(): Kind {
-    if (this.token === Kind.GreaterThan) {
+    if (this.kind === Kind.GreaterThan) {
       return this.#ch === CharacterCodes.greaterThan ?
         this.#chNext === CharacterCodes.equals ?
           this.next(Kind.GreaterThanGreaterThanEquals, 3) :
@@ -516,7 +570,7 @@ export class Scanner {
           this.next(Kind.GreaterThanEquals, 2) :
           this.next(Kind.GreaterThan);
     }
-    return this.token;
+    return this.kind;
   }
 
   private isConflictMarker() {
@@ -557,8 +611,8 @@ export class Scanner {
     // and after...
     this.markPosition();
 
-    this.value = this.#text.substring(this.offset, this.#offset);
-    return this.token = Kind.Whitespace;
+    this.text = this.#text.substring(this.offset, this.#offset);
+    return this.kind = Kind.Whitespace;
   }
 
   private scanDigits(): string {
@@ -590,7 +644,7 @@ export class Scanner {
       }
     }
 
-    this.value = scientific ?
+    this.text = scientific ?
       decimal ?
         `${main}.${decimal}e${scientific}` :
         `${main}e${scientific}` :
@@ -600,7 +654,7 @@ export class Scanner {
 
     // update the position
     this.#column += (this.#offset - start);
-    return this.token = Kind.NumericLiteral;
+    return this.kind = Kind.NumericLiteral;
   }
 
   private scanHexNumber() {
@@ -611,8 +665,8 @@ export class Scanner {
 
     this.advance(2);
 
-    this.value = `0x${this.scanUntil((ch) => !isHexDigit(ch), 'Hex Digit')}`;
-    return this.token = Kind.NumericLiteral;
+    this.text = `0x${this.scanUntil((ch) => !isHexDigit(ch), 'Hex Digit')}`;
+    return this.kind = Kind.NumericLiteral;
   }
 
   private scanBinaryNumber() {
@@ -623,8 +677,8 @@ export class Scanner {
 
     this.advance(2);
 
-    this.value = `0b${this.scanUntil((ch) => !isBinaryDigit(ch), 'Binary Digit')}`;
-    return this.token = Kind.NumericLiteral;
+    this.text = `0b${this.scanUntil((ch) => !isBinaryDigit(ch), 'Binary Digit')}`;
+    return this.kind = Kind.NumericLiteral;
 
   }
 
@@ -667,13 +721,13 @@ export class Scanner {
   }
 
   private scanSingleLineComment() {
-    this.value = this.scanUntil(isLineBreak);
-    return this.token = Kind.SingleLineComment;
+    this.text = this.scanUntil(isLineBreak);
+    return this.kind = Kind.SingleLineComment;
   }
 
   private scanMultiLineComment() {
-    this.value = this.scanUntil((ch, chNext) => ch === CharacterCodes.asterisk && chNext === CharacterCodes.slash, '*/', 2);
-    return this.token = Kind.MultiLineComment;
+    this.text = this.scanUntil((ch, chNext) => ch === CharacterCodes.asterisk && chNext === CharacterCodes.slash, '*/', 2);
+    return this.kind = Kind.MultiLineComment;
   }
 
   private scanString() {
@@ -726,9 +780,9 @@ export class Scanner {
       value = this.unescapeString(value);
     }
 
-    this.value = text;
+    this.text = text;
     this.stringValue = value;
-    return this.token = Kind.StringLiteral;
+    return this.kind = Kind.StringLiteral;
   }
 
   private unindentTripleQuoteString(text: string) {
@@ -858,8 +912,8 @@ export class Scanner {
   }
 
   scanIdentifier() {
-    this.value = this.scanUntil((ch) => !isIdentifierPart(ch));
-    return this.token = keywords.get(this.value) ?? Kind.Identifier;
+    this.text = this.scanUntil((ch) => !isIdentifierPart(ch));
+    return this.kind = keywords.get(this.text) ?? Kind.Identifier;
   }
 
   /**

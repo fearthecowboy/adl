@@ -1,12 +1,9 @@
-import { SymbolTable } from './binder';
-
 /**
  * Type System types
  */
 export interface BaseType {
   kind: string;
   node: Node;
-  instantiationParameters?: Array<Type>;
 }
 
 export type Type =
@@ -209,7 +206,6 @@ export interface ModelStatementNode extends Node {
   properties?: Array<ModelPropertyNode | ModelSpreadPropertyNode>;
   assignment?: Expression;
   templateParameters: Array<TemplateParameterDeclarationNode>;
-  locals?: SymbolTable;
   decorators: Array<DecoratorExpressionNode>;
 }
 

@@ -1,12 +1,17 @@
 {
   "extends": "../tsconfig.json",
   "compilerOptions": {
-    "module": "esnext",
+    "module": "commonjs",
     "outDir": "dist",
     "rootDir": ".",
-    "types": ["node", "mocha"]
+    "types": [
+      "node",
+      "mocha"
+    ]
   },
-  "include": ["./**/*.ts"],
+  "include": [
+    "./**/*.ts"
+  ],
   "exclude": [
     "dist",
     "test/scenarios/**",

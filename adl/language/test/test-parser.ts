@@ -1,172 +1,108 @@
-import { parse } from '../compiler/parser.js';
-import { SyntaxKind } from '../compiler/types.js';
+import * as assert from 'assert';
+import { SourceFile } from '../api/SourceFile';
+import { parse } from '../compiler/parse';
+import { SyntaxKind } from '../compiler/types';
 
-describe('syntax', () => {
+function parseContent(text: string, filename = 'inline.adl') {
+  const sf = parse(text, filename);
+  const newText = sf.save(false);
+  assert.strictEqual(newText, text, 'parsed result does not match input text');
+  return sf;
+}
+
+describe('Parse files', () => {
   describe('import statements', () => {
-    parseEach([
-      'import x;',
-      'import x as { one };',
-      'import x as {};',
-      'import x as { one, two };'
-    ]);
+    it('import entire package', () => parseContent('from x import *;'));
+    it('import one thing', () => parseContent('from x import { one };'));
+    it('import import two things', () => parseContent('from x import { one, two };'));
   });
 
   describe('model statements', () => {
-    parseEach([
-      'model Car { };',
+    it('empty model',
+      () => parseContent('model Car { };')
+    );
 
+    it('decorated model', () => parseContent(
       `@foo()
-       model Car { };`,
+       model Car { }; `));
 
-      `model Car {
-         prop1: number,
-         prop2: string
-       };`,
-
-      `model Car {
+    it('two-props model',
+      () => parseContent(`model Car {
          prop1: number;
          prop2: string;
-       }`,
+       }`
+      ));
 
-      `model Car {
+    it('two models ',
+      () => parseContent(`model Car {
           engine: V6
         }
         
         model V6 {
           name: string
-        }`,
+        }`));
 
-      `model Car {
-         @foo.bar(a, b)
-         prop1: number,
+    it('model with annotated props',
+
+      () => (`model Car {
+         @foo.bar('a', 'b')
+         prop1: number;
          
          @foo.baz(10, "hello")
          prop2: string
-       };`,
-
-      // parens on this decorator are currently required, otherwise it
-      // parses as if it were `@foo('prop-1') : number`
-      `model Car {
-         @foo()
-         'prop-1': number;
-       }`,
-
-      `
-      [Foo()]
-      model Car {
-         [Foo.bar(10, "hello")]
-         prop1: number,
-         
-         [Foo.baz(a, b)]
-         prop2: string
-       };`,
-
-      `@doc """
-       Documentation
-       """
-       model Car {
-         @doc "first"
-         prop1: number;
-
-         @doc "second"
-         prop2: number;
-       }`,
-
-      'model Foo { "strKey": number, "😂😂😂": string }',
-
-      'model Foo<A, B> { }',
-
-      'model Car { @foo @bar x: number }',
-
-      'model Car { ... A, ... B, c: number, ... D, e: string }'
-    ]);
-  });
-
-  describe('model = statements', () => {
-    parseEach([
-      'model x = y;',
-      'model foo = bar | baz;',
-      'model bar<a, b> = a | b;'
-    ]);
+       };`));
   });
 
   describe('model expressions', () => {
-    parseEach([
+    it('model with literal type', () => parseContent(
       'model Car { engine: { type: "v8" } }'
-    ]);
-  });
-
-  describe('tuple model expressions', () => {
-    parseEach([
-      'interface A { b(param: [number, string]): [1, "hi"] }'
-    ]);
+    ));
   });
 
   describe('array expressions', () => {
-    parseEach([
-      'model A { foo: B[] }'
-    ]);
+    it('model with array property', () => parseContent(
+      'model A { foo: Array<B> }'
+    ));
   });
 
   describe('union expressions', () => {
-    parseEach([
+    it('Union Types', () => parseContent(
       'model A { foo: B | C }'
-    ]);
+    ));
   });
 
-  describe('template instantiations', () => {
-    parseEach([
-      'model A = Foo<number, string>;',
-      'model B = Foo<number, string>[];'
-    ]);
-  });
-
-
-  describe('intersection expressions', () => {
-    parseEach([
-      'model A { foo: B & C }'
-    ]);
-  });
-
-  describe('array expressions', () => {
-    parseEach([
-      'model A { foo: D[] }'
-    ]);
-  });
-
-  describe('union expressions', () => {
-    parseEach([
-
-      'model A { foo: B | D }'
-    ]);
-  });
 
   describe('interface statements', () => {
-    parseEach([
-      'interface Store {}',
+    it('empty interface', () => parseContent(
+      'interface Store {}'
+    ));
+    it('simple read function', () => parseContent(
       'interface Store { read(): int32 }',
-      'interface Store { read(): int32, write(v: int32): {} }',
-      'interface Store { read(): int32; write(v: int32): {} }',
-      '@foo interface Store { @dec read():number, @dec write(n: number): {} }',
+    ));
+    it('two methods', () => parseContent(
+      'interface Store { read(): int32; write(v: int32): int32 }',
+    ));
+    it('decorated ', () => parseContent(
+      '@foo interface Store { @dec read():number; @dec write(n: number): int32 }',
+    ));
+    it('another decorated', () => parseContent(
       '@foo @bar interface Store { @foo @bar read(): number; }',
-      'interface Store(apiKey: string, otherArg: number) { }',
-      'interface Store(... apiKeys, x: string) { foo(... A, b: string, ...C, d: number): void }'
-    ]);
+    ));
   });
 
   describe('alias statements', () => {
-    parseEach([
-      'alias MyAlias : SomethingElse;',
-      'alias MyAlias : { constantProperty: 4 };',
-      'alias MyAlias : [ string, number ];'
-    ]);
+    it('type alias', () => parseContent(
+      'alias MyAlias : SomethingElse;'
+    ));
+
+    it('type alias with inlined model', () => parseContent('alias MyAlias : { constantProperty: 4 };',));
   });
 
   describe('multiple statements', () => {
-    parseEach([`
+    it('handles multiple statements', () => parseContent(`
       model A { };
       model B { }
-      model C = A;
+      model C : A;
       ;
       interface I {
         foo(): number;
@@ -176,11 +112,11 @@ describe('syntax', () => {
       }
 
 
-    `]);
+    `));
   });
 
   describe('comments', () => {
-    parseEach([`
+    it('', () => parseContent(`
       // Comment
       model A { /* Another comment */
         /*
@@ -189,23 +125,22 @@ describe('syntax', () => {
         */
         property /* 👀 */ : /* 👍 */ int32; // one more
       }
-      `]);
+      `));
   });
 });
 
-function parseEach(cases: Array<string>) {
-  for (const code of cases) {
-    it('parses `' + shorten(code) + '`', () => {
-      dumpAST(parse(code));
-    });
-  }
+function test(name: string, text: string) {
+  it(`parses ${name}`, () => {
+    dumpAST(parseContent(text));
+  });
 }
 
-function dumpAST(astNode: any) {
-  const replacer = function(this: any, key: string, value: any) {
+
+function dumpAST(sourceFile: SourceFile) {
+  const replacer = function (this: any, key: string, value: any) {
     return key == 'kind' ? SyntaxKind[value] : value;
   };
-  console.log(JSON.stringify(astNode, replacer, 4));
+  console.log(JSON.stringify(sourceFile.statements, undefined, 2));
 }
 
 function shorten(code: string) {
