@@ -1,56 +1,10 @@
 /* eslint-disable no-dupe-class-members */
 import { items } from '@azure-tools/linq';
 import { Kind } from '../compiler/scanner';
-import { isElement, isIterable, isToken } from '../compiler/tokens';
+import { isElement, isIterable } from '../compiler/tokens';
+import { ElementCursor } from './ElementCursor';
 import { Token } from './Token';
 
-
-export class ElementCursor {
-  readonly tokens: Array<Token | Element>;
-  pos = 0;
-  constructor(element: { readonly tokens: Array<Token | Element> }) {
-    this.tokens = element.tokens;
-  }
-
-  find(criteria: Kind | Element) {
-    let current = this.tokens[this.pos];
-    while (current !== criteria && current.kind !== criteria && this.pos < this.tokens.length) {
-      current = this.tokens[++this.pos];
-    }
-    return this;
-  }
-
-  get invalid() {
-    return this.pos >= this.tokens.length;
-  }
-
-  reset() {
-    this.pos = 0;
-    return this;
-  }
-
-  get next() {
-    this.pos++;
-    return this;
-  }
-
-  get text() {
-    return this.tokens[this.pos].text;
-  }
-
-  set text(text: string) {
-    const token = this.tokens[this.pos];
-    if (isToken(token)) {
-      token.text = text;
-    }
-  }
-
-  get element(): Element | undefined {
-    const t = this.tokens[this.pos];
-    return isElement(t) ? t : undefined;
-  }
-
-}
 
 /** an Element is the base class for anything that may be composed of multiple tokens  */
 
@@ -59,7 +13,7 @@ export type AnyToken = Token | Element | Iterable<AnyToken>;
 export abstract class Element {
   readonly abstract kind: Kind;
 
-  find(criteria: Kind | Element) {
+  find(criteria: Kind | Token | Element) {
     return new ElementCursor(this).find(criteria);
   }
 
@@ -93,16 +47,9 @@ export abstract class Element {
   /** @internal */ readonly tokens = new Array<Token | Element>();
   /** @internal */ constructor(tokens: Array<AnyToken> = []) {
     this.push(tokens);
-    // this.parse`adasdas`;
   }
 
-  // parse(code: TemplateStringsArray, ...args: Array<string>) {
-  //}
-
   /** @internal */ push(token: AnyToken): Token | Element | undefined {
-    // if ((<any>token).take) {
-    // return this.push((<any>token).take());
-    // }
     if (isIterable(token)) {
       for (const t of token) {
         this.push(t);
@@ -115,14 +62,18 @@ export abstract class Element {
     return this.tokens.last;
   }
 
+  removeChild(child: Token | Element) {
+    this.find(child).remove();
+  }
+
   /** returns the text of this element (by reconstituting the tokens into text)  */
   get text(): string {
     return this.tokens.select(each => (<Token>each).offset === -1 ? '' : each.text).join('');
   }
 
-  // returns the AST for this element
-  get AST(): Array<Token> {
-    return this.tokens.selectMany(each => isElement(each) ? each.AST : each);
+  // returns the flattened tokens for this element
+  get Tokens(): Array<Token> {
+    return this.tokens.selectMany(each => isElement(each) ? each.Tokens : each);
   }
 
   get any() {

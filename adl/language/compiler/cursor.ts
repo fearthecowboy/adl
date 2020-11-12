@@ -2,6 +2,7 @@
 
 import { Preamble } from '../api/Preamble';
 import { SourceFile } from '../api/SourceFile';
+import { Token } from '../api/Token';
 import { format } from './messages';
 import { Kind, Scanner } from './scanner';
 
@@ -38,7 +39,7 @@ export class TokenCursor extends Scanner {
     return this.expecting(Kind.Identifier);
   }
 
-  expecting(kind: Kind, ...or: Array<Kind>) {
+  expecting(kind: Kind, ...or: Array<Kind>): Token {
     if (this.is(kind)) {
       return this.take();
     } else {

@@ -1,7 +1,7 @@
 import { TokenCursor } from '../compiler/cursor';
 import { Kind } from '../compiler/scanner';
 import { Element } from './Element';
-import { Identifier } from './Identifier';
+import { Label } from './Label';
 import { Preamble, Trivia } from './Preamble';
 import { Token } from './Token';
 import { TypeExpression } from './typeExpression';
@@ -13,7 +13,7 @@ export class Parameter extends Element {
   static parse(cursor: TokenCursor, preamble: Preamble) {
     const value = new Parameter();
     value.push(preamble);
-    value.push(Identifier.parse(cursor, false));
+    value.push(Label.parse(cursor, false));
     value.push(Trivia.parse(cursor));
 
     value.push(cursor.expecting(Kind.Colon));

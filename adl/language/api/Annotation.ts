@@ -1,7 +1,7 @@
 import { TokenCursor } from '../compiler/cursor';
 import { Kind } from '../compiler/scanner';
 import { Element } from './Element';
-import { Identifier } from './Identifier';
+import { Label } from './Label';
 import { LiteralValue } from './LiteralValue';
 import { Preamble, Trivia } from './Preamble';
 import { Token } from './Token';
@@ -28,12 +28,12 @@ export class Annotation extends Element {
       annotation.push(cursor.expecting(Kind.At));
     }
     annotation.push(Trivia.parse(cursor));
-    annotation.push(Identifier.parse(cursor, true));
+    annotation.push(Label.parse(cursor, true));
     annotation.push(Trivia.parse(cursor));
 
     // choices:
-    // identifier
-    // identifier( parameters )
+    // label
+    // label( parameters )
 
 
     if (cursor.is(Kind.OpenParen)) {

@@ -2,7 +2,7 @@ import { TokenCursor } from '../compiler/cursor';
 import { Kind } from '../compiler/scanner';
 import { isTerminator } from '../compiler/tokens';
 import { Element } from './Element';
-import { Identifier } from './Identifier';
+import { Label } from './Label';
 import { Parameter } from './Parameter';
 import { Preamble, Trivia } from './Preamble';
 import { ResponseExpression } from './ResponseExpression';
@@ -21,7 +21,7 @@ export class Response extends Element {
     responseDecl.push(preamble);
     responseDecl.push(cursor.expecting(Kind.ResponseKeyword));
     responseDecl.push(Trivia.parse(cursor));
-    responseDecl.push(Identifier.parse(cursor, false));
+    responseDecl.push(Label.parse(cursor, false));
     responseDecl.push(Trivia.parse(cursor));
     if (templatePermitted && cursor.is(Kind.OpenAngle)) {
       responseDecl.push(TemplateDeclaration.parse(cursor));
@@ -84,10 +84,10 @@ export class Response extends Element {
         continue;
       }
 
-      // not an inline response, should be an identifier some kind
+      // not an inline response, should be a Label some kind
       const responseEx = new ResponseExpression();
       responseEx.push(preamble);
-      responseEx.push(Identifier.parse(cursor, true));
+      responseEx.push(Label.parse(cursor, true));
       if (cursor.is(Kind.OpenAngle)) {
         // it has template parameters
         responseEx.push(TemplateParameters.parse(cursor));

@@ -153,6 +153,7 @@ export enum Kind {
   Annotation,
   Documentation,
   Trivia,
+  Label,
   Preamble,
   Property,
   Parameter,

@@ -2,7 +2,7 @@ import { TokenCursor } from '../compiler/cursor';
 import { Kind } from '../compiler/scanner';
 import { Declaration } from './Declaration';
 import { Element } from './Element';
-import { Identifier } from './Identifier';
+import { Label } from './Label';
 import { LiteralValue } from './LiteralValue';
 import { Preamble, Trivia } from './Preamble';
 import { Terminator } from './Terminator';
@@ -34,7 +34,7 @@ export class Enum extends Declaration {
     enm.push(preamble);
     enm.push(cursor.expecting(Kind.EnumKeyword));                  // 'enum' keyword
     enm.push(Trivia.parse(cursor));                                 // trivia
-    enm.push(Identifier.parse(cursor));                             // name
+    enm.push(Label.parse(cursor));                             // name
     enm.push(Trivia.parse(cursor));                                 // trivia
 
     enm.push(cursor.expecting(Kind.OpenBrace));
@@ -87,12 +87,12 @@ export class EnumValue extends Declaration {
   static parse(cursor: TokenCursor, preamble: Preamble) {
     const value = new EnumValue();
     value.push(preamble);
-    value.push(Identifier.parse(cursor, false));
+    value.push(Label.parse(cursor, false));
     value.push(Trivia.parse(cursor));
     value.push(cursor.expecting(Kind.Colon));
     value.push(LiteralValue.parse(cursor));
     value.push(Trivia.parse(cursor));
-    value.push(Terminator.parse(cursor));
+    value.push(Terminator.parse(cursor, [Kind.CloseBrace], true));
     return value;
   }
 

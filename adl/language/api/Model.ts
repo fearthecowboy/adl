@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/consistent-type-assertions */
 import { TokenCursor } from '../compiler/cursor';
 import { Kind } from '../compiler/scanner';
 import { isTerminator } from '../compiler/tokens';
 import { Declaration } from './Declaration';
-import { Identifier } from './Identifier';
 import { InheritanceDeclaration } from './InheritanceDeclaration';
+import { Label } from './Label';
 import { Preamble, Trivia } from './Preamble';
 import { Property } from './Property';
 import { TemplateDeclaration } from './TemplateDeclaration';
@@ -13,24 +14,29 @@ import { TypeReference } from './TypeReference';
 /**
  * [PREAMBLE] model NAME<PARAMS> : PARENTS { PARAMETERS };
  */
-
 export class Model extends Declaration {
   readonly kind = Kind.Model;
   createProperty(name: string, type: TypeReference) {
-    //
+    // add a new property after the last property.
+    // need the indentation
+    // this.findLast(Kind.Property).add()
+
   }
 
+  get Properties() {
+    return this.tokens.where(each => each.kind === Kind.Property);
+  }
 
   get name(): string {
-    return this.find(Kind.Identifier).text;
+    return (this.find(Kind.Label).element as Label).name;
   }
 
   set name(name: string) {
-    this.find(Kind.Identifier).text = name;
+    (this.find(Kind.Label).element as Label).name = name;
   }
 
   get isTemplate() {
-    return !this.find(Kind.TemplateDeclaration).invalid;
+    return !this.find(Kind.TemplateDeclaration).isInvalid;
   }
 
   get templateDeclaration(): TemplateDeclaration | undefined {
@@ -42,7 +48,7 @@ export class Model extends Declaration {
     model.push(preamble);
     model.push(cursor.expecting(Kind.ModelKeyword));                  // 'model' keywork
     model.push(Trivia.parse(cursor));                                 // trivia
-    model.push(Identifier.parse(cursor));                             // name
+    model.push(Label.parse(cursor));                             // name
     model.push(Trivia.parse(cursor));                                 // trivia
 
     if (cursor.is(Kind.OpenAngle)) {

@@ -34,7 +34,7 @@ export class Import extends Element {
         }
         result.push(cursor.expecting(Kind.CloseBrace));
         result.push(Trivia.parse(cursor));
-        result.push(Terminator.parse(cursor));
+        result.push(Terminator.parse(cursor, [], true));
         return result;
       }
       // eslint-disable-next-line no-constant-condition

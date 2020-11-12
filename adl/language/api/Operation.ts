@@ -1,7 +1,7 @@
 import { TokenCursor } from '../compiler/cursor';
 import { Kind } from '../compiler/scanner';
 import { Element } from './Element';
-import { Identifier } from './Identifier';
+import { Label } from './Label';
 import { Parameter } from './Parameter';
 import { Preamble, Trivia } from './Preamble';
 import { Response } from './Response';
@@ -13,7 +13,7 @@ export class Operation extends Element {
   static parse(cursor: TokenCursor, preamble: Preamble): Operation {
     const operation = new Operation();
     operation.push(preamble);
-    operation.push(Identifier.parse(cursor, false));
+    operation.push(Label.parse(cursor, false));
     operation.push(Trivia.parse(cursor));
     operation.push(cursor.expecting(Kind.OpenParen));
     operation.push(Parameter.parseParameters(cursor));
@@ -25,7 +25,7 @@ export class Operation extends Element {
       operation.push(Response.parseResponse(cursor));
     }
 
-    operation.push(Terminator.parse(cursor));
+    operation.push(Terminator.parse(cursor, [Kind.CloseBrace], true));
 
     return operation;
   }

@@ -1,7 +1,7 @@
 import { TokenCursor } from '../compiler/cursor';
 import { Kind } from '../compiler/scanner';
 import { Element } from './Element';
-import { Identifier } from './Identifier';
+import { Label } from './Label';
 import { Trivia } from './Preamble';
 import { TypeExpression } from './typeExpression';
 
@@ -16,7 +16,7 @@ export class TemplateDeclaration extends Element {
     template.push(cursor.expecting(Kind.OpenAngle));                  // <
     do {
       template.push(Trivia.parse(cursor));                            // trivia
-      template.push(Identifier.parse(cursor));                        // identifier
+      template.push(Label.parse(cursor));                        // identifier
       template.push(Trivia.parse(cursor));                            // trivia
       if (cursor.is(Kind.Comma)) {
         template.push(cursor.expecting(Kind.Comma));

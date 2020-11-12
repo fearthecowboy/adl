@@ -1,7 +1,7 @@
 import { TokenCursor } from '../compiler/cursor';
 import { Kind } from '../compiler/scanner';
 import { Element } from './Element';
-import { Identifier } from './Identifier';
+import { Label } from './Label';
 import { Preamble, Trivia } from './Preamble';
 import { Terminator } from './Terminator';
 import { Token } from './Token';
@@ -34,14 +34,14 @@ export class Property extends Element {
   static parse(cursor: TokenCursor, preamble: Preamble) {
     const value = new Property();
     value.push(preamble);
-    value.push(Identifier.parse(cursor, false));
+    value.push(Label.parse(cursor, false));
     value.push(Trivia.parse(cursor));
 
     value.push(cursor.expecting(Kind.Colon));
     value.push(TypeExpression.parseTypeExpression(cursor));
     value.push(Trivia.parse(cursor));
 
-    value.push(Terminator.parse(cursor));
+    value.push(Terminator.parse(cursor, [Kind.CloseBrace], true));
     return value;
   }
 

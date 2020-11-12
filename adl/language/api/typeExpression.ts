@@ -1,7 +1,7 @@
 import { TokenCursor } from '../compiler/cursor';
 import { Kind } from '../compiler/scanner';
 import { Element } from './Element';
-import { Identifier } from './Identifier';
+import { Label } from './Label';
 import { LiteralValue } from './LiteralValue';
 import { Preamble, Trivia } from './Preamble';
 import { Property } from './Property';
@@ -66,7 +66,7 @@ export class ReferencedTypeEx extends TypeExpression {
     const typeExpression = new ReferencedTypeEx();
     typeExpression.push(trivia);
     // the name of a model
-    typeExpression.push(Identifier.parse(cursor, true));
+    typeExpression.push(Label.parse(cursor, true));
     if (cursor.is(Kind.OpenAngle)) {
       // foo<T>
       typeExpression.push(TemplateParameters.parse(cursor));

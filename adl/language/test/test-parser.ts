@@ -1,7 +1,5 @@
 import * as assert from 'assert';
-import { SourceFile } from '../api/SourceFile';
 import { parse } from '../compiler/parse';
-import { SyntaxKind } from '../compiler/types';
 
 function parseContent(text: string, filename = 'inline.adl') {
   const sf = parse(text, filename);
@@ -24,7 +22,7 @@ describe('Parse files', () => {
 
     it('decorated model', () => parseContent(
       `@foo()
-       model Car { }; `));
+       model Car {  }; `));
 
     it('two-props model',
       () => parseContent(`model Car {
@@ -128,21 +126,3 @@ describe('Parse files', () => {
       `));
   });
 });
-
-function test(name: string, text: string) {
-  it(`parses ${name}`, () => {
-    dumpAST(parseContent(text));
-  });
-}
-
-
-function dumpAST(sourceFile: SourceFile) {
-  const replacer = function (this: any, key: string, value: any) {
-    return key == 'kind' ? SyntaxKind[value] : value;
-  };
-  console.log(JSON.stringify(sourceFile.statements, undefined, 2));
-}
-
-function shorten(code: string) {
-  return code.replace(/\s+/g, ' ');
-}
