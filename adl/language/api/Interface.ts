@@ -4,7 +4,7 @@ import { isTerminator } from '../compiler/tokens';
 import { Declaration } from './Declaration';
 import { Label } from './Label';
 import { Operation } from './Operation';
-import { Preamble, Trivia } from './Preamble';
+import { Preamble } from './Preamble';
 import { Terminator } from './Terminator';
 
 
@@ -16,9 +16,9 @@ export class Interface extends Declaration {
 
     iface.push(preamble);
     iface.push(cursor.expecting(Kind.InterfaceKeyword));                  // 'interface' keyword
-    iface.push(Trivia.parse(cursor));                                 // trivia
+    iface.push(Preamble.parse(cursor, true));                                 // trivia
     iface.push(Label.parse(cursor));                             // name
-    iface.push(Trivia.parse(cursor));                                 // trivia
+    iface.push(Preamble.parse(cursor, true));                                 // trivia
 
     if (isTerminator(cursor.kind)) {
       // empty interface declaration

@@ -2,11 +2,11 @@
 
 import { Preamble } from '../api/Preamble';
 import { SourceFile } from '../api/SourceFile';
-import { Token } from '../api/Token';
+import { RawToken } from '../api/Token';
 import { format } from './messages';
 import { Kind, Scanner } from './scanner';
 
-export class TokenCursor extends Scanner {
+/** @internal */ export class TokenCursor extends Scanner {
   #peekAhead?: Preamble;
 
   get peekAhead() {
@@ -39,11 +39,11 @@ export class TokenCursor extends Scanner {
     return this.expecting(Kind.Identifier);
   }
 
-  expecting(kind: Kind, ...or: Array<Kind>): Token {
+  expecting(kind: Kind, ...or: Array<Kind>): RawToken {
     if (this.is(kind)) {
       return this.take();
     } else {
-      if (or.any(each => this.is(each))) {
+      if (or.some(each => this.is(each))) {
         return this.take();
       }
       throw this.err(`expected ${Kind[kind]}, got ${Kind[this.kind]}`);

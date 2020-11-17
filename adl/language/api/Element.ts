@@ -1,79 +1,72 @@
 /* eslint-disable no-dupe-class-members */
-import { items } from '@azure-tools/linq';
-import { Kind } from '../compiler/scanner';
+import { Kind, Scanner } from '../compiler/scanner';
 import { isElement, isIterable } from '../compiler/tokens';
-import { ElementCursor } from './ElementCursor';
-import { Token } from './Token';
+import { Container } from './Container';
+import { from } from './ElementCursor';
+import { RawToken } from './Token';
 
+export type AnyToken = RawToken | Element | Iterable<AnyToken>;
+
+export interface Token extends RawToken {
+  parent: Container;
+  remove(): void;
+}
 
 /** an Element is the base class for anything that may be composed of multiple tokens  */
-
-export type AnyToken = Token | Element | Iterable<AnyToken>;
-
-export abstract class Element {
+export abstract class Element extends Container implements Token {
   readonly abstract kind: Kind;
+  parent!: Container;
+  offset = 0;
 
-  find(criteria: Kind | Token | Element) {
-    return new ElementCursor(this).find(criteria);
-  }
-
-  /** allows subclasses to trivially implement object initializers */
-  protected initialize<T>(initializer?: Partial<T>) {
-    for (const [key, value] of items(initializer)) {
-      // copy the true value of the items to the object
-      // (use the proxy)
-      const rawThis = <any>this;
-
-      if (value !== undefined) {
-        const rawValue = (<any>value);
-        const targetProperty = rawThis[key];
-        if (targetProperty && targetProperty.push) {
-          if (rawValue[Symbol.iterator]) {
-            // copy elements to target
-            for (const each of rawValue) {
-              rawThis[key].push(each);
-            }
-            continue;
-          }
-          throw new Error(`Initializer for object with array member '${key}', must be initialized with something that can be iterated.`);
-        }
-        // just copy the value across.
-        rawThis[key] = (<any>value);
-      }
-    }
-    return this;
-  }
-
-  /** @internal */ readonly tokens = new Array<Token | Element>();
-  /** @internal */ constructor(tokens: Array<AnyToken> = []) {
+  /** @internal */ readonly tokens = new Array<Token>();
+  /** @internal */ constructor(...tokens: Array<AnyToken | string>) {
+    super();
     this.push(tokens);
   }
 
-  /** @internal */ push(token: AnyToken): Token | Element | undefined {
+  /** @internal */ push(token: AnyToken | string): RawToken | Element | undefined {
+    if (typeof token === 'string') {
+      token = [...Scanner.TokensFrom(token)];
+    }
     if (isIterable(token)) {
       for (const t of token) {
         this.push(t);
       }
     } else {
-      if (!(<Element>token).empty) {
-        this.tokens.push(token);
+      if (!(<Element>token).empty) { // skip empty elements
+        if ((<any>token).parent) {
+          // if the token/element has a parent, this isn't ok.
+
+          // we can check if the parent listed actually owns this
+          // because if it doesn't, we can assume it's been removed
+          // from the parent and is being put into this element.
+
+          if ((<any>token).parent.tokens.find(token)) {
+            throw new Error('Tokens/Elements can not be added to mulitple parents.');
+          }
+          // otherwise, we'll just reset it anyway.
+        }
+        this.tokens.push(this.adopt(token));
       }
     }
     return this.tokens.last;
   }
 
-  removeChild(child: Token | Element) {
-    this.find(child).remove();
+  get indentation(): string {
+    return from(this).find(Kind.Preamble).element?.indentation || '\n  ';
+  }
+
+  remove() {
+    this.parent.removeChild(this);
+  }
+
+  get length() {
+    return this.tokens.length;
   }
 
   /** returns the text of this element (by reconstituting the tokens into text)  */
   get text(): string {
-    return this.tokens.select(each => (<Token>each).offset === -1 ? '' : each.text).join('');
-  }
-
-  // returns the flattened tokens for this element
-  get Tokens(): Array<Token> {
-    return this.tokens.selectMany(each => isElement(each) ? each.Tokens : each);
+    return this.tokens.select(each => (<RawToken>each).offset === -1 ? '' : each.text).join('');
   }
 
   get any() {
@@ -95,5 +88,4 @@ export abstract class Element {
       }
     }
   }
-
 }

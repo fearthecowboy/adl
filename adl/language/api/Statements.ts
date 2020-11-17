@@ -7,10 +7,10 @@ import { Import } from './Import';
 import { Interface } from './Interface';
 import { Model } from './Model';
 import { Preamble } from './Preamble';
-import { Token } from './Token';
+import { RawToken } from './Token';
 
 export class Statements {
-  static *parse(cursor: TokenCursor): Iterable<Token | Element> {
+  static *parse(cursor: TokenCursor): Iterable<RawToken | Element> {
     while (!cursor.eof) {
       const preamble = Preamble.parse(cursor);
 

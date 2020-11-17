@@ -1,17 +1,45 @@
 import { Kind } from '../compiler/scanner';
 import { isElement, isToken } from '../compiler/tokens';
-import { Element } from './Element';
-import { Token } from './Token';
+import { Element, Token } from './Element';
+import { RawToken } from './Token';
 
+
+export function from(source: Element | Array<Token>, pos = -1) {
+  return new ElementCursor(source, pos);
+}
 export class ElementCursor {
-  constructor(private source: Element, private pos = -1) {
+  private source: Array<Token>;
+  /** @internal */ constructor(source: Element | Array<Token>, private pos = -1) {
+    this.source = Array.isArray(source) ? source : source.tokens;
   }
-  find(criteria: Kind | Token | Element) {
-    return new ElementCursor(this.source, this.source.tokens.findIndex((v, i, a) => i >= this.pos && (criteria === v || v.kind === criteria)));
+  find(criteria: Kind | RawToken | Element) {
+    return new ElementCursor(this.source, this.source.findIndex((v, i, a) => i >= this.pos && (criteria === v || v.kind === criteria)));
   }
-  findRange(criteria: Kind | Token | Element, toCriteria: Kind | Token | Element) {
-    /// this.source.tokens.find((v, i, a) => i >= this.pos && (criteria === v || v.kind === criteria)).map( each => new ElementCursor(each))
-    // return new ElementCursor(this.source, this.source.tokens.find((v, i, a) => i >= this.pos && (criteria === v || v.kind === criteria)));
+  findLast(criteria: Kind | RawToken | Element) {
+    for (let i = this.source.length - 1; i > (this).pos; i--) {
+      const v = this.source[i];
+      if (i >= this.pos && (criteria === v || v.kind === criteria)) {
+        return new ElementCursor(this.source, i);
+      }
+    }
+    return new ElementCursor(this.source, -1); // invalid
+  }
+  findIndex(criteria: Kind | RawToken | Element, startIndex = 0): number {
+    return this.source.findIndex((v, i, a) => i >= this.pos && (criteria === v || v.kind === criteria));
+  }
+  selectAll(criteria: Kind | RawToken | Element) {
+    return this.source.where(v => (criteria === v || v.kind === criteria));
+  }
+  selectRange(firstCriteria: Kind | RawToken | Element, lastCriteria: Kind | RawToken | Element): Array<Token | Element> {
+    const f = this.findIndex(firstCriteria);
+    if (f === -1) {
+      return [];
+    }
+    const l = this.findIndex(lastCriteria, f);
+    if (l === -1) {
+      return [];
+    }
+    return this.source.slice(f, l);
   }
   get isValid() {
     return this.pos > -1;
@@ -20,14 +48,17 @@ export class ElementCursor {
     return this.pos < 0;
   }
   get element() {
-    return this.pos > -1 && isElement(this.source.tokens[this.pos]) ? <Element>this.source.tokens[this.pos] : undefined;
+    return this.pos > -1 && isElement(this.source[this.pos]) ? <Element>this.source[this.pos] : undefined;
+  }
+  get rawToken() {
+    return this.pos > -1 && isToken(this.source[this.pos]) ? <RawToken>this.source[this.pos] : undefined;
   }
   get token() {
-    return this.pos > -1 && isToken(this.source.tokens[this.pos]) ? <Token>this.source.tokens[this.pos] : undefined;
+    return this.pos > -1 ? this.source[this.pos] : undefined;
   }
   get next() {
     return this.pos < 0 ? new ElementCursor(this.source, 0) :
-      this.pos >= this.source.tokens.length + 1 ? new ElementCursor(this.source, -1) :
+      this.pos >= this.source.length + 1 ? new ElementCursor(this.source, -1) :
         new ElementCursor(this.source, this.pos + 1);
   }
   get prev() {
@@ -37,14 +68,17 @@ export class ElementCursor {
     return new ElementCursor(this.source, this.pos < 0 ? -1 : this.pos - 1);
   }
   remove() {
-    this.pos > -1 && this.source.tokens.splice(this.pos, 1);
-    this.pos = -1;
+    const element = this.source[this.pos];
+    element.parent.removeChild(element);
+    this.pos = -1; // invalidate the cursor.
   }
-  insert(...elements: Array<Token | Element>) {
-    this.source.tokens.splice(this.pos, 0, ...elements);
-    this.pos += elements.length;
+  insert(...elements: Array<RawToken | Element>) {
+    const parent = this.source[this.pos].parent;
+    this.source.splice(this.pos, 0, ...elements.map(each => parent.adopt(each)));
+    this.pos += elements.length; // move the cursor past the inserted elements.
   }
-  add(...elements: Array<Token | Element>) {
-    this.source.tokens.splice(this.pos + 1, 0, ...elements);
+  add(...elements: Array<RawToken | Element>) {
+    const parent = this.source[this.pos].parent;
+    this.source.splice(this.pos + 1, 0, ...elements.map(each => parent.adopt(each)));
   }
 }

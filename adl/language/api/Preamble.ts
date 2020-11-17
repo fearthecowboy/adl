@@ -1,19 +1,20 @@
 import { linq } from '@azure-tools/linq';
 import { TokenCursor } from '../compiler/cursor';
 import { Kind } from '../compiler/scanner';
-import { isAnnotation, isTrivia } from '../compiler/tokens';
 import { Annotation } from './Annotation';
 import { Element } from './Element';
-import { Token } from './Token';
+import { from } from './ElementCursor';
+import { RawToken } from './Token';
 
-export class TriviaBase extends Element {
-  get notEmpty(): Preamble | Array<Token> {
+
+/** A set of nodes that can be trivia and Annotations. */
+export class Preamble extends Element {
+
+  get notEmpty(): Preamble | Array<RawToken> {
     return this.any ? this : [];
   }
 
-  get kind(): Kind.Preamble | Kind.Trivia {
-    return this.tokens.any(token => isAnnotation(token)) ? Kind.Preamble : Kind.Trivia;
-  }
+  kind = Kind.Preamble;
 
   get annotations() {
     return linq.values(this.tokens).where(each => each.kind === Kind.Annotation);
@@ -24,12 +25,14 @@ export class TriviaBase extends Element {
   }
 
   get isTrivia() {
-    return !this.tokens.any(each => each.kind === Kind.Annotation);
+    return !this.tokens.some(each => each.kind === Kind.Annotation);
   }
-}
 
-/** A set of nodes that can be trivia and Annotations. */
-export class Preamble extends TriviaBase {
+  get indentation(): string {
+    // grab the first whitespace after the first newline (or the first whitespace if there is no newline)
+    const t = from(this).find(Kind.NewLine).find(Kind.Whitespace);
+    return `\n${t.token?.text || '  '}`;
+  }
 
   // We always parse Trivia and Preamble with this method, but we can choose to allow annotations or not.
   static parse(cursor: TokenCursor, justTrivia = false) {
@@ -56,23 +59,12 @@ export class Preamble extends TriviaBase {
           continue;
 
         default:
-          if (justTrivia && !isTrivia(preamble)) {
+          if (justTrivia && !preamble.isTrivia) {
             cursor.err('Annotations are not permitted at this point.');
           }
           return preamble;
       }
       // eslint-disable-next-line no-constant-condition
     } while (true);
-  }
-}
-
-/** Trivia contains whitespace and comments  */
-export class Trivia extends TriviaBase {
-  get notEmpty(): Preamble | Array<Token> {
-    return this.any ? this : [];
-  }
-
-  static parse(cursor: TokenCursor) {
-    return Preamble.parse(cursor, true).notEmpty;
   }
 }

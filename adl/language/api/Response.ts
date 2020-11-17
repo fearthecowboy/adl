@@ -4,10 +4,10 @@ import { isTerminator } from '../compiler/tokens';
 import { Element } from './Element';
 import { Label } from './Label';
 import { Parameter } from './Parameter';
-import { Preamble, Trivia } from './Preamble';
+import { Preamble } from './Preamble';
 import { ResponseExpression } from './ResponseExpression';
 import { TemplateDeclaration, TemplateParameters } from './TemplateDeclaration';
-import { Token } from './Token';
+import { RawToken } from './Token';
 import { Union } from './Union';
 
 
@@ -20,27 +20,27 @@ export class Response extends Element {
     const responseDecl = new Response();
     responseDecl.push(preamble);
     responseDecl.push(cursor.expecting(Kind.ResponseKeyword));
-    responseDecl.push(Trivia.parse(cursor));
+    responseDecl.push(Preamble.parse(cursor, true));
     responseDecl.push(Label.parse(cursor, false));
-    responseDecl.push(Trivia.parse(cursor));
+    responseDecl.push(Preamble.parse(cursor, true));
     if (templatePermitted && cursor.is(Kind.OpenAngle)) {
       responseDecl.push(TemplateDeclaration.parse(cursor));
-      responseDecl.push(Trivia.parse(cursor));
+      responseDecl.push(Preamble.parse(cursor, true));
     }
     responseDecl.push(cursor.expecting(Kind.OpenParen));
     responseDecl.push(Parameter.parseParameters(cursor));
     responseDecl.push(cursor.expecting(Kind.CloseParen));
 
-    responseDecl.push(Trivia.parse(cursor));
+    responseDecl.push(Preamble.parse(cursor, true));
     if (cursor.is(Kind.EqualsArrow)) {
       responseDecl.push(cursor.take());
-      responseDecl.push(Trivia.parse(cursor));
+      responseDecl.push(Preamble.parse(cursor, true));
       responseDecl.push(Response.parseOutputExpression(cursor));
     }
     return responseDecl;
   }
 
-  static *parseOutputExpression(cursor: TokenCursor): Iterable<Token> {
+  static *parseOutputExpression(cursor: TokenCursor): Iterable<RawToken> {
     // quick and dirty, not complete.
     while (!isTerminator(cursor.kind)) {
       yield cursor.take();

@@ -1,7 +1,7 @@
 import { Kind } from '../compiler/scanner';
 
 
-export interface Token {
+export interface RawToken {
   /** the character offset within the document */
   readonly offset: number;
 

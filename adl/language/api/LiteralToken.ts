@@ -1,6 +1,6 @@
 import { Literal } from './Literal';
-import { Token } from './Token';
+import { RawToken } from './Token';
 
-export interface LiteralToken extends Token {
+export interface LiteralToken extends RawToken {
   kind: Literal;
 }

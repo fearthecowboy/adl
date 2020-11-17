@@ -1,10 +1,9 @@
 import { Element } from '../api/Element';
-import { Token } from '../api/Token';
+import { RawToken } from '../api/Token';
 import { Kind } from './scanner';
 
 export function isTrivia(token: Kind | { kind: Kind }) {
   switch ((<any>token).kind || token) {
-    case Kind.Trivia:
     case Kind.Whitespace:
     case Kind.NewLine:
     case Kind.MultiLineComment:
@@ -65,6 +64,6 @@ export function isElement(token: Kind | { kind: Kind }): token is Element {
 }
 
 
-export function isToken(token: Kind | { kind: Kind }): token is Token {
+export function isToken(token: Kind | { kind: Kind }): token is RawToken {
   return ((<any>token).kind || token) < Kind.Elements;
 }

@@ -4,9 +4,9 @@ import { Declaration } from './Declaration';
 import { Element } from './Element';
 import { Label } from './Label';
 import { LiteralValue } from './LiteralValue';
-import { Preamble, Trivia } from './Preamble';
+import { Preamble } from './Preamble';
 import { Terminator } from './Terminator';
-import { Token } from './Token';
+import { RawToken } from './Token';
 
 
 export class Enum extends Declaration {
@@ -33,9 +33,9 @@ export class Enum extends Declaration {
     const enm = new Enum();
     enm.push(preamble);
     enm.push(cursor.expecting(Kind.EnumKeyword));                  // 'enum' keyword
-    enm.push(Trivia.parse(cursor));                                 // trivia
+    enm.push(Preamble.parse(cursor, true));                                 // trivia
     enm.push(Label.parse(cursor));                             // name
-    enm.push(Trivia.parse(cursor));                                 // trivia
+    enm.push(Preamble.parse(cursor, true));                                 // trivia
 
     enm.push(cursor.expecting(Kind.OpenBrace));
     enm.push(EnumValue.parseEnumValues(cursor));
@@ -46,8 +46,8 @@ export class Enum extends Declaration {
 
 export class EnumValue extends Declaration {
   kind = Kind.EnumValue;
-  #name!: Token;
-  #value!: Token;
+  #name!: RawToken;
+  #value!: RawToken;
 
 
   /** @internal */
@@ -88,15 +88,15 @@ export class EnumValue extends Declaration {
     const value = new EnumValue();
     value.push(preamble);
     value.push(Label.parse(cursor, false));
-    value.push(Trivia.parse(cursor));
+    value.push(Preamble.parse(cursor, true));
     value.push(cursor.expecting(Kind.Colon));
     value.push(LiteralValue.parse(cursor));
-    value.push(Trivia.parse(cursor));
+    value.push(Preamble.parse(cursor, true));
     value.push(Terminator.parse(cursor, [Kind.CloseBrace], true));
     return value;
   }
 
-  static *parseEnumValues(cursor: TokenCursor): Iterable<EnumValue | Element | Token> {
+  static *parseEnumValues(cursor: TokenCursor): Iterable<EnumValue | Element | RawToken> {
     let preamble = Preamble.parse(cursor);
     while (!cursor.is(Kind.CloseBrace)) {
       yield EnumValue.parse(cursor, preamble);

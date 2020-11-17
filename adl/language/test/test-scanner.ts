@@ -154,8 +154,14 @@ describe('scanner', () => {
       'This is a triple-quoted string\n\n\n\nAnd this is another line');
   });
 
-  it('parses this file', async () => {
-    //  const text = await readFile(new URL(import.meta.url), 'utf-8');
-    //const all = tokens(text);
-  });
+  it('can parse arbitrary tokens', () => {
+    /// sometimes we just want some arbitrary text turn into tokens. 
+    verify([...Scanner.TokensFrom('this.is.fun')].map(each => [each.kind, each.text]), [
+      [Kind.Identifier],
+      [Kind.Dot],
+      [Kind.Identifier],
+      [Kind.Dot],
+      [Kind.Identifier]
+    ]);
+  })
 });

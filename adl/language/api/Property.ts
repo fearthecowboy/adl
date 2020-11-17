@@ -1,10 +1,11 @@
 import { TokenCursor } from '../compiler/cursor';
 import { Kind } from '../compiler/scanner';
 import { Element } from './Element';
+import { from } from './ElementCursor';
 import { Label } from './Label';
-import { Preamble, Trivia } from './Preamble';
+import { Preamble } from './Preamble';
 import { Terminator } from './Terminator';
-import { Token } from './Token';
+import { RawToken } from './Token';
 import { TypeExpression } from './typeExpression';
 
 
@@ -12,40 +13,36 @@ export class Property extends Element {
   kind = Kind.Property;
 
   get name() {
-    throw new Error('Not Implemented');
+    return (<Label>from(this).find(Kind.Label).element).name;
   }
 
   set name(name: string) {
-    //
+    (<Label>from(this).find(Kind.Label).element).name = name;
   }
 
   get type(): TypeExpression {
-    throw new Error('Not Implemented');
+    return from(this).find(Kind.TypeExpression).element!;
   }
 
   set type(type: TypeExpression) {
     //
   }
 
-  remove() {
-    // removes this from the parent
-  }
-
   static parse(cursor: TokenCursor, preamble: Preamble) {
     const value = new Property();
     value.push(preamble);
     value.push(Label.parse(cursor, false));
-    value.push(Trivia.parse(cursor));
+    value.push(Preamble.parse(cursor, true));
 
     value.push(cursor.expecting(Kind.Colon));
     value.push(TypeExpression.parseTypeExpression(cursor));
-    value.push(Trivia.parse(cursor));
+    value.push(Preamble.parse(cursor, true));
 
     value.push(Terminator.parse(cursor, [Kind.CloseBrace], true));
     return value;
   }
 
-  static *parseProperties(cursor: TokenCursor): Iterable<Token | Property | Preamble> {
+  static *parseProperties(cursor: TokenCursor): Iterable<RawToken | Property | Preamble> {
     let preamble = Preamble.parse(cursor);
     while (!cursor.is(Kind.CloseBrace)) {
       yield Property.parse(cursor, preamble);

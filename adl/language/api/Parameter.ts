@@ -2,8 +2,8 @@ import { TokenCursor } from '../compiler/cursor';
 import { Kind } from '../compiler/scanner';
 import { Element } from './Element';
 import { Label } from './Label';
-import { Preamble, Trivia } from './Preamble';
-import { Token } from './Token';
+import { Preamble } from './Preamble';
+import { RawToken } from './Token';
 import { TypeExpression } from './typeExpression';
 
 
@@ -14,16 +14,16 @@ export class Parameter extends Element {
     const value = new Parameter();
     value.push(preamble);
     value.push(Label.parse(cursor, false));
-    value.push(Trivia.parse(cursor));
+    value.push(Preamble.parse(cursor, true));
 
     value.push(cursor.expecting(Kind.Colon));
     value.push(TypeExpression.parseTypeExpression(cursor));
-    value.push(Trivia.parse(cursor));
+    value.push(Preamble.parse(cursor, true));
 
     return value;
   }
 
-  static * parseParameters(cursor: TokenCursor): Iterable<Parameter | Preamble | Token> {
+  static * parseParameters(cursor: TokenCursor): Iterable<Parameter | Preamble | RawToken> {
     let preamble = Preamble.parse(cursor);
     while (!cursor.is(Kind.CloseParen)) {
       yield Parameter.parse(cursor, preamble);

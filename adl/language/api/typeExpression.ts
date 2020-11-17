@@ -3,17 +3,17 @@ import { Kind } from '../compiler/scanner';
 import { Element } from './Element';
 import { Label } from './Label';
 import { LiteralValue } from './LiteralValue';
-import { Preamble, Trivia } from './Preamble';
+import { Preamble } from './Preamble';
 import { Property } from './Property';
 import { TemplateParameters } from './TemplateDeclaration';
-import { Token } from './Token';
+import { RawToken } from './Token';
 
 /** a valid type expression (ie *use* ofa type. can be a model name, a builtin type, a literal type, or a object definition. ) */
 export class TypeExpression extends Element {
   kind = Kind.TypeExpression;
 
   static parseTypeExpression(cursor: TokenCursor): TypeExpression {
-    let trivia = Trivia.parse(cursor);
+    let trivia = Preamble.parse(cursor, true);
     let union: UnionTypeExpression | undefined;
     let retVal: TypeExpression | undefined;
 
@@ -38,13 +38,13 @@ export class TypeExpression extends Element {
           cursor.err('expecting type expression, did not match token for that.');
       }
 
-      trivia = Trivia.parse(cursor);
+      trivia = Preamble.parse(cursor, true);
       if (cursor.is(Kind.Bar)) {
         union = union || new UnionTypeExpression();
         union.push(retVal);
         union.push(trivia);
         union.push(cursor.expecting(Kind.Bar));
-        trivia = Trivia.parse(cursor);
+        trivia = Preamble.parse(cursor, true);
         continue;
       }
 
@@ -62,7 +62,7 @@ export class TypeExpression extends Element {
 
 export class ReferencedTypeEx extends TypeExpression {
 
-  static parse(cursor: TokenCursor, trivia: Preamble | Array<Token>) {
+  static parse(cursor: TokenCursor, trivia: Preamble | Array<RawToken>) {
     const typeExpression = new ReferencedTypeEx();
     typeExpression.push(trivia);
     // the name of a model
@@ -76,7 +76,7 @@ export class ReferencedTypeEx extends TypeExpression {
 }
 
 export class InlineModelTypeEx extends TypeExpression {
-  static parse(cursor: TokenCursor, trivia: Preamble | Array<Token>) {
+  static parse(cursor: TokenCursor, trivia: Preamble | Array<RawToken>) {
     const typeExpression = new InlineModelTypeEx();
     typeExpression.push(trivia);
 
@@ -90,7 +90,7 @@ export class InlineModelTypeEx extends TypeExpression {
 
 export class LiteralTypeExpression extends TypeExpression {
 
-  static parse(cursor: TokenCursor, trivia: Preamble | Array<Token>) {
+  static parse(cursor: TokenCursor, trivia: Preamble | Array<RawToken>) {
     const literal = new LiteralTypeExpression();
     literal.push(trivia);
     literal.push(LiteralValue.parse(cursor));

@@ -110,8 +110,8 @@
   },
   "eslint.format.enable": true,
   "mochaExplorer.files": "./adl/*/dist/test/**/*.js",
-  "mochaExplorer.cwd": "./adl/core",
-  "mochaExplorer.mochaPath": "./adl/core/node_modules/mocha",
+  "mochaExplorer.cwd": "./adl/language",
+  "mochaExplorer.mochaPath": "./adl/language/node_modules/mocha",
   "mochaExplorer.timeout": 500000,
   "mochaExplorer.require": "source-map-support/register"
 }

@@ -3,7 +3,7 @@ import { Kind } from '../compiler/scanner';
 import { Element } from './Element';
 import { Label } from './Label';
 import { Parameter } from './Parameter';
-import { Preamble, Trivia } from './Preamble';
+import { Preamble } from './Preamble';
 import { Response } from './Response';
 import { Terminator } from './Terminator';
 
@@ -14,11 +14,11 @@ export class Operation extends Element {
     const operation = new Operation();
     operation.push(preamble);
     operation.push(Label.parse(cursor, false));
-    operation.push(Trivia.parse(cursor));
+    operation.push(Preamble.parse(cursor, true));
     operation.push(cursor.expecting(Kind.OpenParen));
     operation.push(Parameter.parseParameters(cursor));
     operation.push(cursor.expecting(Kind.CloseParen));
-    operation.push(Trivia.parse(cursor));
+    operation.push(Preamble.parse(cursor, true));
 
     if (cursor.is(Kind.Colon)) {
       operation.push(cursor.take());

@@ -1,6 +1,6 @@
 import { Element } from './Element';
 import { SourceFile } from './SourceFile';
-import { Token } from './Token';
+import { RawToken } from './Token';
 
 export abstract class Declaration extends Element {
 
@@ -20,7 +20,7 @@ export abstract class Declaration extends Element {
   }
 
   /** @internal */
-  constructor(tokens = new Array<Token>()) {
+  constructor(tokens = new Array<RawToken>()) {
     super(tokens);
 
   }

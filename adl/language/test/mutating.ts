@@ -1,4 +1,5 @@
 import * as assert from 'assert';
+import { TypeExpression } from '../api/typeExpression';
 import { parse } from '../compiler/parse';
 
 function parseContent(text: string, filename = 'inline.adl') {
@@ -41,7 +42,7 @@ describe('Mutate a model', () => {
     `);
   });
 
-  it('playing around', () => {
+  it('add/remove/change properties around', () => {
     const file = parseContent(`
     model Car { 
       year: number; 
@@ -49,10 +50,25 @@ describe('Mutate a model', () => {
     `);
 
     const car = file.models[0];
-    car.s = 'yobot';
 
+    assert.strictEqual(car.Properties.length, 1, 'Should have one property');
+
+    car.createProperty('brand', new TypeExpression('string'));
+    assert.strictEqual(car.Properties.length, 2, 'Should have two property');
+
+    const brand = car.Properties.find(each => each.name === 'brand');
+    assert.strictEqual(!!brand, true, 'must have \'brand\' property');
+
+    // change the name of the property
+    brand!.name = 'make';
+
+    const make = car.Properties.find(each => each.name === 'make');
+    assert.strictEqual(!!make, true, 'must have \'make\' property');
+
+    car.Properties[0].remove();
     // save modified elements back to the file.
     file.save();
+
     console.log(file.text);
   });
 

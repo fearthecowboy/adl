@@ -1,4 +1,4 @@
-import { Token } from '../api/Token';
+import { RawToken } from '../api/Token';
 import { CharacterCodes, isBinaryDigit, isDigit, isHexDigit, isIdentifierPart, isIdentifierStart, isLineBreak, isWhiteSpaceSingleLine, sizeOf } from './character-codes';
 import { format, Message, messages } from './messages';
 
@@ -152,7 +152,6 @@ export enum Kind {
   Operation,
   Annotation,
   Documentation,
-  Trivia,
   Label,
   Preamble,
   Property,
@@ -183,7 +182,7 @@ interface TokenLocation extends Position {
   offset: number;
 }
 
-export class Scanner implements Token {
+export class Scanner implements RawToken {
   #offset = 0;
   #line = 0;
   #column = 0;
@@ -323,6 +322,13 @@ export class Scanner implements Token {
     this.markPosition(); // make sure the map has the new location
 
     return this.kind = Kind.NewLine;
+  }
+
+  start() {
+    if (this.offset === undefined) {
+      this.scan();
+    }
+    return this;
   }
 
   /**
@@ -948,5 +954,12 @@ export class Scanner implements Token {
       position = this.#map[last];
     }
     return { line: position.line, character: position.character + (offset - position.offset) };
+  }
+
+  static *TokensFrom(text: string): Iterable<RawToken> {
+    const scanner = new Scanner(text).start();
+    while (!scanner.eof) {
+      yield scanner.take();
+    }
   }
 }
