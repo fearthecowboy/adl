@@ -27,7 +27,7 @@ export class Model extends Declaration {
       lastProperty = from(this).find(Kind.OpenBrace);
       indentation = new Preamble('\n  '); // two spaces?
     } else {
-      indentation = new Preamble(lastProperty.element!.indentation);
+      indentation = new Preamble((lastProperty.token as Property).indentation);
       lastProperty.add(indentation, newProp);
     }
   }
@@ -37,11 +37,11 @@ export class Model extends Declaration {
   }
 
   get name(): string {
-    return (from(this).find(Kind.Label).element as Label).name;
+    return (from(this).find(Kind.Label).token as Label).name;
   }
 
   set name(name: string) {
-    (from(this).find(Kind.Label).element as Label).name = name;
+    (from(this).find(Kind.Label).token as Label).name = name;
   }
 
   get isTemplate() {
@@ -49,7 +49,7 @@ export class Model extends Declaration {
   }
 
   get templateDeclaration(): TemplateDeclaration | undefined {
-    return from(this).find(Kind.TemplateDeclaration).element;
+    return from(this).find(Kind.TemplateDeclaration).token as TemplateDeclaration;
   }
 
   static parse(cursor: TokenCursor, preamble: Preamble) {

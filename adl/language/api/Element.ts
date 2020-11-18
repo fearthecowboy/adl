@@ -3,6 +3,7 @@ import { Kind, Scanner } from '../compiler/scanner';
 import { isElement, isIterable } from '../compiler/tokens';
 import { Container } from './Container';
 import { from } from './ElementCursor';
+import { Preamble } from './Preamble';
 import { RawToken } from './Token';
 
 export type AnyToken = RawToken | Element | Iterable<AnyToken>;
@@ -53,7 +54,7 @@ export abstract class Element extends Container implements Token {
   }
 
   get indentation(): string {
-    return from(this).find(Kind.Preamble).element?.indentation || '\n  ';
+    return (<Preamble>from(this).find(Kind.Preamble).token)?.indentation || '\n  ';
   }
 
   remove() {

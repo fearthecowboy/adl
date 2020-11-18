@@ -16,25 +16,25 @@ export class Label extends Element {
 
     // check if it has a scope (ie, 'foo.bar')
     if (c.find(Kind.Dot).isInvalid) {
-      return c.rawToken!.text;
+      return c.token!.text;
     }
-    return c.find(Kind.Identifier).rawToken!.text;
+    return c.find(Kind.Identifier).token!.text;
   }
 
   set name(name: string) {
     const c = from(this).find(Kind.Identifier);
 
     if (c.find(Kind.Dot).isInvalid) {
-      c.rawToken!.text = name;
+      c.token!.text = name;
       return;
     }
-    c.find(Kind.Identifier).rawToken!.text = name;
+    c.find(Kind.Identifier).token!.text = name;
   }
 
   get scope(): string | undefined {
     const dot = from(this).find(Kind.Dot);
     // if there is no dot, there is not a scope. otherwise, it's the first identifier.
-    return dot.isInvalid ? undefined : dot.find(Kind.Identifier).element!.text;
+    return dot.isInvalid ? undefined : dot.find(Kind.Identifier).token!.text;
   }
 
   set scope(scope: string | undefined) {
@@ -55,7 +55,7 @@ export class Label extends Element {
 
     if (scope) {
       // we're trying to set it
-      from(this).find(Kind.Identifier).rawToken!.text = scope;
+      from(this).find(Kind.Identifier).token!.text = scope;
       return;
     }
 

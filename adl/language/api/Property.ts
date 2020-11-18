@@ -13,15 +13,15 @@ export class Property extends Element {
   kind = Kind.Property;
 
   get name() {
-    return (<Label>from(this).find(Kind.Label).element).name;
+    return (<Label>from(this).find(Kind.Label).token).name;
   }
 
   set name(name: string) {
-    (<Label>from(this).find(Kind.Label).element).name = name;
+    (<Label>from(this).find(Kind.Label).token).name = name;
   }
 
   get type(): TypeExpression {
-    return from(this).find(Kind.TypeExpression).element!;
+    return <TypeExpression>from(this).find(Kind.TypeExpression).token;
   }
 
   set type(type: TypeExpression) {

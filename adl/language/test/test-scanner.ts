@@ -1,8 +1,8 @@
 import { strictEqual } from 'assert';
 import { format } from '../compiler/messages';
-import { Kind, Position, Scanner } from '../compiler/scanner';
+import { Kind, Scanner } from '../compiler/scanner';
 
-type TokenEntry = [Kind, string?, Position?];
+type TokenEntry = any; // eslint is dying on [Kind, string?, Position?];
 
 function tokens(text: string): Array<TokenEntry> {
   const scanner = new Scanner(text);
@@ -155,7 +155,7 @@ describe('scanner', () => {
   });
 
   it('can parse arbitrary tokens', () => {
-    /// sometimes we just want some arbitrary text turn into tokens. 
+    /// sometimes we just want some arbitrary text turn into tokens.
     verify([...Scanner.TokensFrom('this.is.fun')].map(each => [each.kind, each.text]), [
       [Kind.Identifier],
       [Kind.Dot],
@@ -163,5 +163,5 @@ describe('scanner', () => {
       [Kind.Dot],
       [Kind.Identifier]
     ]);
-  })
+  });
 });
