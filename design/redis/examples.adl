@@ -1,0 +1,126 @@
+      
+      // the criteria: to decide which path to take
+      // case parameters:  things you're going to need to care about from the output of the API CALL.
+      // the output (can be anything crafted from constants/response parameters)
+      [get('/foo/bar/checkNameAvailabily')]
+      operation CheckNameAvailability(subscriptionId: [path] SubscriptionIdParameter, parameters: [body] CheckNameAvailabilityParameters ): {
+
+        // individual cases are listed here
+         
+        [statusCode(200,201)]                  // criteria
+        [mediaType('text/json')]               // criteria
+        case happypath() => true;
+
+        [statusCode(404)]                      // criteria
+        [mediaType('text/json')]               // criteria
+        case sadPath() => false;
+
+        case sillyPath;   // reference a common case
+
+        
+        [default] // matches anything that isn't matched elsewhere
+        case fail([body] [raw] content:string, [statusCode] code:  int32 ) { // annotations add protocol specific information how it's to be acquired. 
+            throw CloudException(code, content);
+        };
+
+      };
+
+      [get('./')]
+      operation CreateVm() {
+        [statusCode(200)]
+        case ok()
+        {
+          // 
+        }
+      }
+
+      [get('./')]
+      operation List(..) {
+        [statusCode(200)]
+        case ok()
+        {
+          // 
+        }
+      }
+}
+
+
+...): TrueResult | FalseResult;
+
+model TrueResult {
+  statusCode: 200 | 201;
+  @body
+  result: true;
+}
+
+
+
+[statusCode(404)]                      // criteria
+[mediaType('text/json')]               // criteria
+[]
+model FalseResult {
+  result: false;
+}
+
+model Error {
+  
+}
+
+// reusable case 
+''' This is a Happy Case
+[statusCode(200)]                            // criteria
+[mediaType('text/json')]                     // criteria
+[header('x-content-type', 'red')]            // criteria
+case sillypath([body] result:  ResultType, [header('x-ms-foo')] foo:  string ) => {foo, result.Value};
+
+
+response ResourceErrors {
+  [statusCode(404)]             // criteria
+  case notfound() {
+    throw new ResourceNotFound();
+  }
+
+  // all other responses are handled as errors
+  [default]
+  case fail([body] content:  Error, [statusCode] code:  int32) { 
+    throw new CloudException(code, Error);
+  };
+}
+
+
+// a response, inheriting behavior from another response
+response TypicalResponse<T> : ResourceErrors {
+  [statusCode(200)]              // criteria
+  [mediaType('text/json')]
+  case success(result: [body] T) {
+    return result;
+  }
+}
+
+
+
+
+// a response is a set of cases
+response TypicalResponseWithHeaders<T> {
+  [statusCode(200)]              // criteria
+  [mediaType('text/json')]
+  case success(result: [body] T, syncToken: [header('sync-token')] string, lastModified: [header('last-modified-date')] date, [header] etag: string) {
+    return {
+      result,
+      etag,
+      syncToken,
+      lastModified
+    };
+  }
+
+  [statusCode(404)]             // criteria
+  case notfound() {
+    throw new ResourceNotFound();
+  }
+
+  // all other cases are handled as errors
+  [default]
+  case fail(content: [body] Error, code: [statusCode] int32) { 
+    throw new CloudException(code, Error);
+  };
+}

@@ -1,0 +1,24 @@
+response ErrorResult {
+  /// Bad Request
+  @statusCode(400)
+  response BadRequest(content: @body ErrorResponse ) => throw content;
+
+   /// Internal error response
+  @statusCode(500)
+  response InternalError(content: @body ErrorResponse ) => throw content;
+}
+
+/// Job ID Not Found
+@statusCode(404)
+response NotFound(content: @body ErrorResponse ) => throw content;
+
+response Result<T> : ErrorResult {
+  @statusCode(200)
+  response Ok(content: @body T ) => content;
+}
+
+response LROResult<T> : Result<T> {
+  /// A successful call results with an Operation-Location header used to check the status of the analysis job.
+  @statusCode(202)
+  response Accepted(operationLocation: @header('OperationLocation') string ) => operationLocation;
+}

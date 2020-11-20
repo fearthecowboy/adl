@@ -1,0 +1,26 @@
+problems:
+  - why are we mapping the operation name from a fixed set of choices to a method??!? ( verbForEndpoint ) ... there should just be a decorator for the method (@post @get etc )
+  - query parameters that are arrays must have a collectionFormat 
+  
+
+smells:
+  - added 'program' code directly to the language project. should have separate CLI project (OH WAIT, THERE# IS ONE)
+  - the 'intermediate format' is stupid. 
+  - I don't see how we can possibly do authoring support, refactorings, etc in this 'design'.
+  - completely ignored the fact that I have fantastic openapi2/3 typescript interface definitions. This code just creates a raw JSON object and dumps it out.
+  - We have absolutely no tests in here 
+  - We have no schema/definition for the "intermediate model'
+  - I can't serialize the intermediate model
+
+  - I don't see how we can build source maps for any of this given it's adhoc nature
+  - we have zero docs on how any of this goes together
+  - I completely disagree with the implementation of decorators
+  - I completely disagree with the implementation of the 'checker'
+  - I completely disagree with the implementation of the transformation out to openapi2
+  - I completely disagree with the 
+  
+
+Things I just don't like:
+  - I don't think everything should be a 'model'
+  - I dont' like the '...' syntax everywhere
+  - I don't like the 

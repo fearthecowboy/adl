@@ -1,0 +1,94 @@
+
+// what did we use from http
+from 'http' import { default, get, url, query, header }
+
+// Azure App Configuration error object.
+model Error {
+  // The type of the error.
+  type: string;
+
+  // A brief summary of the error.
+  title: string;
+
+  // The name of the parameter that resulted in the error.
+  name: string;
+
+  // A detailed description of the error.
+  detail: string;
+
+  // The HTTP status code that the error maps to.
+  status: int32;
+}
+
+alias smallstring : [maxLength(20)] string;
+
+// Used to guarantee real-time consistency between requests.
+alias syncToken : [header('Sync-Token')] [client] string;
+
+// The API version to be used with the HTTP request.
+alias apiVersion : [query('api-version')] [client] string;
+
+// a reusable response that routes any unhandled responses to throw an error
+response ErrorResponse { 
+  // Error response describing why the operation failed
+  [default]
+  returns (content: [body] Error) => throw content;
+}
+
+alias acceptDateTime: [header('Accept-Datetime')] [optional] string;
+
+alias smallInt:  [maximum(100)] [minimum(1)] int32;
+
+alias smallSetOfSmallInts: [maxItems(5)] Array<smallInt>;
+alias smallSetOfSmallInts: [maxItems(5)] Array<[maximum(100)] [minimum(1)] int32>;
+
+model smallInts = @maxItems(5) int32[];
+
+response Standard<T> : ErrorResponse {
+      // Success
+      // - param keys       a list of keys
+      // - param syncToken  Enables real-time consistency between requests by providing the returned value in the next request made to the server.
+      [statusCode(200)]
+      result success(value: [body] T, syncToken: [header('Sync-Token')] string ) => value;
+    }
+}
+
+
+
+response StandardHeaders : ErrorResponse {
+      // Success
+      // - param keys       a list of keys
+      // - param syncToken  Enables real-time consistency between requests by providing the returned value in the next request made to the server.
+      [statusCode(200)]
+      result success(syncToken: [header('Sync-Token')] string );
+    }
+}
+
+// a response with two results, 200/ok and anything else, returns a pageable key
+alias Keys : Standard<Pageable<Key>>;
+
+
+
+[url('/keys')]
+interface KeysResource {
+  // Gets a list of keys.
+  // - param `name`           A filter for the name of the returned keys.
+  // - param `After`          Instructs the server to return elements that appear after the element referred to by the specified token.
+  // - param `acceptDateTime` Requests the server to respond with the state of the resource at the specified time.
+  [get] 
+  operation getKeys(
+    name: [query] [optional] string, 
+    after: [query] [optional] string;
+    acceptDateTime,
+    syncToken, 
+    apiVersion) : Standard<Array<byte>>;
+
+  // Requests the headers and status of the given resource.
+  [head]
+  CheckKeys(
+    name: [query] [optional] string, 
+    after: [query] [optional] string,
+    acceptDateTime,
+    syncToken, 
+    apiVersion) : StandardHeaders;
+}

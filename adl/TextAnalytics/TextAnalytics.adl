@@ -1,0 +1,68 @@
+/// # notes 630 lines of JSON reduced to 60. 
+
+
+@location('{Endpoint}/text/analytics/v3.1-preview.3')
+interface TextAnalytics {
+
+  /// Submit a collection of text documents for analysis. Specify one or more unique tasks to be executed.
+  /// - parameters
+  ///   - body: Collection of documents to analyze and tasks to execute
+  @post('./analyze') 
+  @LongRunning
+  Analyze(@body body: AnalyzeBatchInput): LroResult<AnalyzeJobState>;
+
+  /// Get the status of an analysis job.  A job may consist of one or more tasks.  
+  /// Once all tasks are completed, the job will transition to the completed state and results will be available for each task
+  /// - return 200: Analysis job status and metadata.
+  @get('./analyze/jobs/{jobId}')
+  AnalyzeStatus(AnalyzeJobId, ShowStats, Top, Skip): Result<AnalyzeJobState> || NotFound;
+
+  /// Get details of the healthcare prediction job specified by the jobId.
+  @get('./entities/health/jobs/{jobId}')
+  HealthStatus(JobId,ShowStats,Top,Skip): Result<HealthcareJobState> || NotFound;
+
+  /// Cancel healthcare prediction job.
+  @delete('./entities/health/jobs/{jobId}') 
+  @LongRunning
+  CancelHealthJob(JobId): LroResult<true> || NotFound; /// the original spec doesn't describe the LRO target correctly.
+
+  /// Start a healthcare analysis job to recognize healthcare related entities (drugs, conditions, symptoms, etc) and their relations.
+  @post('./entities/health/jobs')
+  @LongRunning
+  Health(ModelVersion, StringIndexType, MultiLanguageInput) LroResult<???> || NotFound; /// the original spec doesn't describe the LRO target correctly.
+
+  /// The API returns a list of general named entities in a given document. 
+  /// For the list of supported entity types, check [Supported Entity Types in Text Analytics API](https://aka.ms/taner). 
+  /// See the [Supported languages in Text Analytics API](https://aka.ms/talangs) for the list of enabled languages.
+  /// - return 200: A successful call results in a list of recognized entities returned for each valid document.
+  @post('./entities/recognition/general')
+  EntitiesRecognitionGeneral(ModelVersion, ShowStats, StringIndexType, MultiLanguageInput) : Result<EntitiesResult>;
+ 
+  /// The API returns a list of entities with personal information (\\\"SSN\\\", \\\"Bank Account\\\" etc) 
+  /// in the document. For the list of supported entity types, check [Supported languages in Text Analytics API](https://aka.ms/tanerpii\">Supported Entity Types in Text Analytics API</a>. See the <a href=\"https://aka.ms/talangs) for the list of enabled languages.
+  /// - parameter domain: (Optional) if specified, will set the PII domain to include only a subset of the entity categories. Possible values include: 'PHI', 'none'.
+  /// - return 200: A successful call results in a list of entities containing personal information returned for each valid document
+  @post('./entities/recognition/pii')
+  EntitiesRecognitionPii(ModelVersion, ShowStats, StringIndexType, MultiLanguageInput, domain: @query @optional 'PHI'|'none' ): Result<PiiResult>;
+
+  /// The API returns a list of recognized entities with links to a well-known knowledge base. See the [Supported languages in Text Analytics API](https://aka.ms/talangs) for the list of enabled languages.
+  /// - return 200: A successful call results in a list of recognized entities with links to a well-known knowledge base returned for each valid document
+  @post('./entities/linking')
+  EntitiesLinking(ModelVersion, ShowStats, StringIndexType, MultiLanguageInput): Result<EntityLinkingResult>;
+
+  /// The API returns a list of recognized entities with links to a well-known knowledge base. See the [Supported languages in Text Analytics API](https://aka.ms/talangs) for the list of enabled languages.
+  /// - return 200: A successful response results in 0 or more key phrases identified in each valid document
+  @post('./keyPhrases')
+  KeyPhrases(ModelVersion, ShowStats,  MultiLanguageInput): Result<KeyPhraseResult>;
+
+  /// The API returns the detected language and a numeric score between 0 and 1. Scores close to 1 indicate 100% certainty that the identified language is true. See the <a href=\"https://aka.ms/talangs\">Supported languages in Text Analytics API</a> for the list of enabled languages.
+  /// - returns 200: 
+  @post('./Languages')
+  Languages(ModelVersion, ShowStats, LanguageInput) : Result<LanguageResult>;
+
+  /// The API returns a detailed sentiment analysis for the input text. The analysis is done in multiple levels of granularity, start from the a document level, down to sentence and key terms (aspects) and opinions.
+  /// - parameter opinionMining: (Optional) if set to true, response will contain input and document level statistics including aspect-based sentiment analysis results.
+  /// - return 200: A successful call results in a document sentiment prediction, as well as sentiment scores for each sentiment class (Positive, Negative, and Neutral)
+  @post('./')
+  Sentiment(ModelVersion, ShowStats, StringIndexType, MultiLanguageInput, opinionMining: @query @optional boolean ): Result<SentimentResponse>
+}

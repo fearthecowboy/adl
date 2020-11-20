@@ -1,0 +1,32 @@
+# Notes: 
+
+## Manipluation API for ADL AST
+- need things like ts-morph 
+- probably need a formatter 
+
+## Swift-style markup support
+- commonmark package on NPM seems like a good fit (it supports sourcepos, unlike remarkable, markdown-it, smarkdown)
+- does provide an AST for the markdown 
+- would still need to add logic to pull out callouts (ie, `- param`, `- since` etc...)
+- probably need a layer on top of the AST to let us programatically manipulate it. may require us to write a renderer for commonmark to output
+
+## Extension Package Support 
+- can just continue to use NPM packages 
+- add a command to adl cli to create a package.json on the fly and use YARN to physicall create the package (for packing up ADL projects)
+- langauge extensions shouldn't require changes (since they're written in TS anyway)
+- don't need the ambient declaration stuff anymore. 
+- everything that is in the package and has an ADL extension is "exported" 
+- need an api.yaml file ? 
+
+## VSCode extension
+- need syntax highlighting information (.tmLanguage)
+- linting should work fine once the ADL core is built for ADL langauge
+- need to pull errors from ADL language 
+- navigation 
+  -> symbol to definition
+  -> definition to references (places that use it)
+  -> hover information 
+    -> need markup comment info formatted for hover
+    -> 
+
+
